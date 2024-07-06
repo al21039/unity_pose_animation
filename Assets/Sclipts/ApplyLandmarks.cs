@@ -5,7 +5,17 @@ using UnityEngine;
 public class ApplyLandmarks : MonoBehaviour
 {
     public CSVReader csvReader; // CSVReaderスクリプト
-    public Transform[] bones; // 3Dモデルのボーン（必要なボーンのみ設定）
+    public Animator animator; // 3DモデルのAnimator
+
+    // HumanBodyBonesに対応するランドマークペア
+    private Dictionary<HumanBodyBones, (int start, int end)> boneLandmarkPairs = new Dictionary<HumanBodyBones, (int start, int end)>()
+    {
+        {HumanBodyBones.Head, (0, 1) }, // 頭のボーンに対応するランドマークペア
+        {HumanBodyBones.LeftUpperArm, (11, 13) },
+        {HumanBodyBones.LeftLowerArm, (13, 15) },
+        {HumanBodyBones.LeftHand,(15, 19)},
+        // 必要に応じて他のペアを追加
+    };
 
     private int currentFrame = 0;
     private List<Vector3> currentLandmarks;
@@ -15,21 +25,32 @@ public class ApplyLandmarks : MonoBehaviour
         currentLandmarks = csvReader.GetFrameLandmarks(currentFrame);
         if (currentLandmarks != null)
         {
-            for (int i = 0; i < bones.Length; i++)
+            foreach (var pair in boneLandmarkPairs)
             {
-                // 必要なランドマークインデックスを指定
-                int landmarkIndex = GetCorrespondingLandmarkIndex(i);
-                bones[i].position = currentLandmarks[landmarkIndex];
+                HumanBodyBones humanBone = pair.Key;
+                (int start, int end) = pair.Value;
+
+                // ベクトルを計算
+                Vector3 startVec = currentLandmarks[start];
+                Vector3 endVec = currentLandmarks[end];
+                Vector3 direction = endVec - startVec;
+
+                // ベクトル間の回転を計算
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, direction);
+
+                // ボーンに回転を適用
+                Transform boneTransform = animator.GetBoneTransform(humanBone);
+                if (boneTransform != null)
+                {
+                    boneTransform.localRotation = rotation;
+                }
+                else
+                {
+                    Debug.LogError($"ボーン {humanBone} が見つかりませんでした");
+                }
             }
             currentFrame++;
             if (currentFrame >= csvReader.GetTotalFrames()) currentFrame = 0; // ループ再生
         }
-    }
-
-    // 3Dモデルのボーンに対応するBlazePoseランドマークインデックスを返す
-    int GetCorrespondingLandmarkIndex(int boneIndex)
-    {
-        int[] landmarkIndices = { 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 32};
-        return landmarkIndices[boneIndex];
     }
 }
