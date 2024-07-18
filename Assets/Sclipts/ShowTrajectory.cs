@@ -1,41 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
+using UnityEngine;
 
-public class ApplyLandmarks : MonoBehaviour
+public class ShowTrajectory : MonoBehaviour
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private int currentFrame = 0;
+    public GameObject humanoid;
     private Animator animator;
     private int totalFlames = 0;
     [SerializeField] Vector3 forward;
+    GameObject startPose;
+    GameObject endPose;
+    Vector3[] landmarks;
 
+    // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 30;
-        animator = GetComponent<Animator>();
+        animator = humanoid.GetComponent<Animator>();
         LoadLandmarkData();
+        Debug.Log(totalFlames);
+        float entirePos = (float)totalFlames / 25.0f;
+
+        startPose = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
+        landmarks = landmarkData[0];
+        ApplyLandmarksToBones(landmarks, startPose);
+
+        endPose = Instantiate(humanoid, new Vector3(0, 0, entirePos), Quaternion.identity);
+        landmarks = landmarkData[totalFlames - 1];
+        ApplyLandmarksToBones(landmarks, endPose);
+
+
+
     }
 
+    // Update is called once per frame
     void Update()
     {
-
-            if (landmarkData.ContainsKey(currentFrame))
-            {
-                Vector3[] landmarks = landmarkData[currentFrame];
-                ApplyLandmarksToBones(landmarks);
-            }
-
-
-            currentFrame++;
-            if (currentFrame >= totalFlames)
-                currentFrame = 0;
         
     }
 
-    
     void LoadLandmarkData()
     {
         using (var reader = new StreamReader(csvFilePath))
@@ -66,16 +73,16 @@ public class ApplyLandmarks : MonoBehaviour
             }
         }
     }
-    
-    
-    
-    void ApplyLandmarksToBones(Vector3[] landmarks)
+
+
+
+    void ApplyLandmarksToBones(Vector3[] landmarks, GameObject humanoid)
     {
         if (landmarks.Length < 33) return;
 
 
         Vector3 sholuderMiddle = (landmarks[11] + landmarks[12]) / 2;
-        
+
         /*
         //挙動おかしい
         SetBoneRotation(HumanBodyBones.Head, (landmarks[11] + landmarks[12]) / 2, landmarks[0]); //頭
@@ -86,22 +93,22 @@ public class ApplyLandmarks : MonoBehaviour
 
         //SetBoneRotation(HumanBodyBones.Hips, new Vector3(0, 0, 0), sholuderMiddle);
 
-        
-        SetBoneRotation(HumanBodyBones.LeftUpperArm, landmarks[11], landmarks[13]); //左 上腕
-        SetBoneRotation(HumanBodyBones.RightUpperArm, landmarks[12], landmarks[14]); //右 上腕
-        SetBoneRotation(HumanBodyBones.LeftLowerArm, landmarks[13], landmarks[15]); //左 二の腕
-        SetBoneRotation(HumanBodyBones.RightLowerArm, landmarks[14], landmarks[16]); //右 二の腕
-        SetBoneRotation(HumanBodyBones.LeftUpperLeg, landmarks[23], landmarks[25]); //左 太もも
-        SetBoneRotation(HumanBodyBones.RightUpperLeg, landmarks[24], landmarks[26]); //右 太もも
-        SetBoneRotation(HumanBodyBones.LeftLowerLeg, landmarks[25], landmarks[27]); //左 脛
-        SetBoneRotation(HumanBodyBones.RightLowerLeg, landmarks[26], landmarks[28]); //右 脛
-        SetBoneRotation(HumanBodyBones.LeftFoot, landmarks[27], landmarks[31]); //左 足首
-        SetBoneRotation(HumanBodyBones.RightFoot, landmarks[28], landmarks[32]); //右 足首
 
-        
-        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11]); //左 肩
-        SetBoneRotation(HumanBodyBones.RightShoulder, sholuderMiddle, landmarks[12]); //右 肩
-        
+        SetBoneRotation(HumanBodyBones.LeftUpperArm, landmarks[11], landmarks[13], humanoid); //左 上腕
+        SetBoneRotation(HumanBodyBones.RightUpperArm, landmarks[12], landmarks[14], humanoid); //右 上腕
+        SetBoneRotation(HumanBodyBones.LeftLowerArm, landmarks[13], landmarks[15], humanoid); //左 二の腕
+        SetBoneRotation(HumanBodyBones.RightLowerArm, landmarks[14], landmarks[16], humanoid); //右 二の腕
+        SetBoneRotation(HumanBodyBones.LeftUpperLeg, landmarks[23], landmarks[25], humanoid); //左 太もも
+        SetBoneRotation(HumanBodyBones.RightUpperLeg, landmarks[24], landmarks[26], humanoid); //右 太もも
+        SetBoneRotation(HumanBodyBones.LeftLowerLeg, landmarks[25], landmarks[27], humanoid); //左 脛
+        SetBoneRotation(HumanBodyBones.RightLowerLeg, landmarks[26], landmarks[28], humanoid); //右 脛
+        SetBoneRotation(HumanBodyBones.LeftFoot, landmarks[27], landmarks[31], humanoid); //左 足首
+        SetBoneRotation(HumanBodyBones.RightFoot, landmarks[28], landmarks[32], humanoid); //右 足首
+
+
+        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11],humanoid); //左 肩
+        SetBoneRotation(HumanBodyBones.RightShoulder, sholuderMiddle, landmarks[12], humanoid); //右 肩
+
 
         //手について HandTrackingを利用する必要あり
         /*
@@ -113,23 +120,20 @@ public class ApplyLandmarks : MonoBehaviour
         SetBoneRotation(HumanBodyBones.RightIndexProximal, landmarks[16], landmarks[20]); //左 人差し指
         SetBoneRotation(HumanBodyBones.RightThumbProximal, landmarks[16], landmarks[22]); //左 小指
         */
-       
 
-        }
-    
+
+    }
+
     //各ボーンに回転を加える
-    void SetBoneRotation(HumanBodyBones bone, Vector3 start, Vector3 end)
+    void SetBoneRotation(HumanBodyBones bone, Vector3 start, Vector3 end, GameObject humanoid)
     {
-        if (animator.GetBoneTransform(bone) != null)
+        if (humanoid.GetComponent<Animator>().GetBoneTransform(bone) != null)
         {
-            Transform boneTransform = animator.GetBoneTransform(bone);
+            Transform boneTransform = humanoid.GetComponent<Animator>().GetBoneTransform(bone);
             var dir = end - start;
             var lookAtRotation = Quaternion.LookRotation(dir, Vector3.up);
             var offsetRotation = Quaternion.FromToRotation(forward, Vector3.forward);
             boneTransform.rotation = lookAtRotation * offsetRotation;
         }
     }
-    
-    
-    
 }

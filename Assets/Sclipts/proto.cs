@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
+using UnityEngine;
 
-public class SetRotation : MonoBehaviour
+public class proto : MonoBehaviour
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
@@ -11,38 +11,41 @@ public class SetRotation : MonoBehaviour
     public GameObject humanoid;
     private Animator animator;
     private int totalFlames = 0;
-    private int mode = 0;
     [SerializeField] Vector3 forward;
+    GameObject startPose;
+    GameObject endPose;
+    Vector3[] landmarks;
 
+    // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 30;
         animator = humanoid.GetComponent<Animator>();
-        //Instantiate(humanoid, new Vector3(0.0f, 1.5f, 0.0f), Quaternion.identity);
         LoadLandmarkData();
+        Debug.Log(totalFlames);
+        float entirePos = (float)totalFlames / 25.0f;
+
+        startPose = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
+        landmarks = landmarkData[0];
+        ApplyLandmarksToBones(landmarks, startPose);
+
+        endPose = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
+
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (mode == 0)
+        if (landmarkData.ContainsKey(currentFrame))
         {
-            if (landmarkData.ContainsKey(currentFrame))
-            {
-                Vector3[] landmarks = landmarkData[currentFrame];
-                ApplyLandmarksToBones(landmarks);
-            }
-
-
-            currentFrame++;
-            if (currentFrame >= totalFlames)
-                currentFrame = 0;
+            endPose.transform.Translate(0f, 0f, 0.25f);
+            Vector3[] landmarks = landmarkData[currentFrame];
+            ApplyLandmarksToBones(landmarks, endPose);
         }
-        else if (mode == 1)
-        {
 
-        }
+
+        currentFrame++;
     }
-
 
     void LoadLandmarkData()
     {
@@ -66,7 +69,7 @@ public class SetRotation : MonoBehaviour
                     float x = float.Parse(values[1 + i * 3]);
                     float y = float.Parse(values[2 + i * 3]);
                     float z = float.Parse(values[3 + i * 3]);
-                    landmarks[i] = new Vector3(x, -y, z);
+                    landmarks[i] = new Vector3(-x, -y, -z);
                 }
 
                 landmarkData[frame] = landmarks;
@@ -77,7 +80,7 @@ public class SetRotation : MonoBehaviour
 
 
 
-    void ApplyLandmarksToBones(Vector3[] landmarks)
+    void ApplyLandmarksToBones(Vector3[] landmarks, GameObject humanoid)
     {
         if (landmarks.Length < 33) return;
 
@@ -92,21 +95,23 @@ public class SetRotation : MonoBehaviour
         SetBoneRotation(HumanBodyBones.Spine, new Vector3(0, 0, 0), (landmarks[11] + landmarks[12]) / 2); //Ò’Å
         */
 
-
-        SetBoneRotation(HumanBodyBones.LeftUpperArm, landmarks[11], landmarks[13]); //¶ ã˜r
-        SetBoneRotation(HumanBodyBones.RightUpperArm, landmarks[12], landmarks[14]); //‰E ã˜r
-        SetBoneRotation(HumanBodyBones.LeftLowerArm, landmarks[13], landmarks[15]); //¶ “ñ‚Ì˜r
-        SetBoneRotation(HumanBodyBones.RightLowerArm, landmarks[14], landmarks[16]); //‰E “ñ‚Ì˜r
-        SetBoneRotation(HumanBodyBones.LeftUpperLeg, landmarks[23], landmarks[25]); //¶ ‘¾‚à‚à
-        SetBoneRotation(HumanBodyBones.RightUpperLeg, landmarks[24], landmarks[26]); //‰E ‘¾‚à‚à
-        SetBoneRotation(HumanBodyBones.LeftLowerLeg, landmarks[25], landmarks[27]); //¶ ãø
-        SetBoneRotation(HumanBodyBones.RightLowerLeg, landmarks[26], landmarks[28]); //‰E ãø
-        SetBoneRotation(HumanBodyBones.LeftFoot, landmarks[27], landmarks[31]); //¶ ‘«Žñ
-        SetBoneRotation(HumanBodyBones.RightFoot, landmarks[28], landmarks[32]); //‰E ‘«Žñ
+        //SetBoneRotation(HumanBodyBones.Hips, new Vector3(0, 0, 0), sholuderMiddle);
 
 
-        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11]); //¶ Œ¨
-        SetBoneRotation(HumanBodyBones.RightShoulder, sholuderMiddle, landmarks[12]); //‰E Œ¨
+        SetBoneRotation(HumanBodyBones.LeftUpperArm, landmarks[11], landmarks[13], humanoid); //¶ ã˜r
+        SetBoneRotation(HumanBodyBones.RightUpperArm, landmarks[12], landmarks[14], humanoid); //‰E ã˜r
+        SetBoneRotation(HumanBodyBones.LeftLowerArm, landmarks[13], landmarks[15], humanoid); //¶ “ñ‚Ì˜r
+        SetBoneRotation(HumanBodyBones.RightLowerArm, landmarks[14], landmarks[16], humanoid); //‰E “ñ‚Ì˜r
+        SetBoneRotation(HumanBodyBones.LeftUpperLeg, landmarks[23], landmarks[25], humanoid); //¶ ‘¾‚à‚à
+        SetBoneRotation(HumanBodyBones.RightUpperLeg, landmarks[24], landmarks[26], humanoid); //‰E ‘¾‚à‚à
+        SetBoneRotation(HumanBodyBones.LeftLowerLeg, landmarks[25], landmarks[27], humanoid); //¶ ãø
+        SetBoneRotation(HumanBodyBones.RightLowerLeg, landmarks[26], landmarks[28], humanoid); //‰E ãø
+        SetBoneRotation(HumanBodyBones.LeftFoot, landmarks[27], landmarks[31], humanoid); //¶ ‘«Žñ
+        SetBoneRotation(HumanBodyBones.RightFoot, landmarks[28], landmarks[32], humanoid); //‰E ‘«Žñ
+
+
+        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11], humanoid); //¶ Œ¨
+        SetBoneRotation(HumanBodyBones.RightShoulder, sholuderMiddle, landmarks[12], humanoid); //‰E Œ¨
 
 
         //Žè‚É‚Â‚¢‚Ä HandTracking‚ð—˜—p‚·‚é•K—v‚ ‚è
@@ -124,11 +129,11 @@ public class SetRotation : MonoBehaviour
     }
 
     //Šeƒ{[ƒ“‚É‰ñ“]‚ð‰Á‚¦‚é
-    void SetBoneRotation(HumanBodyBones bone, Vector3 start, Vector3 end)
+    void SetBoneRotation(HumanBodyBones bone, Vector3 start, Vector3 end, GameObject humanoid)
     {
-        if (animator.GetBoneTransform(bone) != null)
+        if (humanoid.GetComponent<Animator>().GetBoneTransform(bone) != null)
         {
-            Transform boneTransform = animator.GetBoneTransform(bone);
+            Transform boneTransform = humanoid.GetComponent<Animator>().GetBoneTransform(bone);
             var dir = end - start;
             var lookAtRotation = Quaternion.LookRotation(dir, Vector3.up);
             var offsetRotation = Quaternion.FromToRotation(forward, Vector3.forward);
