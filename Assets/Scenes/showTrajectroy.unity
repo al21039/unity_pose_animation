@@ -123,6 +123,66 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &479405187
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759589078908520698, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5280089721355866688, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      propertyPath: m_Name
+      value: Banana Man
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5280089721355866688, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2064330949}
+  m_SourcePrefab: {fileID: 100100000, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,53 +677,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370932618}
   m_CullTransparentMesh: 1
---- !u!1 &1732141290
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1732141291}
-  - component: {fileID: 1732141292}
-  m_Layer: 0
-  m_Name: Proto
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1732141291
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732141290}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.29944837, y: 0.6240856, z: -3.368368}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1732141292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732141290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 395846e6d77c9784db2ddd19b7da0011, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
-  humanoid: {fileID: 9013633042051453719, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
-  forward: {x: 0, y: 1, z: 0}
 --- !u!1 &1861787947
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +972,25 @@ MonoBehaviour:
   csvFilePath: Assets/CSV/stretch.csv
   humanoid: {fileID: 9013633042051453719, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
   forward: {x: 0, y: 1, z: 0}
+--- !u!1 &2064330948 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5280089721355866688, guid: 6629d8cd66724bb4783f429de03c11cf, type: 3}
+  m_PrefabInstance: {fileID: 479405187}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2064330949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064330948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395846e6d77c9784db2ddd19b7da0011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  csvFilePath: Assets/CSV/stretch.csv
+  forward: {x: 0, y: 1, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -969,4 +1001,4 @@ SceneRoots:
   - {fileID: 1896472332}
   - {fileID: 1299366694}
   - {fileID: 1921099002}
-  - {fileID: 1732141291}
+  - {fileID: 479405187}
