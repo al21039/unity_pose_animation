@@ -26,9 +26,9 @@ public class proto : MonoBehaviour
         {
             if (landmarkData.ContainsKey(currentFrame))
             {
-                transform.Translate(0f, 0f, 0.05f);
                 Vector3[] landmarks = landmarkData[currentFrame];
                 ApplyLandmarksToBones(landmarks);
+                transform.Translate(0f, 0f, 0.05f);
             }
 
 
