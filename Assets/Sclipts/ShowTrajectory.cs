@@ -15,11 +15,13 @@ public class ShowTrajectory : MonoBehaviour
     GameObject startPose;
     GameObject endPose;
     Vector3[] landmarks;
+    Vector3[] LHandPos;
+    Vector3[] RHandPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 30;
+
         animator = humanoid.GetComponent<Animator>();
         LoadLandmarkData();
         Debug.Log(totalFlames);
