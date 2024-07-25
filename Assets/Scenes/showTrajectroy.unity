@@ -636,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   csvFilePath: Assets/CSV/stretch.csv
   humanoid: {fileID: 1313951546615716435, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+  material: {fileID: 0}
   forward: {x: 0, y: 1, z: 0}
   LHandButton: 1
   RHandButton: 1
