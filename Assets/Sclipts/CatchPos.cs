@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class CatchPos : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CatchPos : MonoBehaviour
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private int currentFrame = 0;
     [SerializeField] GameObject humanoid;
+    public Material material;
     private Animator animator;
     private int totalFlames = 0;
     [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
@@ -34,31 +36,52 @@ public class CatchPos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 movingPos;    
+        Vector3 movingPos;
+
         GameObject LHand = new GameObject();
         GameObject RHand = new GameObject();
         GameObject LFoot = new GameObject();
         GameObject RFoot = new GameObject();
 
         LHandlineRenderer = LHand.AddComponent<LineRenderer>();
+        LHandlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        LHandlineRenderer.startColor = Color.white;
+        LHandlineRenderer.endColor = Color.white;
         LHandlineRenderer.startWidth = 0.1f;
         LHandlineRenderer.endWidth = 0.1f;
         LHandlineRenderer.positionCount = 0;
+        LHandlineRenderer.numCapVertices = 10;
+        LHandlineRenderer.numCornerVertices = 10;
 
         RHandlineRenderer = RHand.AddComponent<LineRenderer>();
+        RHandlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        RHandlineRenderer.startColor = Color.white;
+        RHandlineRenderer.endColor = Color.white;
         RHandlineRenderer.startWidth = 0.1f;
         RHandlineRenderer.endWidth = 0.1f;
         RHandlineRenderer.positionCount = 0;
+        RHandlineRenderer.numCapVertices = 10;
+        RHandlineRenderer.numCornerVertices = 10;
 
         LFootlineRenderer = LFoot.AddComponent<LineRenderer>();
+        LFootlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        LFootlineRenderer.startColor = Color.white;
+        LFootlineRenderer.endColor = Color.white;
         LFootlineRenderer.startWidth = 0.1f;
         LFootlineRenderer.endWidth = 0.1f;
         LFootlineRenderer.positionCount = 0;
+        LFootlineRenderer.numCapVertices = 10;
+        LFootlineRenderer.numCornerVertices = 10;
 
         RFootlineRenderer = RFoot.AddComponent<LineRenderer>();
+        RFootlineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        RFootlineRenderer.startColor = Color.white;
+        RFootlineRenderer.endColor = Color.white;
         RFootlineRenderer.startWidth = 0.1f;
         RFootlineRenderer.endWidth = 0.1f;
         RFootlineRenderer.positionCount = 0;
+        RFootlineRenderer.numCapVertices = 10;
+        RFootlineRenderer.numCornerVertices = 10;
 
         animator = humanoid.GetComponent<Animator>();
         LoadLandmarkData();
