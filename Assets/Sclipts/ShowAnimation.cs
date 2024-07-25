@@ -3,42 +3,59 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class ShowTrajectory : MonoBehaviour
+public class ShowAnimation : MonoBehaviour
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
-    private int currentFrame = 0;
-    public GameObject humanoid;
+    public int currentFrame = 0;
+    [SerializeField] GameObject humanoid;
     private Animator animator;
     private int totalFlames = 0;
-    [SerializeField] Vector3 forward;
-    GameObject startPose;
-    GameObject endPose;
-    Vector3[] landmarks;
-    List<Vector3> LHandPos = new List<Vector3>();
-    List<Vector3> RHandPos = new List<Vector3>();
+    [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
+    GameObject go;
+
+    public bool show;
+    public bool check;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        show = false;
+        check = false;
+        Application.targetFrameRate = 30;
         animator = humanoid.GetComponent<Animator>();
         LoadLandmarkData();
-        Debug.Log(totalFlames);
-        float entirePos = (float)totalFlames / 25.0f;
-
-        startPose = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
-        landmarks = landmarkData[0];
-        ApplyLandmarksToBones(landmarks, startPose);
-
-        endPose = Instantiate(humanoid, new Vector3(0, 0, entirePos), Quaternion.identity);
-        landmarks = landmarkData[totalFlames - 1];
-        ApplyLandmarksToBones(landmarks, endPose);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(show)
+        {
+            go = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
+            show = false;
+        }
+
+        if(go)
+        {
+            if (check)
+            {
+                if (landmarkData.ContainsKey(currentFrame))
+                {
+                    Vector3[] landmarks = landmarkData[currentFrame];
+                    ApplyLandmarksToBones(landmarks, go);
+                    go.transform.Translate(0f, 0f, 0.05f);
+                }
+
+                currentFrame++;
+                if (currentFrame >= totalFlames)
+                {
+                    check = false;
+                    Destroy(go);
+                }
+            }
+        }
     }
 
     void LoadLandmarkData()
@@ -104,7 +121,7 @@ public class ShowTrajectory : MonoBehaviour
         SetBoneRotation(HumanBodyBones.RightFoot, landmarks[28], landmarks[32], humanoid); //âE ë´éÒ
 
 
-        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11],humanoid); //ç∂ å®
+        SetBoneRotation(HumanBodyBones.LeftShoulder, sholuderMiddle, landmarks[11], humanoid); //ç∂ å®
         SetBoneRotation(HumanBodyBones.RightShoulder, sholuderMiddle, landmarks[12], humanoid); //âE å®
 
 

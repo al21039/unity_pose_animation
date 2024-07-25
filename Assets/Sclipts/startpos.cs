@@ -17,6 +17,7 @@ public class startpos : MonoBehaviour
         Application.targetFrameRate = 30;
         animator = GetComponent<Animator>();
         LoadLandmarkData();
+        
     }
 
     void Update()

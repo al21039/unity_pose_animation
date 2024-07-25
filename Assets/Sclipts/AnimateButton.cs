@@ -10,4 +10,9 @@ public class AnimateButton : MonoBehaviour
     {
         SceneManager.LoadScene("showAnimation");
     }
+
+    public void ToTrajectory()
+    {
+        SceneManager.LoadScene("showTrajectoy");
+    }
 }

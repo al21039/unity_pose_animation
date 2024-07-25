@@ -53,7 +53,7 @@ public class show_landmarks : MonoBehaviour
                     float x = float.Parse(values[i]) * scale;
                     float y = float.Parse(values[i + 1]) * scale;
                     float z = float.Parse(values[i + 2]) * scale;
-                    frameLandmarks.Add(new Vector3(x, -y, z) + offset);
+                    frameLandmarks.Add(new Vector3(-x, -y, -z) + offset);
                 }
                 framesLandmarks.Add(frameLandmarks);
             }
