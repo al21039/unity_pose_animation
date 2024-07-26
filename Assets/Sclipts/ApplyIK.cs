@@ -15,6 +15,10 @@ public class ApplyIK : MonoBehaviour
     [SerializeField] GameObject LHand;
     [SerializeField] GameObject LFoot;
     [SerializeField] GameObject RFoot;
+    [SerializeField] GameObject RElbow;
+    [SerializeField] GameObject LElbow;
+    [SerializeField] GameObject LKnee;
+    [SerializeField] GameObject RKnee;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +63,7 @@ public class ApplyIK : MonoBehaviour
                     float x = float.Parse(values[1 + i * 3]);
                     float y = float.Parse(values[2 + i * 3]);
                     float z = float.Parse(values[3 + i * 3]);
-                    landmarks[i] = new Vector3(-x, -y + 1, -z);
+                    landmarks[i] = new Vector3(-x,  -y + 1, -z);
                 }
 
                 landmarkData[frame] = landmarks;
@@ -73,7 +77,11 @@ public class ApplyIK : MonoBehaviour
         
         LHand.transform.position = landmarks[15];
         RHand.transform.position = landmarks[16];
-        LFoot.transform.position = landmarks[31];
-        RFoot.transform.position = landmarks[32];
+        LFoot.transform.position = landmarks[27];
+        RFoot.transform.position = landmarks[28];
+        LElbow.transform.position = landmarks[13];
+        RElbow.transform.position = landmarks[14];
+        LKnee.transform.position = landmarks[25];
+        RKnee.transform.position = landmarks[26];
     }
 }
