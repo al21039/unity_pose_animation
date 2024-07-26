@@ -123,6 +123,34 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &349550675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 949923049921367998, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+  m_PrefabInstance: {fileID: 1826025412}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &349550681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349550675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf508fde78a329442b6d4f39a2bc0fd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  csvFilePath: Assets/CSV/stretch.csv
+  forward: {x: 0, y: 1, z: 0}
+  RHand: {fileID: 1956565677}
+  LHand: {fileID: 405068151}
+  LFoot: {fileID: 1463116739}
+  RFoot: {fileID: 1551202995}
+--- !u!1 &405068151 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1945657109633953863, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+  m_PrefabInstance: {fileID: 1826025412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +360,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14fb5c5035087b14db14dac013cb373e, type: 3}
   m_Name: 
@@ -444,6 +472,16 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1463116739 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7809089915036118095, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+  m_PrefabInstance: {fileID: 1826025412}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1551202995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 663925212843698953, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+  m_PrefabInstance: {fileID: 1826025412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1721041655
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +527,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filePath: Assets/CSV/stretch.csv
+--- !u!1001 &1826025412
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460806799465157892, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 949923049921367998, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_Name
+      value: RigModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5802098134675443582, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5802098134675443582, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371663170595055024, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397745159913363505, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 949923049921367998, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 349550681}
+  m_SourcePrefab: {fileID: 100100000, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+--- !u!1 &1956565677 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7112028246069034972, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
+  m_PrefabInstance: {fileID: 1826025412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2119470405
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,15 +632,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119470405}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3b1c1d95b454ff40bfe7c1d0b81a9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   csvFilePath: Assets/CSV/stretch.csv
   landmarkPrefab: {fileID: 7322892745076488792, guid: 94a1aee55906e6e4797a185377a84458, type: 3}
-  scale: 2
-  offset: {x: 0, y: 2, z: 0}
+  scale: 1.1
+  offset: {x: 0, y: 1, z: 0}
   lineMaterial: {fileID: 2100000, guid: 4edc978871804164f847620d264a83f1, type: 2}
 --- !u!4 &2119470407
 Transform:
@@ -547,3 +666,4 @@ SceneRoots:
   - {fileID: 1142510770}
   - {fileID: 2119470407}
   - {fileID: 1721041656}
+  - {fileID: 1826025412}
