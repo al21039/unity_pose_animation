@@ -69,7 +69,7 @@ public class CatchPos : MonoBehaviour
             {
                 Vector3[] landmarks = landmarkData[currentFrame];
                 ApplyLandmarksToBones(landmarks);
-                movingPos = new Vector3(0, 0, currentFrame * 0.05f);
+                movingPos = new Vector3(0, 0, currentFrame * 0.07f);
 
                 LHandPos[i] = animator.GetBoneTransform(HumanBodyBones.LeftHand).transform.position + movingPos;
                 RHandPos[i] = animator.GetBoneTransform(HumanBodyBones.RightHand).transform.position + movingPos;
@@ -82,11 +82,11 @@ public class CatchPos : MonoBehaviour
         GameObject StartPosition = Instantiate(humanoid, new Vector3(0, 0, 0), Quaternion.identity);
         landmarks = landmarkData[0];
         ApplyIdModel(landmarks, StartPosition);
-        GameObject EndPosition = Instantiate(humanoid, new Vector3(0, 0, totalFlames * 0.05f), Quaternion.identity);
+        GameObject EndPosition = Instantiate(humanoid, new Vector3(0, 0, totalFlames * 0.07f), Quaternion.identity);
         landmarks = landmarkData[totalFlames - 1];
         ApplyIdModel(landmarks, EndPosition);
-        GameObject KeyFlamePos = Instantiate(humanoid, new Vector3(0, 0, 60 * 0.05f), Quaternion.identity);
-        landmarks = landmarkData[60];
+        GameObject KeyFlamePos = Instantiate(humanoid, new Vector3(0, 0, 50 * 0.07f), Quaternion.identity);
+        landmarks = landmarkData[50];
         ApplyIdModel(landmarks, KeyFlamePos);
 
         LHandButton = true;

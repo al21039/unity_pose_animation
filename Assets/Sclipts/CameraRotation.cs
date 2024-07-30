@@ -20,6 +20,6 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
 
-        transform.RotateAround(Player.transform.position, new Vector3(0, 1, 0), 0.1f);
+        transform.RotateAround(Player.transform.position, new Vector3(0, 1, 0), 1.0f);
     }
 }

@@ -584,7 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb9c9d8e42c8474f8247e188f36d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
+  csvFilePath: Assets/CSV/kick.csv
   currentFrame: 0
   humanoid: {fileID: 1313951546615716435, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
   forward: {x: 0, y: 1, z: 0}
@@ -634,9 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97ab670d3129bb4faedfd56356ce159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
+  csvFilePath: Assets/CSV/kick.csv
   humanoid: {fileID: 1313951546615716435, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
-  material: {fileID: 0}
   forward: {x: 0, y: 1, z: 0}
   LHandButton: 1
   RHandButton: 1
@@ -970,7 +969,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.095188566, y: -0.82366127, z: 0.14523369, w: 0.53984123}
-  m_LocalPosition: {x: 3.6, y: 3, z: 6.1}
+  m_LocalPosition: {x: 3.6, y: 3, z: 6.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

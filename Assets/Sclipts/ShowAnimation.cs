@@ -45,7 +45,7 @@ public class ShowAnimation : MonoBehaviour
                 {
                     Vector3[] landmarks = landmarkData[currentFrame];
                     ApplyLandmarksToBones(landmarks, go);
-                    go.transform.Translate(0f, 0f, 0.05f);
+                    go.transform.Translate(0f, 0f, 0.07f);
                 }
 
                 currentFrame++;

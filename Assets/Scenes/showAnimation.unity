@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df1b3e488ca29e3418addb51b8392357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
+  csvFilePath: Assets/CSV/kick.csv
   forward: {x: 0, y: 1, z: 0}
 --- !u!1 &671585196
 GameObject:
@@ -499,7 +499,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -1, y: 1, z: 3}
+  m_LocalPosition: {x: -1.5, y: 1, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -519,7 +519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1835154540235227369, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 1835154540235227369, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -556,6 +556,46 @@ PrefabInstance:
     - target: {fileID: 1835154540235227369, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0000020084926
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00087990414
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.05206503
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6607211
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.75056523
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0068736896
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0072238534
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 97.285
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -0.7960205
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247880591192388516, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.34899902
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1049,7 +1089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b1c1d95b454ff40bfe7c1d0b81a9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
+  csvFilePath: Assets/CSV/kick.csv
   landmarkPrefab: {fileID: 7322892745076488792, guid: 94a1aee55906e6e4797a185377a84458, type: 3}
   scale: 1
   offset: {x: 0, y: 1, z: 0}

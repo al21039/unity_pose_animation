@@ -84,7 +84,7 @@ public class ApplyLandmarks : MonoBehaviour
         SetBoneRotation(HumanBodyBones.Spine, new Vector3(0, 0, 0), (landmarks[11] + landmarks[12]) / 2); //ê“í≈
         */
 
-        //SetBoneRotation(HumanBodyBones.Hips, new Vector3(0, 0, 0), sholuderMiddle);
+        SetBoneRotation(HumanBodyBones.Hips, new Vector3(0, 0, 0), new Vector3(landmarks[0].x, sholuderMiddle.y, sholuderMiddle.z));
 
         
         SetBoneRotation(HumanBodyBones.LeftUpperArm, landmarks[11], landmarks[13]); //ç∂ è„òr
