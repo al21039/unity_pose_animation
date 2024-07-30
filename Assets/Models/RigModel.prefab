@@ -585,7 +585,7 @@ Transform:
   m_GameObject: {fileID: 949923049921367998}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.43, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -743,6 +743,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   csvFilePath: Assets/CSV/kick.csv
   forward: {x: 0, y: 1, z: 0}
+  RShoulder: {fileID: 0}
+  LShoulder: {fileID: 0}
+  LHip: {fileID: 0}
+  RHip: {fileID: 0}
   RHand: {fileID: 7112028246069034972}
   LHand: {fileID: 1945657109633953863}
   LFoot: {fileID: 7809089915036118095}
