@@ -567,8 +567,6 @@ GameObject:
   - component: {fileID: 5802098134675443582}
   - component: {fileID: 7397745159913363505}
   - component: {fileID: 436652386988159661}
-  - component: {fileID: 7371663170595055024}
-  - component: {fileID: 4852733673282870622}
   m_Layer: 0
   m_Name: RigModel
   m_TagString: Untagged
@@ -715,46 +713,6 @@ MonoBehaviour:
   - m_Rig: {fileID: 2697798354923342135}
     m_Active: 1
   m_Effectors: []
---- !u!114 &7371663170595055024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949923049921367998}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df1b3e488ca29e3418addb51b8392357, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/kick.csv
-  forward: {x: 0, y: 1, z: 0}
---- !u!114 &4852733673282870622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949923049921367998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf508fde78a329442b6d4f39a2bc0fd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/kick.csv
-  forward: {x: 0, y: 1, z: 0}
-  RShoulder: {fileID: 0}
-  LShoulder: {fileID: 0}
-  LHip: {fileID: 0}
-  RHip: {fileID: 0}
-  RHand: {fileID: 7112028246069034972}
-  LHand: {fileID: 1945657109633953863}
-  LFoot: {fileID: 7809089915036118095}
-  RFoot: {fileID: 663925212843698953}
-  RElbow: {fileID: 3210310002292592100}
-  LElbow: {fileID: 3535397807156214157}
-  LKnee: {fileID: 1708529373166322712}
-  RKnee: {fileID: 6991898592908386034}
 --- !u!1 &975576003702753703
 GameObject:
   m_ObjectHideFlags: 0
