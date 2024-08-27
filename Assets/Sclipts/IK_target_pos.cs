@@ -36,7 +36,6 @@ public class IK_target_pos : MonoBehaviour
     float model_dis_8 = 0;
 
     Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
-    Vector3 mp_middleDot_hipspos = new Vector3(0, 0, 0);
 
     // Start is called before the first frame update
     void Start()
@@ -67,9 +66,8 @@ public class IK_target_pos : MonoBehaviour
             Vector3[] landmarks = landmarkData[currentFrame];
 
             mp_middleDot_shoulderpos = (landmarks[11] + landmarks[12]) / 2;
-            mp_middleDot_hipspos = (landmarks[23] + landmarks[24]) / 2;
 
-            float mp_dis_0 = Vector3.Distance(mp_middleDot_hipspos, mp_middleDot_shoulderpos);
+            float mp_dis_0 = Vector3.Distance(new Vector3(0, 1, 0), mp_middleDot_shoulderpos);
             
             float mp_dis_1 = Vector3.Distance(landmarks[11], landmarks[13]);
             float mp_dis_2 = Vector3.Distance(landmarks[13], landmarks[15]);
@@ -94,7 +92,7 @@ public class IK_target_pos : MonoBehaviour
             float dis_diff_7 = model_dis_7 / mp_dis_7;
             float dis_diff_8 = model_dis_8 / mp_dis_8;
 
-            middleDot.transform.position = (mp_middleDot_shoulderpos - mp_middleDot_hipspos) * dis_diff_0 + Hips.transform.position;
+            middleDot.transform.position = (mp_middleDot_shoulderpos - new Vector3(0, 1, 0)) * dis_diff_0 + Hips.transform.position;
 
             Left_elbow.transform.position = (landmarks[13] - landmarks[11]) * dis_diff_1 + Left_shoulder.transform.position;
             Left_hand.transform.position = (landmarks[15] - landmarks[13]) * dis_diff_2 + Left_elbow.transform.position;
