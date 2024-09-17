@@ -11,6 +11,7 @@ public class IK_target_pos : MonoBehaviour
     private int totalFlames = 0;
     [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
     [SerializeField] GameObject Hips;
+    [SerializeField] GameObject Body;
     [SerializeField] GameObject Left_shoulder;
     [SerializeField] GameObject Left_elbow;
     [SerializeField] GameObject Left_hand;
@@ -25,7 +26,10 @@ public class IK_target_pos : MonoBehaviour
     [SerializeField] GameObject Right_ankle;
     [SerializeField] GameObject middleDot;
 
-    float model_dis_0 = 0;
+    Vector3 mp_body_dot;
+
+    float model_dis_body = 0;
+    float model_dis_shoulder = 0;
     float model_dis_1 = 0;
     float model_dis_2 = 0;
     float model_dis_3 = 0;
@@ -35,13 +39,15 @@ public class IK_target_pos : MonoBehaviour
     float model_dis_7 = 0;
     float model_dis_8 = 0;
 
+
     Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
 
     // Start is called before the first frame update
     void Start()
     {
         //ÉÇÉfÉãÇÃä÷êﬂñàÇÃãóó£åvéZÅ@ê≥ãKâªÇ≈óòóp
-        model_dis_0 = Vector3.Distance(Hips.transform.position, middleDot.transform.position);
+        model_dis_body = Vector3.Distance(Hips.transform.position, Body.transform.position);
+        model_dis_shoulder = Vector3.Distance(Body.transform.position, middleDot.transform.position);
         
         model_dis_1 = Vector3.Distance(Left_shoulder.transform.position, Left_elbow.transform.position);
         model_dis_2 = Vector3.Distance(Left_elbow.transform.position, Left_hand.transform.position);
@@ -52,7 +58,6 @@ public class IK_target_pos : MonoBehaviour
         model_dis_6 = Vector3.Distance(Left_knee.transform.position, Left_ankle.transform.position);
         model_dis_7 = Vector3.Distance(Right_hip.transform.position, Right_knee.transform.position);
         model_dis_8 = Vector3.Distance(Right_knee.transform.position, Right_ankle.transform.position);
-
         
         Application.targetFrameRate = 30;
         LoadLandmarkData();
@@ -66,9 +71,11 @@ public class IK_target_pos : MonoBehaviour
             Vector3[] landmarks = landmarkData[currentFrame];
 
             mp_middleDot_shoulderpos = (landmarks[11] + landmarks[12]) / 2;
+            mp_body_dot = (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4;
 
-            float mp_dis_0 = Vector3.Distance(new Vector3(0, 1, 0), mp_middleDot_shoulderpos);
-            
+            float mp_dis_body = Vector3.Distance(new Vector3(0, 1, 0), mp_body_dot);
+            float mp_dis_shoulder = Vector3.Distance(mp_body_dot, mp_middleDot_shoulderpos);
+
             float mp_dis_1 = Vector3.Distance(landmarks[11], landmarks[13]);
             float mp_dis_2 = Vector3.Distance(landmarks[13], landmarks[15]);
             float mp_dis_3 = Vector3.Distance(landmarks[12], landmarks[14]);
@@ -80,7 +87,8 @@ public class IK_target_pos : MonoBehaviour
             float mp_dis_8 = Vector3.Distance(landmarks[26], landmarks[30]);
 
 
-            float dis_diff_0 = model_dis_0 / mp_dis_0;
+            float dis_diff_body = model_dis_body / mp_dis_body;
+            float dis_diff_shoulder = model_dis_shoulder / mp_dis_shoulder;
             
             float dis_diff_1 = model_dis_1 / mp_dis_1;
             float dis_diff_2 = model_dis_2 / mp_dis_2;
@@ -92,18 +100,22 @@ public class IK_target_pos : MonoBehaviour
             float dis_diff_7 = model_dis_7 / mp_dis_7;
             float dis_diff_8 = model_dis_8 / mp_dis_8;
 
-            middleDot.transform.position = (mp_middleDot_shoulderpos - new Vector3(0, 1, 0)) * dis_diff_0 + Hips.transform.position;
+            
+            Body.transform.position = (mp_body_dot - new Vector3(0, 1, 0)) * dis_diff_body + Hips.transform.position;
 
+            middleDot.transform.position = (mp_middleDot_shoulderpos - mp_body_dot) * dis_diff_shoulder + Body.transform.position;
+            
+            
             Left_elbow.transform.position = (landmarks[13] - landmarks[11]) * dis_diff_1 + Left_shoulder.transform.position;
             Left_hand.transform.position = (landmarks[15] - landmarks[13]) * dis_diff_2 + Left_elbow.transform.position;
             Right_elbow.transform.position = (landmarks[14] - landmarks[12]) * dis_diff_3 + Right_shoulder.transform.position;
             Right_hand.transform.position = (landmarks[16] - landmarks[14]) * dis_diff_4 + Right_elbow.transform.position;
-
+            
             Left_knee.transform.position = (landmarks[25] - landmarks[23]) * dis_diff_5 + Left_hip.transform.position;
             Left_ankle.transform.position = (landmarks[29] - landmarks[25]) * dis_diff_6 + Left_knee.transform.position;
             Right_knee.transform.position = (landmarks[26] - landmarks[24]) * dis_diff_7 + Right_hip.transform.position;
             Right_ankle.transform.position = (landmarks[30] - landmarks[26]) * dis_diff_8 + Right_knee.transform.position;
-
+            
 
         }
 
