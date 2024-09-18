@@ -88,11 +88,14 @@ public class CatchPos : MonoBehaviour
         landmarks = landmarkData[27];
         ApplyIdModel(landmarks, pos1);
         
-        pos1 = Instantiate(humanoid, new Vector3(0, 0, 36 * 0.15f), Quaternion.identity);
-        landmarks = landmarkData[36];
+        pos1 = Instantiate(humanoid, new Vector3(0, 0, 39 * 0.15f), Quaternion.identity);
+        landmarks = landmarkData[39];
         ApplyIdModel(landmarks, pos1);
         pos1 = Instantiate(humanoid, new Vector3(0, 0, 47 * 0.15f), Quaternion.identity);
         landmarks = landmarkData[47];
+        ApplyIdModel(landmarks, pos1);
+        pos1 = Instantiate(humanoid, new Vector3(0, 0, 55 * 0.15f), Quaternion.identity);
+        landmarks = landmarkData[55];
         ApplyIdModel(landmarks, pos1);
         pos1 = Instantiate(humanoid, new Vector3(0, 0, 60 * 0.15f), Quaternion.identity);
         landmarks = landmarkData[60];

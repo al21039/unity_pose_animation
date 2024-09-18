@@ -10,23 +10,21 @@ public class IK_target_pos : MonoBehaviour
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
     
-    private int currentFrame = 0;
-    private int totalFrames = 0;
+    int currentFrame = 0;
+    int totalFrames = 0;
     
-    private bool check = true;
-    private bool detection_check = true;
+    bool check = true;
+    bool detection_check = true;
     
-    private Vector3[] part_position = new Vector3[4];
-    private Vector3[] before_part_position = new Vector3[4];
+    Vector3[] part_position = new Vector3[4];
+    Vector3[] before_part_position = new Vector3[4];
 
     List<int> keyPose_candidate_frames = new List<int>();
     List<float> keyPose_candidate_frames_distance = new List<float>();
-    List<int> max_direction_number = new List<int>();
-    List<int> number = new List<int>();
-    List<int> KeyPose_List = new List<int>();
+    public List<int> KeyPose_List = new List<int>();
 
-    private float[] part_distance = new float[4];
-    private float threshold = 15.0f;
+    float[] part_distance = new float[4];
+    public float threshold = 10.0f;
 
     [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
     [SerializeField] GameObject Hips;
@@ -92,7 +90,6 @@ public class IK_target_pos : MonoBehaviour
 
         if(!check && detection_check)
         {
-            
             DetectionKeyPose();
         }
   
@@ -192,7 +189,12 @@ public class IK_target_pos : MonoBehaviour
                 modelPos[currentFrame] = part_position;
 
                 //関節の前フレームとの距離検出
-                if (currentFrame != 0 && currentFrame != totalFrames)
+                if(currentFrame == 0 || currentFrame == totalFrames - 1)
+                {
+                    keyPose_candidate_frames.Add(currentFrame);
+                    keyPose_candidate_frames_distance.Add(0.0f);
+                }
+                else
                 {
                     bool key_check = false;
                     float max = 0;
@@ -208,7 +210,6 @@ public class IK_target_pos : MonoBehaviour
                             if (!key_check)
                             {
                                 keyPose_candidate_frames.Add(currentFrame);
-                                Debug.Log(currentFrame);
                             }
                             key_check = true;
                             if (max < part_distance[i])
@@ -216,17 +217,13 @@ public class IK_target_pos : MonoBehaviour
                                 max = part_distance[i];
                                 tmp = i;
                             }
-                            
                         }
                     }
                     if (key_check)
                     {
                         keyPose_candidate_frames_distance.Add(max);
-                        max_direction_number.Add(tmp);
-                        number.Add(over_threhold);
                     }
                 }
-
                 for(int i = 0; i < 4; i++)
                 {
                     before_part_position[i] = part_position[i];
@@ -236,27 +233,116 @@ public class IK_target_pos : MonoBehaviour
 
         currentFrame++;
         
-        if (currentFrame >= totalFrames)
+        if (currentFrame > totalFrames - 1)
         {
             currentFrame = 0;
             check = false;
         }
-        
     }
 
 
     void DetectionKeyPose()
     {
-        KeyPose_List.Add(0);
+        bool serial = false;
+        bool first = true;
+        int num = 0;
+        int first_address = 0;
+        int special_flg = 0;
+        float max = 0;
+        int max_number = 0;
 
         for(int i = 0; i < keyPose_candidate_frames.Count; i++)
         {
-            if (keyPose_candidate_frames[i] - KeyPose_List[KeyPose_List.Count - 1] > 7) { }
-            KeyPose_List.Add(keyPose_candidate_frames[0]);
+            if(i == 0)
+            {
+                special_flg = 1;
+            }
+
+            if (i == keyPose_candidate_frames.Count - 1)
+            {
+                special_flg = 2;
+            }
+
+            if (special_flg != 2)
+            {
+                if (keyPose_candidate_frames[i + 1] - keyPose_candidate_frames[i] < 6)
+                {
+                    num++;
+                    if (first)
+                    {
+                        serial = true;
+                        first_address = keyPose_candidate_frames[i];
+                        first = false;
+                    }
+
+                    if (max < keyPose_candidate_frames_distance[i] && special_flg == 0)
+                    {
+                        max = keyPose_candidate_frames_distance[i];
+                        max_number = keyPose_candidate_frames[i];
+                    }
+                }
+                else if (serial)
+                {
+                    max = 0;
+                    serial = false;
+                }
+            }
+            else
+            {
+                max = 0;
+                serial = false;
+            }
+
+            if (!serial)
+            {
+                if (!first)
+                {
+                    if (num > 9)
+                    {
+                        KeyPose_List.Add(first_address);
+                        KeyPose_List.Add(keyPose_candidate_frames[i]);
+                    }
+                    else
+                    {
+                        if (special_flg == 1)
+                        {
+                            KeyPose_List.Add(0);
+                            special_flg = 0;
+                        }
+                        else if (special_flg == 2)
+                        {
+                            KeyPose_List.Add(i + 1);
+                            special_flg = 0;
+                        }
+                        else
+                        {
+                            KeyPose_List.Add(max_number);
+                        }
+                    }
+                    first = true;
+                    first_address = 0;
+                    max_number = 0;
+                    num = 0;
+                }
+                else
+                {
+                    if (special_flg == 1)
+                    {
+                        KeyPose_List.Add(0);
+                        special_flg = 0;
+                    }
+                    else if (special_flg == 2)
+                    {
+                        KeyPose_List.Add(keyPose_candidate_frames[i]);
+                        special_flg = 0;
+                    }
+                    else
+                    {
+                        KeyPose_List.Add(keyPose_candidate_frames[i]);
+                    }
+                }
+            }
         }
-
-
-        KeyPose_List.Add(totalFrames);
         detection_check = false;
     }
 }

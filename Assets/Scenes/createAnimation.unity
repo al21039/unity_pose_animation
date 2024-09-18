@@ -1143,7 +1143,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   csvFilePath: Assets/CSV/kick.csv
-  roop: 1
+  roop: 0
+  KeyPose_List: 
+  threshold: 10
   forward: {x: 0, y: 1, z: 0}
   Hips: {fileID: 440912326}
   Body: {fileID: 1163525783}
