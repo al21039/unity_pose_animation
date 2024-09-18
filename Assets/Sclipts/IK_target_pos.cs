@@ -6,13 +6,27 @@ using UnityEngine;
 public class IK_target_pos : MonoBehaviour
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
+    public bool roop = false;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
     
     private int currentFrame = 0;
-    private int totalFlames = 0;
+    private int totalFrames = 0;
+    
     private bool check = true;
-    private Vector3[] part_position = new Vector3[8];
+    private bool detection_check = true;
+    
+    private Vector3[] part_position = new Vector3[4];
+    private Vector3[] before_part_position = new Vector3[4];
+
+    List<int> keyPose_candidate_frames = new List<int>();
+    List<float> keyPose_candidate_frames_distance = new List<float>();
+    List<int> max_direction_number = new List<int>();
+    List<int> number = new List<int>();
+    List<int> KeyPose_List = new List<int>();
+
+    private float[] part_distance = new float[4];
+    private float threshold = 15.0f;
 
     [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
     [SerializeField] GameObject Hips;
@@ -33,16 +47,16 @@ public class IK_target_pos : MonoBehaviour
 
     Vector3 mp_body_dot;
 
-    float model_dis_body = 0;
-    float model_dis_shoulder = 0;
-    float model_dis_1 = 0;
-    float model_dis_2 = 0;
-    float model_dis_3 = 0;
-    float model_dis_4 = 0;
-    float model_dis_5 = 0;
-    float model_dis_6 = 0;
-    float model_dis_7 = 0;
-    float model_dis_8 = 0;
+    float model_dis_body;
+    float model_dis_shoulder;
+    float model_dis_1;
+    float model_dis_2;
+    float model_dis_3;
+    float model_dis_4;
+    float model_dis_5;
+    float model_dis_6;
+    float model_dis_7;
+    float model_dis_8;
 
 
     Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
@@ -70,6 +84,52 @@ public class IK_target_pos : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        if(check || roop)
+        {
+            CreateAnimation();
+        }
+
+        if(!check && detection_check)
+        {
+            
+            DetectionKeyPose();
+        }
+  
+    }
+
+    //CSVファイルからランドマークデータ読み出し
+    void LoadLandmarkData()
+    {
+        using (var reader = new StreamReader(csvFilePath))
+        {
+            bool isFirstLine = true;
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                if (isFirstLine)
+                {
+                    isFirstLine = false;
+                    continue; // Skip header line
+                }
+                var values = line.Split(',');
+                int frame = int.Parse(values[0]);
+                Vector3[] landmarks = new Vector3[33];
+
+                for (int i = 0; i < 33; i++)
+                {
+                    float x = float.Parse(values[1 + i * 3]);
+                    float y = float.Parse(values[2 + i * 3]);
+                    float z = float.Parse(values[3 + i * 3]);
+                    landmarks[i] = new Vector3(-x, -y + 1, -z);
+                }
+                landmarkData[frame] = landmarks;
+                totalFrames++;
+            }
+        }
+    }
+
+    void CreateAnimation()
     {
         if (landmarkData.ContainsKey(currentFrame))
         {
@@ -122,61 +182,81 @@ public class IK_target_pos : MonoBehaviour
             Left_ankle.transform.position = (landmarks[29] - landmarks[25]) * dis_diff_6 + Left_knee.transform.position;
             Right_knee.transform.position = (landmarks[26] - landmarks[24]) * dis_diff_7 + Right_hip.transform.position;
             Right_ankle.transform.position = (landmarks[30] - landmarks[26]) * dis_diff_8 + Right_knee.transform.position;
-
-            if (check)
-            {
-                part_position[0] = Left_elbow.transform.position;
-                part_position[1] = Left_hand.transform.position;
-                part_position[2] = Right_elbow.transform.position;
-                part_position[3] = Right_hand.transform.position;
-                part_position[4] = Left_knee.transform.position;
-                part_position[5] = Left_ankle.transform.position;
-                part_position[6] = Right_knee.transform.position;
-                part_position[7] = Right_ankle.transform.position;
-
+            
+            
+            if(check) {
+                part_position[0] = Left_hand.transform.position;
+                part_position[1] = Right_hand.transform.position;
+                part_position[2] = Left_ankle.transform.position;
+                part_position[3] = Right_ankle.transform.position;
                 modelPos[currentFrame] = part_position;
-            }
 
+                //関節の前フレームとの距離検出
+                if (currentFrame != 0 && currentFrame != totalFrames)
+                {
+                    bool key_check = false;
+                    float max = 0;
+                    int over_threhold = 0;
+                    int tmp = 0;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        part_distance[i] = Vector3.Distance(part_position[i] * 100, before_part_position[i] * 100);
+                        if (part_distance[i] > threshold)
+                        {
+                            over_threhold++;
+                            if (!key_check)
+                            {
+                                keyPose_candidate_frames.Add(currentFrame);
+                                Debug.Log(currentFrame);
+                            }
+                            key_check = true;
+                            if (max < part_distance[i])
+                            {
+                                max = part_distance[i];
+                                tmp = i;
+                            }
+                            
+                        }
+                    }
+                    if (key_check)
+                    {
+                        keyPose_candidate_frames_distance.Add(max);
+                        max_direction_number.Add(tmp);
+                        number.Add(over_threhold);
+                    }
+                }
+
+                for(int i = 0; i < 4; i++)
+                {
+                    before_part_position[i] = part_position[i];
+                }
+            }
         }
 
         currentFrame++;
-        if (currentFrame >= totalFlames) { 
+        
+        if (currentFrame >= totalFrames)
+        {
             currentFrame = 0;
             check = false;
         }
-
         
     }
 
-    //CSVファイルからランドマークデータ読み出し
-    void LoadLandmarkData()
+
+    void DetectionKeyPose()
     {
-        using (var reader = new StreamReader(csvFilePath))
+        KeyPose_List.Add(0);
+
+        for(int i = 0; i < keyPose_candidate_frames.Count; i++)
         {
-            bool isFirstLine = true;
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                if (isFirstLine)
-                {
-                    isFirstLine = false;
-                    continue; // Skip header line
-                }
-                var values = line.Split(',');
-                int frame = int.Parse(values[0]);
-                Vector3[] landmarks = new Vector3[33];
-
-                for (int i = 0; i < 33; i++)
-                {
-                    float x = float.Parse(values[1 + i * 3]);
-                    float y = float.Parse(values[2 + i * 3]);
-                    float z = float.Parse(values[3 + i * 3]);
-                    landmarks[i] = new Vector3(-x, -y + 1, -z);
-                }
-
-                landmarkData[frame] = landmarks;
-                totalFlames++;
-            }
+            if (keyPose_candidate_frames[i] - KeyPose_List[KeyPose_List.Count - 1] > 7) { }
+            KeyPose_List.Add(keyPose_candidate_frames[0]);
         }
+
+
+        KeyPose_List.Add(totalFrames);
+        detection_check = false;
     }
 }
