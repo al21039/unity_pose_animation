@@ -259,6 +259,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64585971}
   m_CullTransparentMesh: 1
+--- !u!1 &218644118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 218644119}
+  - component: {fileID: 218644120}
+  m_Layer: 0
+  m_Name: ButtonManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &218644119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218644118}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &218644120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218644118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de86a93a481c8f743b8313fdfe1cf517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &277861227
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +449,6 @@ GameObject:
   - component: {fileID: 324980298}
   - component: {fileID: 324980297}
   - component: {fileID: 324980296}
-  - component: {fileID: 324980299}
   m_Layer: 5
   m_Name: LFoot
   m_TagString: Untagged
@@ -477,8 +520,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 324980299}
-        m_TargetAssemblyTypeName: SwitchButton, Assembly-CSharp
+      - m_Target: {fileID: 218644120}
+        m_TargetAssemblyTypeName: Button_script, Assembly-CSharp
         m_MethodName: Push_LFoot
         m_Mode: 1
         m_Arguments:
@@ -527,120 +570,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324980294}
   m_CullTransparentMesh: 1
---- !u!114 &324980299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324980294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271f3d33ce0fcbb4cb5513bc16f5bc0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catchPos: {fileID: 429121091}
---- !u!1 &355553016
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 355553017}
-  - component: {fileID: 355553018}
-  m_Layer: 0
-  m_Name: ShowAnimation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &355553017
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355553016}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02526854, y: -1.4819553, z: 0.640564}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &355553018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355553016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccb9c9d8e42c8474f8247e188f36d861, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/kick.csv
-  currentFrame: 0
-  humanoid: {fileID: 1313951546615716435, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
-  forward: {x: 0, y: 1, z: 0}
-  show: 0
-  check: 0
---- !u!1 &429121089
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 429121090}
-  - component: {fileID: 429121091}
-  m_Layer: 0
-  m_Name: CatchLandmarkPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &429121090
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429121089}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &429121091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429121089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b97ab670d3129bb4faedfd56356ce159, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/kick.csv
-  humanoid: {fileID: 1313951546615716435, guid: 806e802602a17334aa2ce1946d07d67b, type: 3}
-  forward: {x: 0, y: 1, z: 0}
-  LHandButton: 1
-  RHandButton: 1
-  LFootButton: 1
-  RFootButton: 1
 --- !u!1 &433576685
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +582,6 @@ GameObject:
   - component: {fileID: 433576689}
   - component: {fileID: 433576688}
   - component: {fileID: 433576687}
-  - component: {fileID: 433576690}
   m_Layer: 5
   m_Name: RFoot
   m_TagString: Untagged
@@ -725,8 +653,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 433576690}
-        m_TargetAssemblyTypeName: SwitchButton, Assembly-CSharp
+      - m_Target: {fileID: 218644120}
+        m_TargetAssemblyTypeName: Button_script, Assembly-CSharp
         m_MethodName: Push_RFoot
         m_Mode: 1
         m_Arguments:
@@ -775,19 +703,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 433576685}
   m_CullTransparentMesh: 1
---- !u!114 &433576690
+--- !u!1 &665791604
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 665791605}
+  - component: {fileID: 665791606}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &665791605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665791604}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &665791606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433576685}
+  m_GameObject: {fileID: 665791604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271f3d33ce0fcbb4cb5513bc16f5bc0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f68d8929d850304c8ead3940e29ca35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  catchPos: {fileID: 429121091}
+  rig_model: {fileID: 8261421516790387995, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,7 +961,6 @@ GameObject:
   - component: {fileID: 1009281348}
   - component: {fileID: 1009281347}
   - component: {fileID: 1009281346}
-  - component: {fileID: 1009281349}
   m_Layer: 5
   m_Name: Show
   m_TagString: Untagged
@@ -1072,19 +1031,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1009281347}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1009281349}
-        m_TargetAssemblyTypeName: AnimButton, Assembly-CSharp
-        m_MethodName: push
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1009281347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,19 +1070,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009281344}
   m_CullTransparentMesh: 1
---- !u!114 &1009281349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1009281344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdb56da3d8aab944b6ec335820c17b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showAnimation: {fileID: 355553018}
 --- !u!1 &1142510766
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,7 +1658,6 @@ GameObject:
   - component: {fileID: 1861787951}
   - component: {fileID: 1861787950}
   - component: {fileID: 1861787949}
-  - component: {fileID: 1861787952}
   m_Layer: 5
   m_Name: AnimateButton
   m_TagString: Untagged
@@ -1796,9 +1729,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1861787952}
-        m_TargetAssemblyTypeName: AnimateButton, Assembly-CSharp
-        m_MethodName: ChageToAnimateScene
+      - m_Target: {fileID: 218644120}
+        m_TargetAssemblyTypeName: Trajectory_Button_Script, Assembly-CSharp
+        m_MethodName: ChangeToAnimationScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1846,18 +1779,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861787947}
   m_CullTransparentMesh: 1
---- !u!114 &1861787952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861787947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74e471772ce3b0042b3b364b776e6694, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1896472328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,7 +1898,6 @@ GameObject:
   - component: {fileID: 1975911366}
   - component: {fileID: 1975911365}
   - component: {fileID: 1975911364}
-  - component: {fileID: 1975911367}
   m_Layer: 5
   m_Name: LHand
   m_TagString: Untagged
@@ -2049,8 +1969,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1975911367}
-        m_TargetAssemblyTypeName: SwitchButton, Assembly-CSharp
+      - m_Target: {fileID: 218644120}
+        m_TargetAssemblyTypeName: Button_script, Assembly-CSharp
         m_MethodName: Push_LHand
         m_Mode: 1
         m_Arguments:
@@ -2099,19 +2019,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975911362}
   m_CullTransparentMesh: 1
---- !u!114 &1975911367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1975911362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271f3d33ce0fcbb4cb5513bc16f5bc0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catchPos: {fileID: 429121091}
 --- !u!1 &1976814565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2165,6 @@ GameObject:
   - component: {fileID: 2070459140}
   - component: {fileID: 2070459139}
   - component: {fileID: 2070459138}
-  - component: {fileID: 2070459141}
   m_Layer: 5
   m_Name: RHand
   m_TagString: Untagged
@@ -2330,8 +2236,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2070459141}
-        m_TargetAssemblyTypeName: SwitchButton, Assembly-CSharp
+      - m_Target: {fileID: 218644120}
+        m_TargetAssemblyTypeName: Button_script, Assembly-CSharp
         m_MethodName: Push_RHand
         m_Mode: 1
         m_Arguments:
@@ -2380,19 +2286,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070459136}
   m_CullTransparentMesh: 1
---- !u!114 &2070459141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070459136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271f3d33ce0fcbb4cb5513bc16f5bc0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catchPos: {fileID: 429121091}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2402,5 +2295,5 @@ SceneRoots:
   - {fileID: 1142510770}
   - {fileID: 1896472332}
   - {fileID: 1299366694}
-  - {fileID: 429121090}
-  - {fileID: 355553017}
+  - {fileID: 218644119}
+  - {fileID: 665791605}

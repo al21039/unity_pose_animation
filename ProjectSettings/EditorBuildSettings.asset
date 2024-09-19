@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/showAnimation.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/createAnimation.unity
+    guid: 051a81663647ecd47b5da63f72671665
   - enabled: 1
     path: Assets/Scenes/showTrajectroy.unity
     guid: 52bfb6d912b35a44a8fe6ee38a5e3155

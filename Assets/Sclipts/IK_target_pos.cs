@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IK_target_pos : MonoBehaviour
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
     public bool roop = false;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
-    private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
+    public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
+    [SerializeField] GameObject travel_button;
+    [SerializeField] GameObject scene_manager_object;
+    AnimationSceneManager AnimationSceneManager;
     
-    int currentFrame = 0;
+    public int currentFrame = 0;
     int totalFrames = 0;
     
     bool check = true;
+    bool created_check = false;
     bool detection_check = true;
     
-    Vector3[] part_position = new Vector3[4];
+    public Vector3[] part_position = new Vector3[10];
     Vector3[] before_part_position = new Vector3[4];
 
     List<int> keyPose_candidate_frames = new List<int>();
@@ -25,8 +30,6 @@ public class IK_target_pos : MonoBehaviour
 
     float[] part_distance = new float[4];
     public float threshold = 10.0f;
-
-    [SerializeField] Vector3 forward = new Vector3(0, 1, 0);
     [SerializeField] GameObject Hips;
     [SerializeField] GameObject Body;
     [SerializeField] GameObject Left_shoulder;
@@ -62,6 +65,8 @@ public class IK_target_pos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AnimationSceneManager = scene_manager_object.GetComponent<AnimationSceneManager>();
+
         //モデルの関節毎の距離計算　正規化で利用
         model_dis_body = Vector3.Distance(Hips.transform.position, Body.transform.position);　//腰から体の中心
         model_dis_shoulder = Vector3.Distance(Body.transform.position, middleDot.transform.position);　//体の中心から首
@@ -83,7 +88,7 @@ public class IK_target_pos : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(check || roop)
+        if(check)
         {
             CreateAnimation();
         }
@@ -91,6 +96,16 @@ public class IK_target_pos : MonoBehaviour
         if(!check && detection_check)
         {
             DetectionKeyPose();
+        }
+
+        if (!detection_check && !created_check)
+        {
+
+            AnimationSceneManager.part_position = modelPos;
+            AnimationSceneManager.KeyPoses = KeyPose_List;
+            AnimationSceneManager.makedAnimation = true;
+            created_check = true;
+            travel_button.SetActive(true);
         }
   
     }
@@ -186,7 +201,20 @@ public class IK_target_pos : MonoBehaviour
                 part_position[1] = Right_hand.transform.position;
                 part_position[2] = Left_ankle.transform.position;
                 part_position[3] = Right_ankle.transform.position;
+                part_position[4] = Left_elbow.transform.position;
+                part_position[5] = Right_elbow.transform.position;
+                part_position[6] = Left_knee.transform.position;
+                part_position[7] = Right_knee.transform.position;
+                part_position[8] = Body.transform.position;
+                part_position[9] = middleDot.transform.position;
+
                 modelPos[currentFrame] = part_position;
+
+                for(int i = 0; i < 10; i++)
+                {
+                    Debug.Log(modelPos[currentFrame][i]);
+                }
+
 
                 //関節の前フレームとの距離検出
                 if(currentFrame == 0 || currentFrame == totalFrames - 1)
