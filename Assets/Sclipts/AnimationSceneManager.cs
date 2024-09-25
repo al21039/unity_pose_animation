@@ -27,6 +27,7 @@ public class AnimationSceneManager : MonoBehaviour
             //Debug.Log(pos_list[i]);
         }
         keypose_model = Instantiate(humanoid_model, new Vector3(0, 0, frame * 0.15f), Quaternion.identity);
+        keypose_model.name = frame + "_frame_model";
         SetAnimationTransform setAnimationTransform = keypose_model.GetComponent<SetAnimationTransform>();
         setAnimationTransform.SetPartTransform(frame, pos_list);
     }
