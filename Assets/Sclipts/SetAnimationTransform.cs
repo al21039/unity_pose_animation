@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+//キーフレーム毎にモデルの位置を定めそのフレームのアニメーションを行わせる
 public class SetAnimationTransform : MonoBehaviour
 {
     [SerializeField] GameObject Body;
@@ -17,12 +18,15 @@ public class SetAnimationTransform : MonoBehaviour
     [SerializeField] GameObject Right_ankle;
     int animation_frame = 0;
 
-    [SerializeField] GameObject manager_obj;
+    GameObject manager_obj;
+    private AnimationSceneManager manager_script;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        manager_obj = GameObject.Find("AnimationSceneManager");
+        manager_script = manager_obj.GetComponent<AnimationSceneManager>();
     }
 
     // Update is called once per frame
@@ -31,21 +35,21 @@ public class SetAnimationTransform : MonoBehaviour
         
     }
 
-    public void SetPartTransform(int frame)
+    public void SetPartTransform(int frame, Vector3[] pos_list)
     {
+        Vector3[] positions = pos_list;
         animation_frame = frame;
-        Vector3[] position = AnimationSceneManager.part_position[animation_frame];
 
-        Left_hand.transform.position = position[0] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_hand.transform.position = position[1] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_ankle.transform.position = position[2] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_ankle.transform.position = position[3] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_elbow.transform.position = position[4] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_elbow.transform.position = position[5] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_knee.transform.position = position[6] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_knee.transform.position = position[7] + new Vector3(0, 0, animation_frame * 0.15f);
-        Body.transform.position = position[8] + new Vector3(0, 0, animation_frame * 0.15f);
-        middleDot.transform.position = position[9] + new Vector3(0, 0, animation_frame * 0.15f);
+        Left_hand.transform.position = positions[0] + new Vector3(0, 0, animation_frame * 0.15f);
+        Right_hand.transform.position = positions[1] + new Vector3(0, 0, animation_frame * 0.15f);
+        Left_ankle.transform.position = positions[2] + new Vector3(0, 0, animation_frame * 0.15f);
+        Right_ankle.transform.position = positions[3] + new Vector3(0, 0, animation_frame * 0.15f);
+        Left_elbow.transform.position = positions[4] + new Vector3(0, 0, animation_frame * 0.15f);
+        Right_elbow.transform.position = positions[5] + new Vector3(0, 0, animation_frame * 0.15f);
+        Left_knee.transform.position = positions[6] + new Vector3(0, 0, animation_frame * 0.15f);
+        Right_knee.transform.position = positions[7] + new Vector3(0, 0, animation_frame * 0.15f);
+        Body.transform.position = positions[8] + new Vector3(0, 0, animation_frame * 0.15f);
+        middleDot.transform.position = positions[9] + new Vector3(0, 0, animation_frame * 0.15f);
     }
 }
 

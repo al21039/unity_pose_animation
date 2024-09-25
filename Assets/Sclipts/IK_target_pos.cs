@@ -10,7 +10,6 @@ public class IK_target_pos : MonoBehaviour
     public bool roop = false;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
-    [SerializeField] GameObject travel_button;
     [SerializeField] GameObject scene_manager_object;
     AnimationSceneManager AnimationSceneManager;
     
@@ -19,9 +18,8 @@ public class IK_target_pos : MonoBehaviour
     
     bool check = true;
     bool created_check = false;
-    bool detection_check = true;
+    bool detection_check = false;
     
-    public Vector3[] part_position = new Vector3[10];
     Vector3[] before_part_position = new Vector3[4];
 
     List<int> keyPose_candidate_frames = new List<int>();
@@ -61,7 +59,6 @@ public class IK_target_pos : MonoBehaviour
 
 
     Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
-
     // Start is called before the first frame update
     void Start()
     {
@@ -93,19 +90,29 @@ public class IK_target_pos : MonoBehaviour
             CreateAnimation();
         }
 
-        if(!check && detection_check)
+        if(!check && !detection_check)
         {
             DetectionKeyPose();
         }
 
-        if (!detection_check && !created_check)
-        {
+        if (detection_check && !created_check)
+        {        
+            for (int i = 0; i < KeyPose_List.Count; i++)
+            {
+                AnimationSceneManager.SetPosition(KeyPose_List[i], modelPos[KeyPose_List[i]]);
+            }
+            /*
+            foreach (Vector3[] value in modelPos.Values)
+            {
+                foreach (Vector3 vec in value)
+                {
+                    Debug.Log(vec);
+                }
 
-            AnimationSceneManager.part_position = modelPos;
-            AnimationSceneManager.KeyPoses = KeyPose_List;
-            AnimationSceneManager.makedAnimation = true;
+            }
+            */
             created_check = true;
-            travel_button.SetActive(true);
+            Destroy(this.gameObject);
         }
   
     }
@@ -143,124 +150,119 @@ public class IK_target_pos : MonoBehaviour
 
     void CreateAnimation()
     {
-        if (landmarkData.ContainsKey(currentFrame))
+
+        //フレーム毎の各ランドマーク座標
+        Vector3[] landmarks = landmarkData[currentFrame];
+
+        mp_middleDot_shoulderpos = (landmarks[11] + landmarks[12]) / 2;
+        mp_body_dot = (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4;
+
+        float mp_dis_body = Vector3.Distance(new Vector3(0, 1, 0), mp_body_dot);
+        float mp_dis_shoulder = Vector3.Distance(mp_body_dot, mp_middleDot_shoulderpos);
+
+        //ランドマーク隣接距離
+        float mp_dis_1 = Vector3.Distance(landmarks[11], landmarks[13]);
+        float mp_dis_2 = Vector3.Distance(landmarks[13], landmarks[15]);
+        float mp_dis_3 = Vector3.Distance(landmarks[12], landmarks[14]);
+        float mp_dis_4 = Vector3.Distance(landmarks[14], landmarks[16]);
+
+        float mp_dis_5 = Vector3.Distance(landmarks[23], landmarks[25]);
+        float mp_dis_6 = Vector3.Distance(landmarks[25], landmarks[29]);
+        float mp_dis_7 = Vector3.Distance(landmarks[24], landmarks[26]);
+        float mp_dis_8 = Vector3.Distance(landmarks[26], landmarks[30]);
+
+        //モデルの隣接距離とランドマークの隣接距離で比率計算
+        float dis_diff_body = model_dis_body / mp_dis_body;
+        float dis_diff_shoulder = model_dis_shoulder / mp_dis_shoulder;
+
+        float dis_diff_1 = model_dis_1 / mp_dis_1;
+        float dis_diff_2 = model_dis_2 / mp_dis_2;
+        float dis_diff_3 = model_dis_3 / mp_dis_3;
+        float dis_diff_4 = model_dis_4 / mp_dis_4;
+
+        float dis_diff_5 = model_dis_5 / mp_dis_5;
+        float dis_diff_6 = model_dis_6 / mp_dis_6;
+        float dis_diff_7 = model_dis_7 / mp_dis_7;
+        float dis_diff_8 = model_dis_8 / mp_dis_8;
+
+
+        Body.transform.position = (mp_body_dot - new Vector3(0, 1, 0)) * dis_diff_body + Hips.transform.position;
+
+        middleDot.transform.position = (mp_middleDot_shoulderpos - mp_body_dot) * dis_diff_shoulder + Body.transform.position;
+
+
+        Left_elbow.transform.position = (landmarks[13] - landmarks[11]) * dis_diff_1 + Left_shoulder.transform.position;
+        Left_hand.transform.position = (landmarks[15] - landmarks[13]) * dis_diff_2 + Left_elbow.transform.position;
+        Right_elbow.transform.position = (landmarks[14] - landmarks[12]) * dis_diff_3 + Right_shoulder.transform.position;
+        Right_hand.transform.position = (landmarks[16] - landmarks[14]) * dis_diff_4 + Right_elbow.transform.position;
+
+        Left_knee.transform.position = (landmarks[25] - landmarks[23]) * dis_diff_5 + Left_hip.transform.position;
+        Left_ankle.transform.position = (landmarks[29] - landmarks[25]) * dis_diff_6 + Left_knee.transform.position;
+        Right_knee.transform.position = (landmarks[26] - landmarks[24]) * dis_diff_7 + Right_hip.transform.position;
+        Right_ankle.transform.position = (landmarks[30] - landmarks[26]) * dis_diff_8 + Right_knee.transform.position;
+
+        Vector3[] part_position = new Vector3[]
         {
-            //フレーム毎の各ランドマーク座標
-            Vector3[] landmarks = landmarkData[currentFrame];
+            Left_hand.transform.position,
+            Right_hand.transform.position,
+            Left_ankle.transform.position,
+            Right_ankle.transform.position,
+            Left_elbow.transform.position,
+            Right_elbow.transform.position,
+            Left_knee.transform.position,
+            Right_knee.transform.position,
+            Body.transform.position,
+            middleDot.transform.position
+        };
 
-            mp_middleDot_shoulderpos = (landmarks[11] + landmarks[12]) / 2;
-            mp_body_dot = (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4;
-
-            float mp_dis_body = Vector3.Distance(new Vector3(0, 1, 0), mp_body_dot);
-            float mp_dis_shoulder = Vector3.Distance(mp_body_dot, mp_middleDot_shoulderpos);
-
-            //ランドマーク隣接距離
-            float mp_dis_1 = Vector3.Distance(landmarks[11], landmarks[13]);
-            float mp_dis_2 = Vector3.Distance(landmarks[13], landmarks[15]);
-            float mp_dis_3 = Vector3.Distance(landmarks[12], landmarks[14]);
-            float mp_dis_4 = Vector3.Distance(landmarks[14], landmarks[16]);
-
-            float mp_dis_5 = Vector3.Distance(landmarks[23], landmarks[25]);
-            float mp_dis_6 = Vector3.Distance(landmarks[25], landmarks[29]);
-            float mp_dis_7 = Vector3.Distance(landmarks[24], landmarks[26]);
-            float mp_dis_8 = Vector3.Distance(landmarks[26], landmarks[30]);
-
-            //モデルの隣接距離とランドマークの隣接距離で比率計算
-            float dis_diff_body = model_dis_body / mp_dis_body;
-            float dis_diff_shoulder = model_dis_shoulder / mp_dis_shoulder;
-
-            float dis_diff_1 = model_dis_1 / mp_dis_1;
-            float dis_diff_2 = model_dis_2 / mp_dis_2;
-            float dis_diff_3 = model_dis_3 / mp_dis_3;
-            float dis_diff_4 = model_dis_4 / mp_dis_4;
-
-            float dis_diff_5 = model_dis_5 / mp_dis_5;
-            float dis_diff_6 = model_dis_6 / mp_dis_6;
-            float dis_diff_7 = model_dis_7 / mp_dis_7;
-            float dis_diff_8 = model_dis_8 / mp_dis_8;
+        modelPos.Add(currentFrame, part_position);
 
 
-            Body.transform.position = (mp_body_dot - new Vector3(0, 1, 0)) * dis_diff_body + Hips.transform.position;
+        //関節の前フレームとの距離検出
+        if (currentFrame == 0 || currentFrame == totalFrames - 1)
+        {
+            keyPose_candidate_frames.Add(currentFrame);
+            keyPose_candidate_frames_distance.Add(0.0f);
+        }
+        else
+        {
+            bool key_check = false;
+            float max = 0;
+            int over_threhold = 0;
+            int tmp = 0;
 
-            middleDot.transform.position = (mp_middleDot_shoulderpos - mp_body_dot) * dis_diff_shoulder + Body.transform.position;
-
-
-            Left_elbow.transform.position = (landmarks[13] - landmarks[11]) * dis_diff_1 + Left_shoulder.transform.position;
-            Left_hand.transform.position = (landmarks[15] - landmarks[13]) * dis_diff_2 + Left_elbow.transform.position;
-            Right_elbow.transform.position = (landmarks[14] - landmarks[12]) * dis_diff_3 + Right_shoulder.transform.position;
-            Right_hand.transform.position = (landmarks[16] - landmarks[14]) * dis_diff_4 + Right_elbow.transform.position;
-
-            Left_knee.transform.position = (landmarks[25] - landmarks[23]) * dis_diff_5 + Left_hip.transform.position;
-            Left_ankle.transform.position = (landmarks[29] - landmarks[25]) * dis_diff_6 + Left_knee.transform.position;
-            Right_knee.transform.position = (landmarks[26] - landmarks[24]) * dis_diff_7 + Right_hip.transform.position;
-            Right_ankle.transform.position = (landmarks[30] - landmarks[26]) * dis_diff_8 + Right_knee.transform.position;
-            
-            
-            if(check) {
-                part_position[0] = Left_hand.transform.position;
-                part_position[1] = Right_hand.transform.position;
-                part_position[2] = Left_ankle.transform.position;
-                part_position[3] = Right_ankle.transform.position;
-                part_position[4] = Left_elbow.transform.position;
-                part_position[5] = Right_elbow.transform.position;
-                part_position[6] = Left_knee.transform.position;
-                part_position[7] = Right_knee.transform.position;
-                part_position[8] = Body.transform.position;
-                part_position[9] = middleDot.transform.position;
-
-                modelPos[currentFrame] = part_position;
-
-                for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 4; i++)
+            {
+                part_distance[i] = Vector3.Distance(part_position[i] * 100, before_part_position[i] * 100);
+                if (part_distance[i] > threshold)
                 {
-                    Debug.Log(modelPos[currentFrame][i]);
-                }
-
-
-                //関節の前フレームとの距離検出
-                if(currentFrame == 0 || currentFrame == totalFrames - 1)
-                {
-                    keyPose_candidate_frames.Add(currentFrame);
-                    keyPose_candidate_frames_distance.Add(0.0f);
-                }
-                else
-                {
-                    bool key_check = false;
-                    float max = 0;
-                    int over_threhold = 0;
-                    int tmp = 0;
-
-                    for (int i = 0; i < 4; i++)
+                    over_threhold++;
+                    if (!key_check)
                     {
-                        part_distance[i] = Vector3.Distance(part_position[i] * 100, before_part_position[i] * 100);
-                        if (part_distance[i] > threshold)
-                        {
-                            over_threhold++;
-                            if (!key_check)
-                            {
-                                keyPose_candidate_frames.Add(currentFrame);
-                            }
-                            key_check = true;
-                            if (max < part_distance[i])
-                            {
-                                max = part_distance[i];
-                                tmp = i;
-                            }
-                        }
+                        keyPose_candidate_frames.Add(currentFrame);
                     }
-                    if (key_check)
+                    key_check = true;
+                    if (max < part_distance[i])
                     {
-                        keyPose_candidate_frames_distance.Add(max);
+                        max = part_distance[i];
+                        tmp = i;
                     }
-                }
-                for(int i = 0; i < 4; i++)
-                {
-                    before_part_position[i] = part_position[i];
                 }
             }
+            if (key_check)
+            {
+                keyPose_candidate_frames_distance.Add(max);
+            }
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            before_part_position[i] = part_position[i];
         }
 
+
+
         currentFrame++;
-        
+
         if (currentFrame > totalFrames - 1)
         {
             currentFrame = 0;
@@ -371,6 +373,6 @@ public class IK_target_pos : MonoBehaviour
                 }
             }
         }
-        detection_check = false;
+        detection_check = true;
     }
 }
