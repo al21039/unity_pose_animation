@@ -1349,7 +1349,7 @@ GameObject:
   - component: {fileID: 8658763929156561474}
   m_Layer: 0
   m_Name: FootLTarget
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1575,7 +1575,7 @@ GameObject:
   - component: {fileID: 8125457540474022704}
   m_Layer: 0
   m_Name: HandLTarget
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3026,7 +3026,7 @@ GameObject:
   - component: {fileID: 5532460742450813401}
   m_Layer: 0
   m_Name: FootRTarget
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3188,7 +3188,7 @@ GameObject:
   - component: {fileID: 123947155867359283}
   m_Layer: 0
   m_Name: HandRTarget
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

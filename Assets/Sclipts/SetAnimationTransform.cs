@@ -40,16 +40,16 @@ public class SetAnimationTransform : MonoBehaviour
         Vector3[] positions = pos_list;
         animation_frame = frame;
 
-        Left_hand.transform.position = positions[0] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_hand.transform.position = positions[1] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_ankle.transform.position = positions[2] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_ankle.transform.position = positions[3] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_elbow.transform.position = positions[4] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_elbow.transform.position = positions[5] + new Vector3(0, 0, animation_frame * 0.15f);
-        Left_knee.transform.position = positions[6] + new Vector3(0, 0, animation_frame * 0.15f);
-        Right_knee.transform.position = positions[7] + new Vector3(0, 0, animation_frame * 0.15f);
-        Body.transform.position = positions[8] + new Vector3(0, 0, animation_frame * 0.15f);
-        middleDot.transform.position = positions[9] + new Vector3(0, 0, animation_frame * 0.15f);
+        Left_hand.transform.position = positions[0] + new Vector3(0, 0, animation_frame * 0.3f);
+        Right_hand.transform.position = positions[1] + new Vector3(0, 0, animation_frame * 0.3f);
+        Left_ankle.transform.position = positions[2] + new Vector3(0, 0, animation_frame * 0.3f);
+        Right_ankle.transform.position = positions[3] + new Vector3(0, 0, animation_frame * 0.3f);
+        Left_elbow.transform.position = positions[4] + new Vector3(0, 0, animation_frame * 0.3f);
+        Right_elbow.transform.position = positions[5] + new Vector3(0, 0, animation_frame * 0.3f);
+        Left_knee.transform.position = positions[6] + new Vector3(0, 0, animation_frame * 0.3f);
+        Right_knee.transform.position = positions[7] + new Vector3(0, 0, animation_frame * 0.3f);
+        Body.transform.position = positions[8] + new Vector3(0, 0, animation_frame * 0.3f);
+        middleDot.transform.position = positions[9] + new Vector3(0, 0, animation_frame * 0.3f);
     }
 }
 

@@ -96,21 +96,15 @@ public class IK_target_pos : MonoBehaviour
         }
 
         if (detection_check && !created_check)
-        {        
+        {
             for (int i = 0; i < KeyPose_List.Count; i++)
             {
                 AnimationSceneManager.SetPosition(KeyPose_List[i], modelPos[KeyPose_List[i]]);
             }
-            /*
-            foreach (Vector3[] value in modelPos.Values)
-            {
-                foreach (Vector3 vec in value)
-                {
-                    Debug.Log(vec);
-                }
-
-            }
-            */
+            AnimationSceneManager.total_frame = totalFrames;
+            AnimationSceneManager.KeyPose_List = KeyPose_List;
+            AnimationSceneManager.modelPos = modelPos;
+            AnimationSceneManager.SetSpline();
             created_check = true;
             Destroy(this.gameObject);
         }
