@@ -71,13 +71,12 @@ public class AnimationSceneManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            _selectedObject = null;
             //移動した分を補間する処理 オブジェクトがあるなら
             if(_selectedObeject_name != null && _selected_frame != null)
             {
                 ReplacePosition(_selectedObeject_name, _selected_frame, _selectedObject.transform.position);
             }
-
+            _selectedObject = null;
             _selectedObeject_name = null;
             _selected_frame = null;
         }
@@ -157,6 +156,8 @@ public class AnimationSceneManager : MonoBehaviour
         LineRenderer line_renderer = null;
         int number_of_points = -1;
         int position_id = -1;
+        string frame_obj = moved_frame + "_frame_model";
+        Vector3 hit_target_pos = new Vector3(0.0f, 0.0f, 0.0f);
 
         if (moved_obj == "HandLTarget")
         {
@@ -183,7 +184,31 @@ public class AnimationSceneManager : MonoBehaviour
             Debug.Log("obj null");
             return;
         }
+        Transform hit_target = null;
+        switch(position_id)
+        {
+            case 0:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Spine 1").Find("Spine 2").Find("Spine 3").Find("Left Shoulder").Find("Left Arm").Find("Left Forearm").Find("Left Hand");
+                break;
+            case 1:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Spine 1").Find("Spine 2").Find("Spine 3").Find("Right Shoulder").Find("Right Arm").Find("Right Forearm").Find("Right Hand");
+                break;
+            case 2:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Left Thigh").Find("Left Leg").Find("Left Foot");
+                break;
+            case 3:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Right Thigh").Find("Right Leg").Find("Right Foot");
+                break;
+        }
 
+        if (hit_target != null)
+        {
+            hit_target_pos = hit_target.position;
+        }
+        else
+        {
+            Debug.Log("dont catch");
+        }
         int frame;
         try
         {
@@ -194,19 +219,29 @@ public class AnimationSceneManager : MonoBehaviour
             return;
         }
 
+        float origin_effective = 0.8f;
+        float bezier_effective = 0.5f;
+
         if(KeyPose_List.Contains(frame))
         {
-            line_renderer.SetPosition(frame, moved_position);
-
 
             if(frame == 0) {
                 number_of_points = KeyPose_List[1];
                 Vector3[] points = new Vector3[number_of_points];
-                points[0] = moved_position;
+                points[0] = hit_target_pos;
 
                 for(int i = 1; i < number_of_points; i++) 
                 {
-                    points[i] = Vector3.Lerp(points[0], modelPos[i][position_id], (float)i / (number_of_points - 1));
+                    Vector3 tmpPos = Bezier(
+                        points[0],
+                        modelPos[i][position_id] + new Vector3(0.0f, 0.0f, i * 0.30f), 
+                        modelPos[KeyPose_List[1]][position_id] + new Vector3(0.0f, 0.0f, KeyPose_List[1] * 0.30f),
+                        bezier_effective);
+                    
+                    points[i] = Vector3.Lerp(
+                        modelPos[i][position_id] + new Vector3(0.0f, 0.0f, i * 0.30f),
+                        tmpPos,
+                        origin_effective);
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -214,37 +249,118 @@ public class AnimationSceneManager : MonoBehaviour
                     line_renderer.SetPosition(i, points[i]);
                 }
 
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    modelPos[i][position_id] = points[i] - new Vector3(0.0f, 0.0f, i * 0.30f);
+                }
+
             }
+            
             else if(frame == KeyPose_List[KeyPose_List.Count - 1])
             {
-                number_of_points = KeyPose_List[KeyPose_List.Count - 1] - KeyPose_List[KeyPose_List.Count - 2];
+                int before_key = KeyPose_List[KeyPose_List.Count - 2];
+                number_of_points = KeyPose_List[KeyPose_List.Count - 1] - before_key;
                 Vector3[] points = new Vector3[number_of_points];
-                points[number_of_points - 1] = moved_position;
+                points[number_of_points - 1] = hit_target_pos;             
 
                 for (int i = 0; i < number_of_points - 1; i++)
                 {
-                    points[i] = Vector3.Lerp(points[number_of_points - 1], modelPos[i + KeyPose_List[KeyPose_List.Count - 2] + 1][position_id], (float)i / (number_of_points - 1));
+                    Vector3 tmpPos = Bezier(
+                        modelPos[before_key][position_id] + new Vector3(0.0f, 0.0f, (before_key) * 0.30f), 
+                        modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f),
+                        points[number_of_points - 1], 
+                        bezier_effective);
+
+                    points[i] = Vector3.Lerp(
+                        modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f), 
+                        tmpPos, 
+                        origin_effective);
                 }
 
                 for (int i = 0; i < number_of_points; i++)
                 {
-                    line_renderer.SetPosition(i + KeyPose_List[KeyPose_List.Count - 2] + 1, points[i]);
+                    line_renderer.SetPosition(i + before_key + 1, points[i]);
+                }
+
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    modelPos[i + before_key + 1][position_id] = points[i] - new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f);
                 }
             }
-
+            
             else
             {
+
                 int list_index = KeyPose_List.IndexOf(frame);
-                number_of_points = KeyPose_List[list_index] - KeyPose_List[list_index - 1];
+                int before_key = KeyPose_List[list_index - 1];
+                number_of_points = KeyPose_List[list_index] - before_key;
                 Vector3[] before_points = new Vector3[number_of_points];
-                before_points[number_of_points - 1] = moved_position;
+                before_points[number_of_points - 1] = hit_target_pos;
+                
 
                 for (int i = 0; i < number_of_points - 1; i++)
                 {
-                    before_points[i] = Vector3.Lerp(before_points[number_of_points - 1], modelPos[KeyPose_List[list_index - 1] + 1][position_id], (float)i / (number_of_points - 1));
+                    Vector3 tmpPos = Bezier(
+                        modelPos[before_key][position_id] + new Vector3(0.0f, 0.0f, (before_key + 1) * 0.30f),
+                        modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f),
+                        before_points[number_of_points - 1], 
+                        bezier_effective);
+
+                    before_points[i] = Vector3.Lerp(
+                        modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f), 
+                        tmpPos, 
+                        origin_effective);
+                }
+
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    line_renderer.SetPosition(i + before_key + 1, before_points[i]);
+                }
+
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    modelPos[i + before_key + 1][position_id] = before_points[i] - new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f);
+                }
+
+
+
+                int current_key = KeyPose_List[list_index];
+                number_of_points = KeyPose_List[list_index + 1] - current_key;
+                Vector3[] after_points = new Vector3[number_of_points];
+                after_points[0] = hit_target_pos;
+
+                for (int i = 1; i < number_of_points; i++)
+                {
+                    Vector3 tmpPos = Bezier(
+                        after_points[0],
+                        modelPos[i + current_key][position_id] + new Vector3(0.0f, 0.0f, (i + current_key) * 0.30f),
+                        modelPos[KeyPose_List[list_index + 1]][position_id] + new Vector3(0.0f, 0.0f, (KeyPose_List[list_index + 1]) * 0.30f),
+                        bezier_effective);
+
+                    after_points[i] = Vector3.Lerp(
+                        modelPos[i + current_key][position_id] + new Vector3(0.0f, 0.0f, (i + current_key) * 0.30f), 
+                        tmpPos, 
+                        origin_effective);
+                }
+
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    line_renderer.SetPosition(i + current_key, after_points[i]);
+                }
+
+                for (int i = 0; i < number_of_points; i++)
+                {
+                    modelPos[i + current_key][position_id] = after_points[i] - new Vector3(0.0f, 0.0f, (i + current_key) * 0.30f);
                 }
             }
         }
+        
+    }
 
+    private Vector3 Bezier(Vector3 start, Vector3 control, Vector3 end, float t)
+    {
+        Vector3 p0 = Vector3.Lerp(start, control, t);
+        Vector3 p1 = Vector3.Lerp(control, end, t);
+        return Vector3.Lerp(p0, p1, t); 
     }
 }
