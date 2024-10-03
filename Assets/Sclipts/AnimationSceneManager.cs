@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AnimationSceneManager : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class AnimationSceneManager : MonoBehaviour
     [SerializeField] private GameObject _left_foot_button;
     [SerializeField] private GameObject _right_foot_button;
 
+    [SerializeField] private GameObject _create_anim_button;
+
+    [SerializeField] private GameObject _created_model;
+
     private GameObject _keypose_model;
     private LineRenderer _left_hand_line_renderer;
     private LineRenderer _right_hand_line_renderer;
@@ -29,6 +34,7 @@ public class AnimationSceneManager : MonoBehaviour
     private Vector3 _offset;
     private string _selectedObeject_name;
     private string _selected_frame;
+    private SetNewPosition _set_new_position;
 
 
     public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
@@ -97,8 +103,8 @@ public class AnimationSceneManager : MonoBehaviour
 
     public void SetSpline()
     {
-        _camera_obj.transform.position = new Vector3(4.0f, 3.0f, 13.0f);
-        _camera_obj.transform.rotation = Quaternion.Euler(10.0f, -110.0f, -5.0f);
+        _camera_obj.transform.position = new Vector3(5.0f, 2.0f, 20.0f);
+        _camera_obj.transform.rotation = Quaternion.Euler(15.0f, -90.0f, 0.0f);
         _left_hand_spline.SetActive(true);
         _right_hand_spline.SetActive(true);
         _left_foot_spline.SetActive(true);
@@ -120,6 +126,7 @@ public class AnimationSceneManager : MonoBehaviour
         _right_hand_button.SetActive(true);
         _left_foot_button.SetActive(true);
         _right_foot_button.SetActive(true);
+        _create_anim_button.SetActive(true);
     }
 
     public void DisplayLeftHandSpline()
@@ -140,6 +147,33 @@ public class AnimationSceneManager : MonoBehaviour
     public void DisplayRightFootSpline()
     {
         _right_foot_spline.SetActive(!_right_foot_spline.activeSelf);
+    }
+
+    public void DisplayNewAnimation()
+    {
+        _camera_obj.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
+        _camera_obj.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+        _left_hand_spline.SetActive(false);
+        _right_hand_spline.SetActive(false);
+        _left_foot_spline.SetActive(false);
+        _right_foot_spline.SetActive(false);
+
+        _left_hand_button.SetActive(false);
+        _right_hand_button.SetActive(false);
+        _left_foot_button.SetActive(false);
+        _right_foot_button.SetActive(false);
+        _create_anim_button.SetActive(false);
+
+        for (int i = 0; i < KeyPose_List.Count; i++)
+        {
+            string tmp_name = KeyPose_List[i].ToString() + "_frame_model";
+            GameObject destroy_obj = GameObject.Find(tmp_name);
+            Destroy(destroy_obj);
+        }
+        GameObject created_model = Instantiate(_created_model, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        _set_new_position = created_model.GetComponent<SetNewPosition>();
+        _set_new_position.SetStatus(modelPos, total_frame);
+
     }
 
     //マウスの座標取得
@@ -219,8 +253,8 @@ public class AnimationSceneManager : MonoBehaviour
             return;
         }
 
-        float origin_effective = 0.8f;
-        float bezier_effective = 0.5f;
+        float origin_effective = 0.5f;
+        float bezier_effective = 0.90f;
 
         if(KeyPose_List.Contains(frame))
         {
@@ -394,7 +428,7 @@ public class AnimationSceneManager : MonoBehaviour
     private Vector3 Bezier(Vector3 start, Vector3 control, Vector3 end, float t)
     {
         Vector3 p0 = Vector3.Lerp(start, control, t);
-        Vector3 p1 = Vector3.Lerp(control, end, t);
+        Vector3 p1 = Vector3.Lerp(end, control, t);
         return Vector3.Lerp(p0, p1, t); 
     }
 }

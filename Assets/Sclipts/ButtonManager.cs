@@ -38,4 +38,9 @@ public class ButtonManager : MonoBehaviour
     {
         _scene_manager.DisplayRightFootSpline();
     }
+
+    public void OnClickedCreateAnimationButton()
+    {
+        _scene_manager.DisplayNewAnimation();
+    }
 }
