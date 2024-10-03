@@ -292,14 +292,17 @@ public class AnimationSceneManager : MonoBehaviour
             {
 
                 int list_index = KeyPose_List.IndexOf(frame);
+                int current_key = KeyPose_List[list_index];
+                int after_key = KeyPose_List[list_index + 1];
                 int before_key = KeyPose_List[list_index - 1];
-                number_of_points = KeyPose_List[list_index] - before_key;
+                number_of_points = current_key - before_key;
                 Vector3[] before_points = new Vector3[number_of_points];
                 before_points[number_of_points - 1] = hit_target_pos;
                 
 
                 for (int i = 0; i < number_of_points - 1; i++)
                 {
+                    /*
                     Vector3 tmpPos = Bezier(
                         modelPos[before_key][position_id] + new Vector3(0.0f, 0.0f, (before_key + 1) * 0.30f),
                         modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f),
@@ -310,6 +313,15 @@ public class AnimationSceneManager : MonoBehaviour
                         modelPos[i + before_key + 1][position_id] + new Vector3(0.0f, 0.0f, (i + before_key + 1) * 0.30f), 
                         tmpPos, 
                         origin_effective);
+                    */
+                    float t = (float)i / (float)number_of_points;
+                    Vector3 p0 = modelPos[before_key - 1][position_id] + new Vector3(0, 0, (before_key - 1) * 0.30f);
+                    Vector3 p1 = modelPos[before_key][position_id] + new Vector3(0, 0, (before_key) * 0.30f);
+                    Vector3 p2 = modelPos[current_key][position_id] + new Vector3(0, 0, (current_key) * 0.30f);
+                    Vector3 p3 = modelPos[current_key + 1][position_id] + new Vector3(0, 0, (before_key + 1) * 0.30f);
+
+                    before_points[i] = CatmullRomSpline(p0, p1, p2, p3, t);
+
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -324,13 +336,14 @@ public class AnimationSceneManager : MonoBehaviour
 
 
 
-                int current_key = KeyPose_List[list_index];
+                
                 number_of_points = KeyPose_List[list_index + 1] - current_key;
                 Vector3[] after_points = new Vector3[number_of_points];
                 after_points[0] = hit_target_pos;
 
                 for (int i = 1; i < number_of_points; i++)
                 {
+                    /*
                     Vector3 tmpPos = Bezier(
                         after_points[0],
                         modelPos[i + current_key][position_id] + new Vector3(0.0f, 0.0f, (i + current_key) * 0.30f),
@@ -341,6 +354,15 @@ public class AnimationSceneManager : MonoBehaviour
                         modelPos[i + current_key][position_id] + new Vector3(0.0f, 0.0f, (i + current_key) * 0.30f), 
                         tmpPos, 
                         origin_effective);
+                    */
+
+                    float t = (float)i / (float)number_of_points;
+                    Vector3 p0 = modelPos[current_key - 1][position_id] + new Vector3(0, 0, (current_key - 1) * 0.30f);
+                    Vector3 p1 = modelPos[current_key][position_id] + new Vector3(0, 0, (current_key) * 0.30f);
+                    Vector3 p2 = modelPos[after_key][position_id] + new Vector3(0, 0, (after_key) * 0.30f);
+                    Vector3 p3 = modelPos[after_key + 1][position_id] + new Vector3(0, 0, (after_key + 1) * 0.30f);
+
+                    after_points[i] = CatmullRomSpline(p0, p1, p2, p3, t);
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -357,6 +379,18 @@ public class AnimationSceneManager : MonoBehaviour
         
     }
 
+    Vector3 CatmullRomSpline(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    {
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        return 0.5f * (
+            (2.0f * p1) +
+            (-p0 + p2) * t +
+            (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
+            (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3
+        );
+    }
     private Vector3 Bezier(Vector3 start, Vector3 control, Vector3 end, float t)
     {
         Vector3 p0 = Vector3.Lerp(start, control, t);
