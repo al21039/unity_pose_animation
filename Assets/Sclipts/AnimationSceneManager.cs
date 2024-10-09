@@ -197,21 +197,37 @@ public class AnimationSceneManager : MonoBehaviour
         {
             line_renderer = _left_hand_line_renderer;
             position_id = 0;
-        } 
-        else if(moved_obj == "HandRTarget")
+        }
+        else if (moved_obj == "HandRTarget")
         {
             line_renderer = _right_hand_line_renderer;
             position_id = 1;
-        } 
-        else if(moved_obj == "FootLTarget")
+        }
+        else if (moved_obj == "FootLTarget")
         {
             line_renderer = _left_foot_line_renderer;
             position_id = 2;
-        } 
-        else if(moved_obj == "FootRTarget")
+        }
+        else if (moved_obj == "FootRTarget")
         {
             line_renderer = _right_foot_line_renderer;
             position_id = 3;
+        }
+        else if (moved_obj == "ElbowLTarget")
+        {
+            position_id = 4;
+        }
+        else if (moved_obj == "ElbowRTarget")
+        {
+            position_id = 5;
+        }
+        else if (moved_obj == "KneeLTarget")
+        {
+            position_id = 6;
+        }
+        else if (moved_obj == "KneeRTarget")
+        {
+            position_id = 7;
         }
         else
         {
@@ -232,6 +248,18 @@ public class AnimationSceneManager : MonoBehaviour
                 break;
             case 3:
                 hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Right Thigh").Find("Right Leg").Find("Right Foot");
+                break;
+            case 4:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Spine 1").Find("Spine 2").Find("Spine 3").Find("Left Shoulder").Find("Left Arm").Find("Left Forearm");
+                break;
+            case 5:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Spine 1").Find("Spine 2").Find("Spine 3").Find("Right Shoulder").Find("Right Arm").Find("Right Forearm");
+                break;
+            case 6:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Left Thigh").Find("Left Leg");
+                break;
+            case 7:
+                hit_target = GameObject.Find(frame_obj).transform.Find("Armature").Find("Hips").Find("Right Thigh").Find("Right Leg");
                 break;
         }
 
@@ -277,10 +305,12 @@ public class AnimationSceneManager : MonoBehaviour
                         tmpPos,
                         origin_effective);
                 }
-
-                for (int i = 0; i < number_of_points; i++)
+                if (position_id < 4)
                 {
-                    line_renderer.SetPosition(i, points[i]);
+                    for (int i = 0; i < number_of_points; i++)
+                    {
+                        line_renderer.SetPosition(i, points[i]);
+                    }
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -310,10 +340,12 @@ public class AnimationSceneManager : MonoBehaviour
                         tmpPos, 
                         origin_effective);
                 }
-
-                for (int i = 0; i < number_of_points; i++)
+                if (position_id < 4)
                 {
-                    line_renderer.SetPosition(i + before_key + 1, points[i]);
+                    for (int i = 0; i < number_of_points; i++)
+                    {
+                        line_renderer.SetPosition(i + before_key + 1, points[i]);
+                    }
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -357,10 +389,12 @@ public class AnimationSceneManager : MonoBehaviour
                     before_points[i] = CatmullRomSpline(p0, p1, p2, p3, t);
 
                 }
-
-                for (int i = 0; i < number_of_points; i++)
+                if (position_id < 4)
                 {
-                    line_renderer.SetPosition(i + before_key + 1, before_points[i]);
+                    for (int i = 0; i < number_of_points; i++)
+                    {
+                        line_renderer.SetPosition(i + before_key + 1, before_points[i]);
+                    }
                 }
 
                 for (int i = 0; i < number_of_points; i++)
@@ -398,10 +432,12 @@ public class AnimationSceneManager : MonoBehaviour
 
                     after_points[i] = CatmullRomSpline(p0, p1, p2, p3, t);
                 }
-
-                for (int i = 0; i < number_of_points; i++)
+                if (position_id < 4)
                 {
-                    line_renderer.SetPosition(i + current_key, after_points[i]);
+                    for (int i = 0; i < number_of_points; i++)
+                    {
+                        line_renderer.SetPosition(i + current_key, after_points[i]);
+                    }
                 }
 
                 for (int i = 0; i < number_of_points; i++)
