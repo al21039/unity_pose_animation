@@ -1754,6 +1754,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1512736483}
   - component: {fileID: 1512736484}
+  - component: {fileID: 1512736485}
   m_Layer: 0
   m_Name: AnimationSceneManager
   m_TagString: Untagged
@@ -1800,8 +1801,21 @@ MonoBehaviour:
   _right_foot_button: {fileID: 799523243}
   _create_anim_button: {fileID: 338539227}
   _created_model: {fileID: 3068819014942912371, guid: e5f6f90c4b087a945b59da68831e3051, type: 3}
-  KeyPose_List: 
-  total_frame: 0
+  _spherePrefab: {fileID: 5448276671561403501, guid: f6c39e3bd0c222b478888b4255a88258, type: 3}
+  _replaceScript: {fileID: 1512736485}
+--- !u!114 &1512736485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512736482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c22af21099574124b9fdfe6e04f3c87d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneManager: {fileID: 1512736484}
 --- !u!1 &1653766537
 GameObject:
   m_ObjectHideFlags: 0
@@ -3309,10 +3323,10 @@ MonoBehaviour:
     m_Target: {fileID: 6785862069760617914}
     m_Hint: {fileID: 2224959385519813834}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.5
-    m_HintWeight: 0.5
-    m_MaintainTargetPositionOffset: 0
-    m_MaintainTargetRotationOffset: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!4 &1823544571966207225
 Transform:
   m_ObjectHideFlags: 0
@@ -3349,10 +3363,10 @@ MonoBehaviour:
     m_Target: {fileID: 2356488281012694974}
     m_Hint: {fileID: 3818254496011958987}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.5
-    m_HintWeight: 0.5
-    m_MaintainTargetPositionOffset: 0
-    m_MaintainTargetRotationOffset: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!135 &2094111363438835840
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4934,10 +4948,10 @@ MonoBehaviour:
     m_Target: {fileID: 2192213107345930038}
     m_Hint: {fileID: 4101626397167043236}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.5
-    m_HintWeight: 0.5
-    m_MaintainTargetPositionOffset: 0
-    m_MaintainTargetRotationOffset: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &5447035846276463679
 GameObject:
   m_ObjectHideFlags: 0
@@ -5916,10 +5930,10 @@ MonoBehaviour:
     m_Target: {fileID: 1605184195965360284}
     m_Hint: {fileID: 8357727732829562136}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.5
-    m_HintWeight: 0.5
-    m_MaintainTargetPositionOffset: 0
-    m_MaintainTargetRotationOffset: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &7915496080639363334
 GameObject:
   m_ObjectHideFlags: 0
@@ -6546,12 +6560,12 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 963194228}
+  - {fileID: 1073756203}
+  - {fileID: 2135993976}
   - {fileID: 705507995}
   - {fileID: 1142510770}
   - {fileID: 2119470407}
   - {fileID: 3827287851098679605}
-  - {fileID: 1073756203}
-  - {fileID: 2135993976}
   - {fileID: 1853181381}
   - {fileID: 1512736483}
   - {fileID: 1687187665}

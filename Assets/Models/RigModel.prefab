@@ -1460,8 +1460,8 @@ MonoBehaviour:
     m_Target: {fileID: 6239293799884627429}
     m_Hint: {fileID: 8418565889933595520}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.25
-    m_HintWeight: 0.75
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
     m_MaintainTargetPositionOffset: 1
     m_MaintainTargetRotationOffset: 0
 --- !u!1 &3903480026401652937
@@ -1686,8 +1686,8 @@ MonoBehaviour:
     m_Target: {fileID: 6148291622187540648}
     m_Hint: {fileID: 2368291410950106389}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.25
-    m_HintWeight: 0.75
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
     m_MaintainTargetPositionOffset: 1
     m_MaintainTargetRotationOffset: 0
 --- !u!1 &4576064709075817802
@@ -3293,8 +3293,8 @@ MonoBehaviour:
     m_Target: {fileID: 713641425425720284}
     m_Hint: {fileID: 1875369432020170073}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.25
-    m_HintWeight: 0.75
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
     m_MaintainTargetPositionOffset: 1
     m_MaintainTargetRotationOffset: 0
 --- !u!1 &7879667373705006259
@@ -3455,8 +3455,8 @@ MonoBehaviour:
     m_Target: {fileID: 2230036099688445505}
     m_Hint: {fileID: 2844500265442029607}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0.25
-    m_HintWeight: 0.75
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
     m_MaintainTargetPositionOffset: 1
     m_MaintainTargetRotationOffset: 0
 --- !u!1 &8188087255335562986
