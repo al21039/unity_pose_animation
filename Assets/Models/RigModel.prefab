@@ -1349,7 +1349,7 @@ GameObject:
   - component: {fileID: 8658763929156561474}
   m_Layer: 0
   m_Name: FootLTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1575,7 +1575,7 @@ GameObject:
   - component: {fileID: 8125457540474022704}
   m_Layer: 0
   m_Name: HandLTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1796,9 +1796,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6905317321179441627}
   - component: {fileID: 1753020112083205156}
+  - component: {fileID: 3956136221239211853}
   m_Layer: 0
   m_Name: Joints
-  m_TagString: Untagged
+  m_TagString: KeyModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1923,6 +1924,28 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000068688765, y: -0.005793521, z: -0.0027987687}
     m_Extent: {x: 0.04360994, y: 0.042294696, z: 0.006816606}
   m_DirtyAABB: 0
+--- !u!64 &3956136221239211853
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862672486233875436}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -696335369928898679, guid: 81bb9eea30387e442899949a80011e55, type: 3}
 --- !u!1 &4996616472339103361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2029,9 +2052,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6989762647508250018}
   - component: {fileID: 5830690609913911879}
+  - component: {fileID: 6969168605800013019}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: KeyModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2157,6 +2181,28 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00009581074, y: -0.0030767545, z: -0.00091552036}
     m_Extent: {x: 0.044162717, y: 0.052132066, z: 0.013649365}
   m_DirtyAABB: 0
+--- !u!64 &6969168605800013019
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6068098652325403769}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2959467708922500008, guid: 81bb9eea30387e442899949a80011e55, type: 3}
 --- !u!1 &6079660067916916460
 GameObject:
   m_ObjectHideFlags: 0
@@ -3182,7 +3228,7 @@ GameObject:
   - component: {fileID: 5532460742450813401}
   m_Layer: 0
   m_Name: FootRTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3344,7 +3390,7 @@ GameObject:
   - component: {fileID: 123947155867359283}
   m_Layer: 0
   m_Name: HandRTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
