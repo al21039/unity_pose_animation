@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class IK_target_pos : MonoBehaviour
 {
@@ -97,6 +95,7 @@ public class IK_target_pos : MonoBehaviour
 
         if (detection_check && !created_check)
         {
+            AnimationSceneManager.SetTotalKeyFrame(KeyPose_List.Count);
             for (int i = 0; i < KeyPose_List.Count; i++)
             {
                 AnimationSceneManager.SetPosition(KeyPose_List[i], modelPos[KeyPose_List[i]]);

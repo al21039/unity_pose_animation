@@ -1548,8 +1548,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3068819014942912371}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 81bb9eea30387e442899949a80011e55, type: 3}
+  m_Controller: {fileID: 9100000, guid: ad8fe4522c0f5c14ebcae16f760e422c, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1650,15 +1650,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3068819014942912371}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_RigLayers:
   - m_Rig: {fileID: 6253546757933129398}
-    m_Active: 1
-  - m_Rig: {fileID: 9097564457100461027}
     m_Active: 1
   m_Effectors: []
 --- !u!114 &-7994022697374489391
@@ -1688,6 +1686,7 @@ MonoBehaviour:
   Right_knee: {fileID: 3945321179090031815}
   Right_ankle: {fileID: 242691761564135834}
   middleDot: {fileID: 7223611731110707999}
+  _animator: {fileID: 2111077795986912191}
 --- !u!1 &3074290297889274478
 GameObject:
   m_ObjectHideFlags: 0

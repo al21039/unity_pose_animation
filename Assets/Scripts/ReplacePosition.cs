@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +10,8 @@ public class ReplacePosition : MonoBehaviour
     private List<int> _keyPoseList = new List<int>();
 
     private bool _isEffectiveFirstPosition = false;
+
+    private float _frameInterval = 0.30f;
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +48,11 @@ public class ReplacePosition : MonoBehaviour
             float t = (float)i / (float)numberOfPoints;
             Vector3 p0 = targetPosition;
             Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
-            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * 0.30f);
+            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i][positionID] + new Vector3(0.0f, 0.0f, (i) * 0.30f);
+            var savedPoint = _modelPos[i][positionID] + new Vector3(0.0f, 0.0f, (i) * _frameInterval);
 
             points[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -69,7 +70,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i][positionID] = points[i] - new Vector3(0.0f, 0.0f, i * 0.30f);
+            _changedPos[i][positionID] = points[i] - new Vector3(0.0f, 0.0f, i * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -89,13 +90,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * 0.30f);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * 0.30f);
+            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
+            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
             Vector3 p2 = targetPosition;
             Vector3 p3 = targetPosition;
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
             points[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -113,7 +114,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _modelPos[i + previousKey + 1][positionID] = points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            _modelPos[i + previousKey + 1][positionID] = points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -137,13 +138,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * 0.30f);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * 0.30f);
+            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
             Vector3 p2 = targetPosition;
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
+            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
             beforePoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -162,7 +163,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -175,13 +176,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * 0.30f);
+            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * _frameInterval);
             Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
-            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * 0.30f);
+            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
 
             afterPoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -199,7 +200,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -223,13 +224,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * 0.30f);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * 0.30f);
+            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
+            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
             Vector3 p2 = targetPosition;
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
+            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
             before_points[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -248,7 +249,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -261,13 +262,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * 0.30f);
+            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * _frameInterval);
             Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
+            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
 
             afterPoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -285,7 +286,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -310,13 +311,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * 0.30f);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * 0.30f);
+            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
+            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
             Vector3 p2 = targetPosition;
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
+            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
             before_points[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -334,7 +335,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
+            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -346,13 +347,13 @@ public class ReplacePosition : MonoBehaviour
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * 0.30f);
+            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (currentKey - 1) * _frameInterval);
             Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * 0.30f);
-            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * 0.30f);
+            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
 
             afterPoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
@@ -371,7 +372,7 @@ public class ReplacePosition : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
+            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
         }
         
         _sceneManager.SetChangedPos(_changedPos);

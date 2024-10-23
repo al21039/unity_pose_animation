@@ -49,7 +49,7 @@ public class AnimationSceneManager : MonoBehaviour
     private string _selectedIKObjectName;
     private string _selectedKeyModelName;
     private string _selected_frame;
-    private SetNewPosition _set_new_position;
+    private CreateNewAnim _set_new_position;
     private string _selecterPositonName; //ドロップダウンで選択した部位
 
     private Dictionary<int, Vector3[]> _modelPos = new Dictionary<int, Vector3[]>();
@@ -61,6 +61,21 @@ public class AnimationSceneManager : MonoBehaviour
 
     private bool _touchIndirectSphere = false;
     private Vector3 _sphereDefaultPosition;
+    private float _frameInterval = 0.30f;
+    private int _totalKeyFrame = 0; //キーフレームの数
+    private GameObject[] _keyPoseModel;
+    private HumanPose[] _keyPoseHumanPose;
+    private int _keyPoseModelCount = 0;
+
+
+
+    public void SetTotalKeyFrame(int totalKeyFrame)
+    {
+        _totalKeyFrame = totalKeyFrame;
+        _keyPoseModel = new GameObject[totalKeyFrame];
+        _keyPoseHumanPose = new HumanPose[totalKeyFrame];
+    }
+
 
     public void SetSelectPositionID(int positionID)
     {
@@ -187,10 +202,12 @@ public class AnimationSceneManager : MonoBehaviour
 
     public void SetPosition(int frame, Vector3[] pos_list)
     {
-        _keypose_model = Instantiate(humanoid_model, new Vector3(0, 0, frame * 0.3f), Quaternion.identity);
-        _keypose_model.name = frame + "_frame_model";
-        SetAnimationTransform setAnimationTransform = _keypose_model.GetComponent<SetAnimationTransform>();
+        _keyPoseModel[_keyPoseModelCount] = Instantiate(humanoid_model, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
+        _keyPoseModel[_keyPoseModelCount].name = frame + "_frame_model";
+        SetAnimationTransform setAnimationTransform = _keyPoseModel[_keyPoseModelCount].GetComponent<SetAnimationTransform>();
         setAnimationTransform.SetPartTransform(frame, pos_list);
+        _keyPoseModelCount++;
+
     }
 
     //線描画
@@ -210,13 +227,10 @@ public class AnimationSceneManager : MonoBehaviour
 
         for (int i = 0; i < _totalFrame; i++)
         {
-            _left_hand_line_renderer.SetPosition(i, _modelPos[i][0] + new Vector3(0, 0, i * 0.3f));
-            _right_hand_line_renderer.SetPosition(i, _modelPos[i][1] + new Vector3(0, 0, i * 0.3f));
-
-            //Instantiate(_spherePrefab, _modelPos[i][1] + new Vector3(0, 0, i * 0.3f), Quaternion.identity);
-
-            _left_foot_line_renderer.SetPosition(i, _modelPos[i][2] + new Vector3(0, 0, i * 0.3f));
-            _right_foot_line_renderer.SetPosition(i, _modelPos[i][3] + new Vector3(0, 0, i * 0.3f));
+            _left_hand_line_renderer.SetPosition(i, _modelPos[i][0] + new Vector3(0, 0, i * _frameInterval));
+            _right_hand_line_renderer.SetPosition(i, _modelPos[i][1] + new Vector3(0, 0, i * _frameInterval));
+            _left_foot_line_renderer.SetPosition(i, _modelPos[i][2] + new Vector3(0, 0, i * _frameInterval));
+            _right_foot_line_renderer.SetPosition(i, _modelPos[i][3] + new Vector3(0, 0, i * _frameInterval));
         }
         _left_hand_button.SetActive(true);
         _right_hand_button.SetActive(true);
@@ -261,6 +275,12 @@ public class AnimationSceneManager : MonoBehaviour
     }
     public void DisplayNewAnimation()
     {
+        for(int i = 0; i < _keyPoseModel.Length; i++)
+        {
+            SetAnimationTransform setAnimationTransform = _keyPoseModel[i].GetComponent<SetAnimationTransform>();
+            _keyPoseHumanPose[i] = setAnimationTransform.GetKeyPoseMuscle();
+        }
+
         _camera_obj.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
         _camera_obj.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
         _left_hand_spline.SetActive(false);
@@ -287,9 +307,10 @@ public class AnimationSceneManager : MonoBehaviour
             Destroy(destroy_obj);
         }
         GameObject created_model = Instantiate(_created_model, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        _set_new_position = created_model.GetComponent<SetNewPosition>();
-        _set_new_position.SetStatus(_modelPos, _totalFrame);
-
+        _set_new_position = created_model.GetComponent<CreateNewAnim>();
+        
+        int muscleNum = _keyPoseHumanPose[0].muscles.Length;
+        _set_new_position.CreateNewAnimation(_keyPoseHumanPose, _keyPoseList);
     }
 
     //マウスの座標取得

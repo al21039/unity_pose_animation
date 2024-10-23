@@ -2800,7 +2800,7 @@ MonoBehaviour:
   _create_anim_button: {fileID: 338539227}
   _indirectButton: {fileID: 1978983588}
   _positionDropDown: {fileID: 124369731}
-  _created_model: {fileID: 3068819014942912371, guid: e5f6f90c4b087a945b59da68831e3051, type: 3}
+  _created_model: {fileID: 8932000906575889375, guid: fba873322e2c39246bf691389f8169dd, type: 3}
   _spherePrefab: {fileID: 5448276671561403501, guid: f6c39e3bd0c222b478888b4255a88258, type: 3}
   _replaceScript: {fileID: 1512736485}
   _searchEndPointScript: {fileID: 1512736486}
@@ -4933,8 +4933,6 @@ MonoBehaviour:
   m_RigLayers:
   - m_Rig: {fileID: 1076226022746216667}
     m_Active: 1
-  - m_Rig: {fileID: 2767322150129288590}
-    m_Active: 1
   m_Effectors: []
 --- !u!4 &2224959385519813834
 Transform:
@@ -6107,14 +6105,19 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8264150240820816158}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 81bb9eea30387e442899949a80011e55, type: 3}
+  m_Controller: {fileID: 9100000, guid: 2f4ab7ad058e2df40a6aeae4f12f38be, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Left Leg'\n\tTransform 'Left Foot'\n\tTransform
+    'Spine 1'\n\tTransform 'Right Leg'\n\tTransform 'Right Arm'\n\tTransform 'Right
+    Foot'\n\tTransform 'Armature'\n\tTransform 'Left Arm'\n\tTransform 'Spine 2'\n\tTransform
+    'Left Forearm'\n\tand more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

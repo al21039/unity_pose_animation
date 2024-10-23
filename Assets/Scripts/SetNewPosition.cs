@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,11 +24,16 @@ public class SetNewPosition : MonoBehaviour
     private int _currentFrame = 0;
     private bool _isPlaying = false;
 
+    private HumanPoseHandler _humanPoseHandler;
+    private HumanPose _humanPose;
+    [SerializeField] private Animator _animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _animator = GetComponent<Animator>();
+        Debug.Log(_animator);
+        _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
     }
 
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class SetNewPosition : MonoBehaviour
     {
         if (_isPlaying)
         {
-            CreateNewAnimation();
+            //CreateNewAnimation();
         }
     }
 
@@ -66,6 +70,25 @@ public class SetNewPosition : MonoBehaviour
         {
             _currentFrame = 0;
         }
-        
+    }
+
+    public void SetNewAnimation(HumanPose framePose)
+    {
+        _animator = GetComponent<Animator>();
+        Debug.Log(_animator);
+        _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
+        HumanPose humanPose = new HumanPose();
+        humanPose = framePose;
+
+        /*
+        for (int i = 0; i < framePose.muscles.Length; i++)
+        {
+            Debug.Log(framePose.muscles[i]);
+        }
+        Debug.Log(framePose.bodyPosition);
+        Debug.Log(framePose.bodyRotation);
+        */
+        Debug.Log(framePose.muscles[32]);
+        _humanPoseHandler.SetHumanPose(ref humanPose);
     }
 }
