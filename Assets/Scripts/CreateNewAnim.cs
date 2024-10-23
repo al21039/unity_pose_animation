@@ -109,16 +109,16 @@ public class CreateNewAnim : MonoBehaviour
             animclip.SetCurve("", typeof(Animator), muscleName, humanPoseMuscleCurves[i]);
         }
 
-        animclip.SetCurve("", typeof(Animator), "RootT.X", rootTX);
-        animclip.SetCurve("", typeof(Animator), "RootT.Y", rootTY);
-        animclip.SetCurve("", typeof(Animator), "RootT.Z", rootTZ);
-        animclip.SetCurve("", typeof(Animator), "RootQ.X", rootQX);
-        animclip.SetCurve("", typeof(Animator), "RootQ.Y", rootQY);
-        animclip.SetCurve("", typeof(Animator), "RootQ.Z", rootQZ);
-        animclip.SetCurve("", typeof(Animator), "RootQ.W", rootQW);
+        animclip.SetCurve("", typeof(Animator), "RootT.x", rootTX);
+        animclip.SetCurve("", typeof(Animator), "RootT.y", rootTY);
+        animclip.SetCurve("", typeof(Animator), "RootT.z", rootTZ);
+        animclip.SetCurve("", typeof(Animator), "RootQ.x", rootQX);
+        animclip.SetCurve("", typeof(Animator), "RootQ.y", rootQY);
+        animclip.SetCurve("", typeof(Animator), "RootQ.z", rootQZ);
+        animclip.SetCurve("", typeof(Animator), "RootQ.w", rootQW);
 
         //アニメーションを制作
-        AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick2.anim"));
+        AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick.anim"));
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }

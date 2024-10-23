@@ -21,6 +21,7 @@ public class SetAnimationTransform : MonoBehaviour
     private HumanPoseHandler _humanPoseHandler;
     private HumanPose _humanPose;
 
+
     GameObject manager_obj;
     private AnimationSceneManager manager_script;
 
@@ -55,12 +56,16 @@ public class SetAnimationTransform : MonoBehaviour
         middleDot.transform.position = positions[9] + new Vector3(0, 0, animation_frame * _frameInterval);
     }
 
-    public HumanPose GetKeyPoseMuscle()
+    //各キーフレームのモデルのHumanPoseを返す
+    public HumanPose GetKeyPoseMuscle(int frame)
     {
         _animator = GetComponent<Animator>();
         _humanPose = new HumanPose();
         _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
         _humanPoseHandler.GetHumanPose(ref _humanPose);
+
+        _humanPose.bodyPosition -= new Vector3(0, 0, frame * _frameInterval);
+
         return _humanPose;
     }
 }

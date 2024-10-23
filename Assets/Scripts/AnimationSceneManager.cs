@@ -278,7 +278,7 @@ public class AnimationSceneManager : MonoBehaviour
         for(int i = 0; i < _keyPoseModel.Length; i++)
         {
             SetAnimationTransform setAnimationTransform = _keyPoseModel[i].GetComponent<SetAnimationTransform>();
-            _keyPoseHumanPose[i] = setAnimationTransform.GetKeyPoseMuscle();
+            _keyPoseHumanPose[i] = setAnimationTransform.GetKeyPoseMuscle(_keyPoseList[i]);
         }
 
         _camera_obj.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
