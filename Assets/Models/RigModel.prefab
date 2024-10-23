@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 7583664257930665655}
   m_Layer: 0
   m_Name: RigModel
-  m_TagString: Untagged
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2684,7 +2684,7 @@ GameObject:
   - component: {fileID: 2670574053269645468}
   m_Layer: 0
   m_Name: KneeRTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3017,7 +3017,7 @@ GameObject:
   - component: {fileID: 7724633415022215852}
   m_Layer: 0
   m_Name: ElbowRTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3122,7 +3122,7 @@ GameObject:
   - component: {fileID: 3465382316829147472}
   m_Layer: 0
   m_Name: KneeLTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3737,7 +3737,7 @@ GameObject:
   - component: {fileID: 2833518988479183595}
   m_Layer: 0
   m_Name: ElbowLTarget
-  m_TagString: Movable
+  m_TagString: IKObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

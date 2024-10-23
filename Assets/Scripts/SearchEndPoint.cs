@@ -16,6 +16,52 @@ public class SearchEndPoint : MonoBehaviour
         
     }
 
+    public Transform ReturnEndAnker(int positionID, GameObject rootObject)
+    {
+        Transform anker = null;
+        switch (positionID)
+        {
+            case 0:
+                anker = rootObject.transform.Find("Rig").Find("HandRig").Find("HandLTarget");
+                break;
+            
+            case 1:
+                anker = rootObject.transform.Find("Rig").Find("HandRig").Find("HandRTarget");
+                break;
+
+            case 2:
+                anker = rootObject.transform.Find("Rig").Find("FootRig").Find("FootLTarget");
+                break;
+
+            case 3:
+                anker = rootObject.transform.Find("Rig").Find("FootRig").Find("FootRTarget");
+                break;
+
+            case 4:
+                anker = rootObject.transform.Find("Rig").Find("HandRig").Find("ElbowLTarget");
+                break;
+
+            case 5:
+                anker = rootObject.transform.Find("Rig").Find("HandRig").Find("ElbowRTarget");
+                break;
+
+            case 6:
+                anker = rootObject.transform.Find("Rig").Find("FootRig").Find("KneeLTarget");
+                break;
+
+            case 7:
+                anker = rootObject.transform.Find("Rig").Find("FootRig").Find("KneeRTarget");
+                break;
+
+            default:
+                break;
+        }
+
+        return anker;
+        
+    }
+
+    //ŠÖß‘€ì‚ğs‚Á‚½Û‚ÌŠÖß‚ğæ“¾
     public Transform ReturnEndPoint(int positionID, GameObject rootObject)
     {
         Transform target = null;
@@ -49,6 +95,7 @@ public class SearchEndPoint : MonoBehaviour
         return target;
     }
 
+    //’¼Ú‘€ì‚ğs‚Á‚½Û‚ÌŠÖß‚ğæ“¾
     public Transform ReturnEndPoint(int positionID, string frameObject)
     {
         Transform target = null;

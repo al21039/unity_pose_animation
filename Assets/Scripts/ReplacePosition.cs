@@ -10,6 +10,8 @@ public class ReplacePosition : MonoBehaviour
     private Dictionary<int, Vector3[]> _changedPos = new Dictionary<int, Vector3[]>();
     private List<int> _keyPoseList = new List<int>();
 
+    private bool _isEffectiveFirstPosition = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +54,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i][positionID] + new Vector3(0.0f, 0.0f, (i) * 0.30f);
 
             points[i] = splinedPoint;
-            points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);     
+            if (_isEffectiveFirstPosition)
+            { 
+                points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
         if (positionID < 4)
         {
@@ -93,7 +98,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
 
             points[i] = splinedPoint;
-            points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
         if (positionID < 4)
         {
@@ -138,7 +146,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
 
             beforePoints[i] = splinedPoint;
-            beforePoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                beforePoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
 
         if (positionID < 4)
@@ -153,6 +164,9 @@ public class ReplacePosition : MonoBehaviour
         {
             _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
         }
+
+        _sceneManager.SetChangedPos(_changedPos);
+
 
         numberOfPoints = _keyPoseList[listIndex + 1] - currentKey;
         Vector3[] afterPoints = new Vector3[numberOfPoints];
@@ -170,7 +184,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
 
             afterPoints[i] = splinedPoint;
-            afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
         if (positionID < 4)
         {
@@ -215,7 +232,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
 
             before_points[i] = splinedPoint;
-            before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
 
         if (positionID < 4)
@@ -230,6 +250,9 @@ public class ReplacePosition : MonoBehaviour
         {
             _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
         }
+
+        _sceneManager.SetChangedPos(_changedPos);
+
 
         numberOfPoints = _keyPoseList[listIndex + 1] - currentKey;
         Vector3[] afterPoints = new Vector3[numberOfPoints];
@@ -247,7 +270,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
 
             afterPoints[i] = splinedPoint;
-            afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
         if (positionID < 4)
         {
@@ -293,8 +319,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
 
             before_points[i] = splinedPoint;
-            before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
-
+            if (_isEffectiveFirstPosition)
+            {
+                before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
         if (positionID < 4)
         {
@@ -309,8 +337,7 @@ public class ReplacePosition : MonoBehaviour
             _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * 0.30f);
         }
 
-
-
+        _sceneManager.SetChangedPos(_changedPos);
 
         numberOfPoints = _keyPoseList[listIndex + 1] - currentKey;
         Vector3[] afterPoints = new Vector3[numberOfPoints];
@@ -328,7 +355,10 @@ public class ReplacePosition : MonoBehaviour
             var savedPoint = _modelPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * 0.30f);
 
             afterPoints[i] = splinedPoint;
-            afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            if (_isEffectiveFirstPosition)
+            {
+                afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+            }
         }
 
         if (positionID < 4)

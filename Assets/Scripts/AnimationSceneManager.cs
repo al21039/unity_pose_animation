@@ -41,6 +41,8 @@ public class AnimationSceneManager : MonoBehaviour
     private Camera _camera;
     private GameObject _selectedIKObject; //マウスで選択したIKのオブジェクト
     private GameObject _selectedKeyModel;
+    private Transform _selectedTargetObject;
+    private Transform _selectedTargetAnker;
     private Vector3 _IKTargetOffset;
     private Vector3 _IndirectSphereOffset;
     private bool _isSphereMoved = false; 
@@ -58,6 +60,7 @@ public class AnimationSceneManager : MonoBehaviour
     private int _selectPositionID = -1;
 
     private bool _touchIndirectSphere = false;
+    private Vector3 _sphereDefaultPosition;
 
     public void SetSelectPositionID(int positionID)
     {
@@ -122,19 +125,24 @@ public class AnimationSceneManager : MonoBehaviour
 
                     else if(hit.collider.CompareTag("KeyModel"))
                     {
-                        _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject;
+                        _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject; //元のモデルフレームを取得
                         Debug.Log(_selectedKeyModel);
-                        _selectedKeyModelName = _selectedKeyModel.name;
+                        _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
                     }
 
+                    //フレームのモデルがある時かつ、ドロップダウンを選んでいるときに球を触ったら
                     else if(hit.collider.CompareTag("OperatingSphere"))
                     {
-                        _touchIndirectSphere = true;
+                        _touchIndirectSphere = true;　//球を触っている判定
                         Debug.Log("touch");
                         if (_selectedKeyModel != null && _selectPositionID != -1)
                         {
+                            _sphereDefaultPosition = indirectSphere.transform.position;
                             _IndirectSphereOffset = indirectSphere.transform.position - GetMouseWorldPos(true);
                             _isSphereMoved = true;
+                            _selectedTargetObject = _searchEndPointScript.ReturnEndPoint(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
+                            _selectedTargetAnker = _searchEndPointScript.ReturnEndAnker(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
+                            Debug.Log(_selectedTargetObject.gameObject.name);
                         }
                     }
                 }
@@ -146,7 +154,7 @@ public class AnimationSceneManager : MonoBehaviour
             //移動した分を補間する処理 オブジェクトがあるなら
             if (_selectedIKObjectName != null && _selected_frame != null)
             {
-                ReplacePosition(_selectedIKObjectName, _selected_frame, _selectedIKObject.transform.position);
+                ReplacePosition(_selectedIKObjectName, _selected_frame, _selectedIKObject);
                 _selectedIKObject = null;
                 _selectedIKObjectName = null;
                 _selected_frame = null;
@@ -156,10 +164,10 @@ public class AnimationSceneManager : MonoBehaviour
             {
                 if (_isSphereMoved)
                 {
-                    ReplacePosition(_selectedKeyModel, _selectPositionID, _selectedKeyModel.transform.position);
+                    ReplacePosition(_selectedKeyModel, _selectPositionID, _selectedTargetObject);
                 }
-                _selectedKeyModel = null;
-                _selectedKeyModelName = null;
+                _touchIndirectSphere = false;
+                _isSphereMoved = false;
             }
             
         }
@@ -169,9 +177,11 @@ public class AnimationSceneManager : MonoBehaviour
             _selectedIKObject.transform.position = GetMouseWorldPos(false) + _IKTargetOffset;
         }
 
-        if(_selectedKeyModel != null)
+        if(_isSphereMoved)
         {
-            _IndirectSphereOffset = GetMouseWorldPos(true) + _IndirectSphereOffset; //ここミスってる
+            indirectSphere.transform.position = GetMouseWorldPos(true) + _IndirectSphereOffset; 
+            _selectedTargetAnker.position += indirectSphere.transform.position - _sphereDefaultPosition;
+            _sphereDefaultPosition = indirectSphere.transform.position;
         }
     }
 
@@ -220,17 +230,14 @@ public class AnimationSceneManager : MonoBehaviour
     {
         _left_hand_spline.SetActive(!_left_hand_spline.activeSelf);
     }
-
     public void DisplayRightHandSpline()
     {
         _right_hand_spline.SetActive(!_right_hand_spline.activeSelf);
     }
-
     public void DisplayLeftFootSpline()
     {
         _left_foot_spline.SetActive(!_left_foot_spline.activeSelf);
     }
-
     public void DisplayRightFootSpline()
     {
         _right_foot_spline.SetActive(!_right_foot_spline.activeSelf);
@@ -244,7 +251,6 @@ public class AnimationSceneManager : MonoBehaviour
         }
         _positionDropDown.SetActive(true);
     }
-
     public void DestoryIndirectSphere()
     {
         if (indirectSphere != null)
@@ -253,7 +259,6 @@ public class AnimationSceneManager : MonoBehaviour
         }
         _positionDropDown.SetActive(false);
     }
-
     public void DisplayNewAnimation()
     {
         _camera_obj.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
@@ -268,6 +273,12 @@ public class AnimationSceneManager : MonoBehaviour
         _left_foot_button.SetActive(false);
         _right_foot_button.SetActive(false);
         _create_anim_button.SetActive(false);
+        _indirectButton.SetActive(false);
+        _positionDropDown.SetActive(false);
+        if(indirectSphere != null)
+        {
+            Destroy(indirectSphere); 
+        }
 
         for (int i = 0; i < _keyPoseList.Count; i++)
         {
@@ -287,7 +298,7 @@ public class AnimationSceneManager : MonoBehaviour
         Vector3 mousePoint = Input.mousePosition;
         if (sphereOperate)
         {
-            mousePoint.z = _camera.WorldToScreenPoint(_selectedKeyModel.transform.position).z;
+            mousePoint.z = _camera.WorldToScreenPoint(indirectSphere.transform.position).z;
         }
         else
         {
@@ -296,8 +307,8 @@ public class AnimationSceneManager : MonoBehaviour
         return _camera.ScreenToWorldPoint(mousePoint);
     }
 
-    //マウスで動かした後の修正
-    private void ReplacePosition(string moved_obj, string moved_frame, Vector3 moved_position)
+    //マウスで動かした後の修正 直接操作
+    private void ReplacePosition(string moved_obj, string moved_frame, GameObject movedObject)
     {
         LineRenderer lineRenderer = null;
         int positionID = -1;
@@ -366,14 +377,15 @@ public class AnimationSceneManager : MonoBehaviour
         {
             return;
         }
-
         SetSplineAndJointPosition(frame, targetPosition, positionID, lineRenderer);
     }
 
-    private void ReplacePosition(GameObject rootObject, int positionID, Vector3 moved_position)
+    //マウスで動かした後の修正 関節操作
+    private void ReplacePosition(GameObject rootObject, int positionID, Transform moved_position)
     {
         LineRenderer lineRenderer = null;
         int frameNumber = int.Parse(rootObject.name.Replace("_frame_model", ""));
+        Debug.Log(frameNumber);
         Vector3 targetPosition = new Vector3(0.0f, 0.0f, 0.0f);
         
         switch(positionID)
@@ -399,7 +411,7 @@ public class AnimationSceneManager : MonoBehaviour
         }
 
         Transform hitTarget = null;
-        hitTarget = _searchEndPointScript.ReturnEndPoint(positionID, rootObject);
+        hitTarget = moved_position;
 
         if(hitTarget != null)
         {
