@@ -3,27 +3,17 @@ using UnityEngine;
 
 public class ReplacePosition : MonoBehaviour
 {
-    [SerializeField] AnimationSceneManager _sceneManager;
+    [SerializeField] private AnimationSceneManager _sceneManager;
+    [SerializeField] private GameObject _spherePrefab;
+    [SerializeField] private bool _popSphere = false;
 
     private Dictionary<int, Vector3[]> _modelPos = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> _changedPos = new Dictionary<int, Vector3[]>();
     private List<int> _keyPoseList = new List<int>();
 
-    private bool _isEffectiveFirstPosition = false;
+    private bool _isEffectiveFirstPosition = false; //MediaPipeで取得した位置の影響を受けるか　　　受けない場合滑らかな位置に変更
 
     private float _frameInterval = 0.30f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void GetRequiredalue()
     {
@@ -59,6 +49,8 @@ public class ReplacePosition : MonoBehaviour
             { 
                 points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+
+            InstantiateSpherePrefab(points[i]);
         }
         if (positionID < 4)
         {
@@ -103,6 +95,7 @@ public class ReplacePosition : MonoBehaviour
             {
                 points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(points[i]);
         }
         if (positionID < 4)
         {
@@ -151,6 +144,7 @@ public class ReplacePosition : MonoBehaviour
             {
                 beforePoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(beforePoints[i]);
         }
 
         if (positionID < 4)
@@ -189,6 +183,7 @@ public class ReplacePosition : MonoBehaviour
             {
                 afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(afterPoints[i]);
         }
         if (positionID < 4)
         {
@@ -217,8 +212,8 @@ public class ReplacePosition : MonoBehaviour
         int previousKey = _keyPoseList[listIndex - 1];
         int twoPreviousKey = _keyPoseList[listIndex - 2];
         int numberOfPoints = currentKey - previousKey;
-        Vector3[] before_points = new Vector3[numberOfPoints];
-        before_points[numberOfPoints - 1] = targetPosition;
+        Vector3[] beforePoints = new Vector3[numberOfPoints];
+        beforePoints[numberOfPoints - 1] = targetPosition;
 
 
         for (int i = 0; i < numberOfPoints - 1; i++)
@@ -232,24 +227,25 @@ public class ReplacePosition : MonoBehaviour
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
-            before_points[i] = splinedPoint;
+            beforePoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
             {
-                before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+                beforePoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(beforePoints[i]);
         }
 
         if (positionID < 4)
         {
             for (int i = 0; i < numberOfPoints; i++)
             {
-                lineRenderer.SetPosition(i + previousKey + 1, before_points[i]);
+                lineRenderer.SetPosition(i + previousKey + 1, beforePoints[i]);
             }
         }
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -275,6 +271,7 @@ public class ReplacePosition : MonoBehaviour
             {
                 afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(afterPoints[i]);
         }
         if (positionID < 4)
         {
@@ -304,8 +301,8 @@ public class ReplacePosition : MonoBehaviour
         int twoPreviousKey = _keyPoseList[listIndex - 2];
         int twoAfterKey = _keyPoseList[listIndex + 2];
         int numberOfPoints = currentKey - previousKey;
-        Vector3[] before_points = new Vector3[numberOfPoints];
-        before_points[numberOfPoints - 1] = targetPosition;
+        Vector3[] beforePoints = new Vector3[numberOfPoints];
+        beforePoints[numberOfPoints - 1] = targetPosition;
 
 
         for (int i = 0; i < numberOfPoints - 1; i++)
@@ -319,23 +316,24 @@ public class ReplacePosition : MonoBehaviour
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
             var savedPoint = _modelPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
 
-            before_points[i] = splinedPoint;
+            beforePoints[i] = splinedPoint;
             if (_isEffectiveFirstPosition)
             {
-                before_points[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
+                beforePoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(beforePoints[i]);
         }
         if (positionID < 4)
         {
             for (int i = 0; i < numberOfPoints; i++)
             {
-                lineRenderer.SetPosition(i + previousKey + 1, before_points[i]);
+                lineRenderer.SetPosition(i + previousKey + 1, beforePoints[i]);
             }
         }
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            _changedPos[i + previousKey + 1][positionID] = before_points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
         }
 
         _sceneManager.SetChangedPos(_changedPos);
@@ -360,6 +358,7 @@ public class ReplacePosition : MonoBehaviour
             {
                 afterPoints[i] = Vector3.Lerp(splinedPoint, savedPoint, 0.2f);
             }
+            InstantiateSpherePrefab(afterPoints[i]);
         }
 
         if (positionID < 4)
@@ -390,5 +389,13 @@ public class ReplacePosition : MonoBehaviour
             (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
             (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3
         );
+    }
+
+    private void InstantiateSpherePrefab(Vector3 instantiatePosition)
+    {
+        if (_popSphere)
+        {
+            Instantiate(_spherePrefab, instantiatePosition, Quaternion.identity);
+        }
     }
 }

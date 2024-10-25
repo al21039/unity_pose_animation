@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AnimationSceneManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class AnimationSceneManager : MonoBehaviour
     [SerializeField] private GameObject _create_anim_button;
     [SerializeField] private GameObject _indirectButton;
     [SerializeField] private GameObject _positionDropDown;
+    [SerializeField] private Slider _slider;
 
     //編集後に用いるモデルのプレハブ
     [SerializeField] private GameObject _created_model;
@@ -66,7 +68,7 @@ public class AnimationSceneManager : MonoBehaviour
     private GameObject[] _keyPoseModel;
     private HumanPose[] _keyPoseHumanPose;
     private int _keyPoseModelCount = 0;
-
+    private float _indeirectEffectiveGainValue = 0;
 
 
     public void SetTotalKeyFrame(int totalKeyFrame)
@@ -148,6 +150,7 @@ public class AnimationSceneManager : MonoBehaviour
                     //フレームのモデルがある時かつ、ドロップダウンを選んでいるときに球を触ったら
                     else if(hit.collider.CompareTag("OperatingSphere"))
                     {
+                        _indeirectEffectiveGainValue = _slider.value;
                         _touchIndirectSphere = true;　//球を触っている判定
                         Debug.Log("touch");
                         if (_selectedKeyModel != null && _selectPositionID != -1)
@@ -195,7 +198,7 @@ public class AnimationSceneManager : MonoBehaviour
         if(_isSphereMoved)
         {
             indirectSphere.transform.position = GetMouseWorldPos(true) + _IndirectSphereOffset; 
-            _selectedTargetAnker.position += indirectSphere.transform.position - _sphereDefaultPosition;
+            _selectedTargetAnker.position += (indirectSphere.transform.position - _sphereDefaultPosition) * _indeirectEffectiveGainValue;
             _sphereDefaultPosition = indirectSphere.transform.position;
         }
     }
@@ -264,6 +267,7 @@ public class AnimationSceneManager : MonoBehaviour
             indirectSphere = Instantiate(_spherePrefab, spawnPosition, Quaternion.identity);
         }
         _positionDropDown.SetActive(true);
+        _slider.gameObject.SetActive(true);
     }
     public void DestoryIndirectSphere()
     {
@@ -283,6 +287,7 @@ public class AnimationSceneManager : MonoBehaviour
 
         _camera_obj.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
         _camera_obj.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+
         _left_hand_spline.SetActive(false);
         _right_hand_spline.SetActive(false);
         _left_foot_spline.SetActive(false);
@@ -295,6 +300,7 @@ public class AnimationSceneManager : MonoBehaviour
         _create_anim_button.SetActive(false);
         _indirectButton.SetActive(false);
         _positionDropDown.SetActive(false);
+        _slider.gameObject.SetActive(false);
         if(indirectSphere != null)
         {
             Destroy(indirectSphere); 
