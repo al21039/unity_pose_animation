@@ -3154,6 +3154,7 @@ MonoBehaviour:
   _positionDropDown: {fileID: 124369731}
   _slider: {fileID: 1279744133}
   _created_model: {fileID: 8932000906575889375, guid: fba873322e2c39246bf691389f8169dd, type: 3}
+  _animationModel: {fileID: 3068819014942912371, guid: e5f6f90c4b087a945b59da68831e3051, type: 3}
   _spherePrefab: {fileID: 5448276671561403501, guid: f6c39e3bd0c222b478888b4255a88258, type: 3}
   _replaceScript: {fileID: 1512736485}
   _searchEndPointScript: {fileID: 1512736486}
@@ -3171,6 +3172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneManager: {fileID: 1512736484}
   _spherePrefab: {fileID: 5448276671561403501, guid: f6c39e3bd0c222b478888b4255a88258, type: 3}
+  _popSphere: 0
 --- !u!114 &1512736486
 MonoBehaviour:
   m_ObjectHideFlags: 0

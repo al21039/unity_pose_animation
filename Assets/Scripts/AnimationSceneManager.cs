@@ -28,6 +28,7 @@ public class AnimationSceneManager : MonoBehaviour
 
     //編集後に用いるモデルのプレハブ
     [SerializeField] private GameObject _created_model;
+    [SerializeField] private GameObject _animationModel;
 
 
     [SerializeField] private GameObject _spherePrefab;
@@ -312,11 +313,16 @@ public class AnimationSceneManager : MonoBehaviour
             GameObject destroy_obj = GameObject.Find(tmp_name);
             Destroy(destroy_obj);
         }
+        GameObject animationModel = Instantiate(_animationModel, new Vector3(2.0f, 0.0f, 0.0f), Quaternion.identity);
+        SetNewPosition setNewPosition = animationModel.GetComponent<SetNewPosition>();
+        setNewPosition.SetStatus(_changedPos, _totalFrame);
+
+
         GameObject created_model = Instantiate(_created_model, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        _set_new_position = created_model.GetComponent<CreateNewAnim>();
-        
-        int muscleNum = _keyPoseHumanPose[0].muscles.Length;
+        _set_new_position = created_model.GetComponent<CreateNewAnim>();       
         _set_new_position.CreateNewAnimation(_keyPoseHumanPose, _keyPoseList);
+        
+        
     }
 
     //マウスの座標取得

@@ -41,7 +41,7 @@ public class SetNewPosition : MonoBehaviour
     {
         if (_isPlaying)
         {
-            //CreateNewAnimation();
+            CreateNewAnimation();
         }
     }
 
@@ -70,6 +70,7 @@ public class SetNewPosition : MonoBehaviour
         {
             _currentFrame = 0;
         }
+        Debug.Log("check");
     }
 
     public void SetNewAnimation(HumanPose framePose)
