@@ -253,8 +253,6 @@ public class IK_target_pos : MonoBehaviour
             before_part_position[i] = part_position[i];
         }
 
-
-
         currentFrame++;
 
         if (currentFrame > totalFrames - 1)

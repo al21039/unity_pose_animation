@@ -50,6 +50,7 @@ public class CreateNewAnim : MonoBehaviour
         _humanPoseHandler.SetHumanPose(ref humanPose);
     }
 
+    //アニメーション作成
     public void CreateNewAnimation(HumanPose[] keyFramePoses, List<int> keyFrameList)
     {
         float time = 0;

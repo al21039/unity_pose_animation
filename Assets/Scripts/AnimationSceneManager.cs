@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class AnimationSceneManager : MonoBehaviour
 {
+    public static AnimationSceneManager instance;
+
     [SerializeField] GameObject humanoid_model;
 
     //ü
@@ -71,6 +73,15 @@ public class AnimationSceneManager : MonoBehaviour
     private int _keyPoseModelCount = 0;
     private float _indeirectEffectiveGainValue = 0;
 
+    private string _newKeyPoseFilePath;
+
+    public static AnimationSceneManager GetInstance() => instance;
+
+    public void SetNewKeyPoseFilePath(string filePath)
+    {
+        _newKeyPoseFilePath = filePath;
+    }
+
 
     public void SetTotalKeyFrame(int totalKeyFrame)
     {
@@ -108,7 +119,23 @@ public class AnimationSceneManager : MonoBehaviour
     {
         _totalFrame = totalFrame;
     }
- 
+
+    //ƒVƒ“ƒOƒ‹ƒgƒ“ˆ—
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {

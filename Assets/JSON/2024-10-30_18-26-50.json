@@ -1,0 +1,16 @@
+if not results.pose_landmarks:
+            return jsonify({'error': 'No landmarks detected'})
+
+        # ランドマークを構造化してJSON形式に整形
+        landmarks = []
+        for landmark in results.pose_landmarks.landmark:
+            landmarks.append({
+                'x': landmark.x,
+                'y': landmark.y,
+                'z': landmark.z
+            })
+
+        data = {
+            "num_landmarks": len(landmarks),
+            "landmarks": landmarks
+        }

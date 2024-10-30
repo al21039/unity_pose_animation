@@ -72,24 +72,18 @@ public class SetNewPosition : MonoBehaviour
         }
         Debug.Log("check");
     }
-
-    public void SetNewAnimation(HumanPose framePose)
+    
+    public void SetPosition(Vector3[] jsonPosition)
     {
-        _animator = GetComponent<Animator>();
-        Debug.Log(_animator);
-        _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
-        HumanPose humanPose = new HumanPose();
-        humanPose = framePose;
-
-        /*
-        for (int i = 0; i < framePose.muscles.Length; i++)
-        {
-            Debug.Log(framePose.muscles[i]);
-        }
-        Debug.Log(framePose.bodyPosition);
-        Debug.Log(framePose.bodyRotation);
-        */
-        Debug.Log(framePose.muscles[32]);
-        _humanPoseHandler.SetHumanPose(ref humanPose);
+        Left_hand.transform.position = _modelPos[_currentFrame][0];
+        Right_hand.transform.position = _modelPos[_currentFrame][1];
+        Left_ankle.transform.position = _modelPos[_currentFrame][2];
+        Right_ankle.transform.position = _modelPos[_currentFrame][3];
+        Left_elbow.transform.position = _modelPos[_currentFrame][4];
+        Right_elbow.transform.position = _modelPos[_currentFrame][5];
+        Left_knee.transform.position = _modelPos[_currentFrame][6];
+        Right_knee.transform.position = _modelPos[_currentFrame][7];
+        Body.transform.position = _modelPos[_currentFrame][8];
+        middleDot.transform.position = _modelPos[_currentFrame][9];
     }
 }
