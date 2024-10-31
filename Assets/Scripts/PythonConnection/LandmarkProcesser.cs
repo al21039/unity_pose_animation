@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 public class LandmarkProcesser : MonoBehaviour
@@ -35,7 +33,11 @@ public class LandmarkProcesser : MonoBehaviour
 
             for (int i = 0; i < data.landmarks.Count; i++)
             {
-                ImageLandmarks[i] = new Vector3(data.landmarks[i].x, data.landmarks[i].y, data.landmarks[i].z);
+                ImageLandmarks[i] = new Vector3(
+                    -data.landmarks[i].x, 
+                    data.landmarks[i].y, 
+                    -data.landmarks[i].z
+                );
             }
             return ImageLandmarks;
         }
