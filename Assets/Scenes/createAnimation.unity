@@ -3436,7 +3436,7 @@ GameObject:
   - component: {fileID: 1853181381}
   - component: {fileID: 1853181382}
   m_Layer: 0
-  m_Name: ButtonManager
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8079,19 +8079,20 @@ MonoBehaviour:
   threshold: 10
   Hips: {fileID: 6978353494451431424}
   Body: {fileID: 6879683167404652785}
-  Left_shoulder: {fileID: 6987914130817227085}
-  Left_elbow: {fileID: 7046440620904923147}
-  Left_hand: {fileID: 5200198549083020941}
-  Right_shoulder: {fileID: 822744141513962892}
-  Right_elbow: {fileID: 6649062966277879767}
-  Right_hand: {fileID: 2330452312526604902}
-  Left_hip: {fileID: 4662471586291122841}
-  Left_knee: {fileID: 8765746130432101774}
-  Left_ankle: {fileID: 8258833145315165305}
-  Right_hip: {fileID: 4294825857103721231}
-  Right_knee: {fileID: 7991095259944391338}
-  Right_ankle: {fileID: 6591225477397362679}
   middleDot: {fileID: 4330746373134959986}
+  _limbObjectArray:
+  - {fileID: 6987914130817227085}
+  - {fileID: 7046440620904923147}
+  - {fileID: 5200198549083020941}
+  - {fileID: 822744141513962892}
+  - {fileID: 6649062966277879767}
+  - {fileID: 2330452312526604902}
+  - {fileID: 4662471586291122841}
+  - {fileID: 8765746130432101774}
+  - {fileID: 8258833145315165305}
+  - {fileID: 4294825857103721231}
+  - {fileID: 7991095259944391338}
+  - {fileID: 6591225477397362679}
 --- !u!1 &8665626719312199032
 GameObject:
   m_ObjectHideFlags: 0

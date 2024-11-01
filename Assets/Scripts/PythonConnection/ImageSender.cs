@@ -9,10 +9,13 @@ public class ImageSender : MonoBehaviour
     [SerializeField] private Texture2D _texture;
     [SerializeField] private LandmarkProcesser _processer;
     [SerializeField] private GameObject _spherePrefab;
+    [SerializeField] private GameObject _modelPrefab;
+    [SerializeField] private GameObject _button;
 
     //Texture2D‚ðPNGŒ`Ž®‚É•ÏŠ·
     public void SendImageToPython()
     {
+        _button.SetActive(false);
         Texture2D newTexture = new Texture2D(_texture.width, _texture.height, TextureFormat.RGBA32, false);
         newTexture.SetPixels(_texture.GetPixels());
         newTexture.Apply();
@@ -67,12 +70,19 @@ public class ImageSender : MonoBehaviour
         
         Vector3[] jsonLandmarks = _processer.GetLandmarksFromJson(filePath);
 
+        /*
         for(int i = 0; i < jsonLandmarks.Length; i++)
         {
             Instantiate(_spherePrefab, jsonLandmarks[i], Quaternion.identity);
         }
+        */
 
-        //AnimationSceneManager.GetInstance().SetNewKeyPoseFilePath(filePath);
+        GameObject newModel = Instantiate(_modelPrefab, Vector3.zero, Quaternion.identity);
+        
+        SetImagePosition setImagePosition = newModel.GetComponent<SetImagePosition>();
+        setImagePosition.CalcModelDis();
+        setImagePosition.SetImageModel(jsonLandmarks);
+        
     }
-
+            
 }

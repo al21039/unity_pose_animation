@@ -29,13 +29,15 @@ public class LandmarkProcesser : MonoBehaviour
 
             LandmarkData data = JsonUtility.FromJson<LandmarkData>(jsonText);
 
+
+
             Vector3[] ImageLandmarks = new Vector3[data.num_landmarks];
 
             for (int i = 0; i < data.landmarks.Count; i++)
             {
                 ImageLandmarks[i] = new Vector3(
-                    -data.landmarks[i].x, 
-                    data.landmarks[i].y, 
+                    -data.landmarks[i].x,
+                    -data.landmarks[i].y + 1,
                     -data.landmarks[i].z
                 );
             }
