@@ -80,14 +80,6 @@ public class SetNewPosition : MonoBehaviour
         HumanPose humanPose = new HumanPose();
         humanPose = framePose;
 
-        /*
-        for (int i = 0; i < framePose.muscles.Length; i++)
-        {
-            Debug.Log(framePose.muscles[i]);
-        }
-        Debug.Log(framePose.bodyPosition);
-        Debug.Log(framePose.bodyRotation);
-        */
         Debug.Log(framePose.muscles[32]);
         _humanPoseHandler.SetHumanPose(ref humanPose);
     }
