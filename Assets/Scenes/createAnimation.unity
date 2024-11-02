@@ -3171,6 +3171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneManager: {fileID: 1512736484}
   _spherePrefab: {fileID: 5448276671561403501, guid: f6c39e3bd0c222b478888b4255a88258, type: 3}
+  _popSphere: 0
 --- !u!114 &1512736486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4334,55 +4335,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2023362832}
   m_CullTransparentMesh: 1
---- !u!1 &2119470405
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2119470407}
-  - component: {fileID: 2119470406}
-  m_Layer: 0
-  m_Name: show_landmarks
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2119470406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119470405}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3b1c1d95b454ff40bfe7c1d0b81a9ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/kick.csv
-  landmarkPrefab: {fileID: 7322892745076488792, guid: 94a1aee55906e6e4797a185377a84458, type: 3}
-  scale: 1.1
-  offset: {x: 0, y: 1, z: 0}
-  lineMaterial: {fileID: 2100000, guid: 4edc978871804164f847620d264a83f1, type: 2}
---- !u!4 &2119470407
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119470405}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2135993973
 GameObject:
   m_ObjectHideFlags: 0
@@ -8329,7 +8281,6 @@ SceneRoots:
   - {fileID: 2135993976}
   - {fileID: 705507995}
   - {fileID: 1142510770}
-  - {fileID: 2119470407}
   - {fileID: 3827287851098679605}
   - {fileID: 1853181381}
   - {fileID: 1512736483}
