@@ -70,7 +70,8 @@ public class LandmarkManager : MonoBehaviour
         for (int i = 0; i < _jsonFilePaths.Length; i++)
         {
             GameObject imageModel = Instantiate(_jsonModel, Vector3.zero, Quaternion.identity);
-            
+            CreateFromJSON createFromJSON = imageModel.GetComponent<CreateFromJSON>();
+            createFromJSON.SetJsonLandmark(_jsonFilePaths[i]);
         }
     }
 

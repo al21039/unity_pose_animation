@@ -39,7 +39,7 @@ public class CreateFromJSON : BaseCalculation
         
     }
 
-    private void SetJsonLandmark(string fileName)
+    public void SetJsonLandmark(string fileName)
     {
         DetectionLandmarkPosition(fileName);
 
