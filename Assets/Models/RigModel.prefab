@@ -2050,7 +2050,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6989762647508250018}
   - component: {fileID: 5830690609913911879}
-  - component: {fileID: 6969168605800013019}
   m_Layer: 0
   m_Name: Body
   m_TagString: KeyModel
@@ -2179,28 +2178,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00009581074, y: -0.0030767545, z: -0.00091552036}
     m_Extent: {x: 0.044162717, y: 0.052132066, z: 0.013649365}
   m_DirtyAABB: 0
---- !u!64 &6969168605800013019
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6068098652325403769}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2959467708922500008, guid: 81bb9eea30387e442899949a80011e55, type: 3}
 --- !u!1 &6079660067916916460
 GameObject:
   m_ObjectHideFlags: 0

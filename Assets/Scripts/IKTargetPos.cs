@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class IK_target_pos : BaseCalc
+public class IKTargetPos : BaseCalc
 {
     public string csvFilePath = "Assets/CSV/stretch.csv";
     public bool roop = false;
@@ -68,7 +68,6 @@ public class IK_target_pos : BaseCalc
 
         _modelLimbDistance = ReturnLimbDistance(_modelLimbObject);
         
-        Application.targetFrameRate = 30;
         LoadLandmarkData();
     }
 
@@ -78,6 +77,10 @@ public class IK_target_pos : BaseCalc
         if(!isCreated)
         {
             CreateAnimation();
+        }
+        else
+        {
+
         }
     }
 
@@ -377,8 +380,8 @@ public class IK_target_pos : BaseCalc
 
 
         }
-
-        nextPhase();
+        LandmarkManager.GetInstance().CSVLandmarkPositions = modelPos;
+        Destroy(this);
     }
 
     void nextPhase()
