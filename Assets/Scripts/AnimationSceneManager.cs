@@ -5,6 +5,10 @@ using UnityEngine.UI;
 public class AnimationSceneManager : MonoBehaviour
 {
     [SerializeField] GameObject humanoid_model;
+    [SerializeField] private GameObject _editableModel;
+
+    [SerializeField] private GameObject[] Splines;
+    [SerializeField] private GameObject[] SplineSettingButton;
 
     //ê¸
     [SerializeField] private GameObject _left_hand_spline;
@@ -77,7 +81,6 @@ public class AnimationSceneManager : MonoBehaviour
         _keyPoseModel = new GameObject[totalKeyFrame];
         _keyPoseHumanPose = new HumanPose[totalKeyFrame];
     }
-
 
     public void SetSelectPositionID(int positionID)
     {
