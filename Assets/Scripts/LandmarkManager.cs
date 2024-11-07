@@ -1,18 +1,22 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LandmarkManager : MonoBehaviour
 {
     [SerializeField] private GameObject _jsonModel;
-    [SerializeField] private string[] _jsonFilePaths;
+    [SerializeField] private TextAsset[] _jsonFilePaths;
 
     private int _jsonCount = 0;
 
-    private Dictionary<int, Vector3[]> _csvLandmarkPositions;
-    private Dictionary<int, Vector3[]> _jsonLandmarkPositions;
-    private int _totalFrame;
+    private Dictionary<int, Vector3[]> _csvLandmarkPositions = new Dictionary<int, Vector3[]>();
+    private Dictionary<int, Vector3[]> _jsonLandmarkPositions = new Dictionary<int, Vector3[]>();
+    private List<int> _keyPoseList = new List<int>();
+    private int _totalFrame = 0;
 
     private static LandmarkManager instance;
+
+    private string _startDate;
 
     public Dictionary<int, Vector3[]> CSVLandmarkPositions
     {
@@ -23,6 +27,7 @@ public class LandmarkManager : MonoBehaviour
         set
         {
             _csvLandmarkPositions = value;
+            SetJsonLandmark();
         }
     }
 
@@ -38,41 +43,74 @@ public class LandmarkManager : MonoBehaviour
         }
     }
 
-    public void IncrementJsonCount()
+    public string StartDate
     {
+        get 
+        {
+            return _startDate;
+        }
+        set
+        {
+            _startDate = value;
+        }
+    }
+
+    public int JsonCount
+    {
+        get { 
+            return _jsonCount;
+        }
+        set { 
+            
+        }
+    }
+
+    public void SetJsonLandmarkPosition(Vector3[] jsonLandmark)
+    {
+        _jsonLandmarkPositions.Add(_jsonCount, jsonLandmark);
+
         _jsonCount++;
-        if(_jsonCount >_jsonFilePaths.Length)
+        if(_jsonCount >= _jsonFilePaths.Length)
         {
             ///
             //　　次の処理へ　　　　キーフレームを表示
             ///
+            Debug.Log("スタート処理完了");
+        }
+        else
+        {
+            SetJsonLandmark();
         }
     }
 
 
     public static LandmarkManager GetInstance() => instance;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _startDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        Application.targetFrameRate = 30;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }   
 
     private void SetJsonLandmark()
     {
-        for (int i = 0; i < _jsonFilePaths.Length; i++)
-        {
             GameObject imageModel = Instantiate(_jsonModel, Vector3.zero, Quaternion.identity);
             CreateFromJSON createFromJSON = imageModel.GetComponent<CreateFromJSON>();
-            createFromJSON.SetJsonLandmark(_jsonFilePaths[i]);
-        }
+            createFromJSON.SetJsonLandmark(_jsonFilePaths[_jsonCount]);
     }
-
 }

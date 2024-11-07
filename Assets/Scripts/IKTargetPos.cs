@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class IKTargetPos : BaseCalc
+public class IKTargetPos : BaseCalculation
 {
-    public string csvFilePath = "Assets/CSV/stretch.csv";
+    public string csvFilePath = "Assets/CSV/kick.csv";
     public bool roop = false;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
-    [SerializeField] GameObject scene_manager_object;
-    AnimationSceneManager AnimationSceneManager;
+    //[SerializeField] GameObject scene_manager_object;
+    //AnimationSceneManager AnimationSceneManager;
     
     public int currentFrame = 0;
     int totalFrames = 0;
@@ -27,61 +27,31 @@ public class IKTargetPos : BaseCalc
 
     float[] part_distance = new float[4];
     public float threshold = 10.0f;
-    [SerializeField] GameObject Hips;
-    [SerializeField] GameObject Body;
-    [SerializeField] GameObject middleDot;
-    [SerializeField] GameObject _LeftToe;
-    [SerializeField] GameObject _RightToe;
-    [SerializeField] GameObject _LeftFinger;
-    [SerializeField] GameObject _RightFinger;
 
-    [SerializeField] GameObject[] _modelLimbObject = new GameObject[12];
-
-    Vector3 mp_body_dot;
-
-    float model_dis_body;
-    float model_dis_shoulder;
-    float _modelDisLToe;
-    float _modelDisRToe;
-    float _modelDisLFinger;
-    float _modelDisRFinger;
+    [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
 
 
-    private float[] _modelLimbDistance = new float[8];
-    private float[] _mediaPipeLimbDistance = new float[8];
+    private float[] _modelLimbDistance;
+    private float[] _mediaPipeLimbDistance;
 
 
     Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
     // Start is called before the first frame update
     void Start()
     {
-        AnimationSceneManager = scene_manager_object.GetComponent<AnimationSceneManager>();
-
-        //モデルの関節毎の距離計算　正規化で利用
-        model_dis_body = Vector3.Distance(Hips.transform.position, Body.transform.position);　//腰から体の中心
-        model_dis_shoulder = Vector3.Distance(Body.transform.position, middleDot.transform.position);　//体の中心から首
-
-        _modelDisLToe = Vector3.Distance(_modelLimbObject[8].transform.position, _LeftToe.transform.position);
-        _modelDisRToe = Vector3.Distance(_modelLimbObject[11].transform.position, _RightToe.transform.position);
-        _modelDisLFinger = Vector3.Distance(_modelLimbObject[2].transform.position, _LeftFinger.transform.position);
-        _modelDisRFinger = Vector3.Distance(_modelLimbObject[5].transform.position, _RightFinger.transform.position);
-
-        _modelLimbDistance = ReturnLimbDistance(_modelLimbObject);
-        
-        LoadLandmarkData();
+        CalcModelDistance();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!isCreated)
-        {
-            CreateAnimation();
-        }
-        else
-        {
 
-        }
+    }
+    private void CalcModelDistance()
+    {
+        _modelLimbDistance = ReturnDistance(_modelLimbObject);
+
+        LoadLandmarkData();
     }
 
     //CSVファイルからランドマークデータ読み出し
@@ -113,101 +83,84 @@ public class IKTargetPos : BaseCalc
                 totalFrames++;
             }
         }
+        CreateAnimation();
     }
+
 
     void CreateAnimation()
     {
         //フレーム毎の各ランドマーク座標
         Vector3[] landmarks = landmarkData[currentFrame];
 
-        mp_middleDot_shoulderpos = (landmarks[11] + landmarks[12]) / 2;
-        mp_body_dot = (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4;
-
-        float mp_dis_body = Vector3.Distance(new Vector3(0, 1, 0), mp_body_dot);
-        float mp_dis_shoulder = Vector3.Distance(mp_body_dot, mp_middleDot_shoulderpos);
-
-        float mpDisLeftToe = Vector3.Distance(landmarks[29], landmarks[31]);
-        float mpDisRightToe = Vector3.Distance(landmarks[30], landmarks[32]);
-        float mpDisLeftFinger = Vector3.Distance(landmarks[15], landmarks[19]);
-        float mpDisRightFinger = Vector3.Distance(landmarks[16], landmarks[20]);
-
-        Vector3[] _mediaPipeLimbArray = new Vector3[12]
+        Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
+            new Vector3(0, 1, 0),
+            (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4,
+            (landmarks[11] + landmarks[12]) / 2,
             landmarks[11],
             landmarks[13],
             landmarks[15],
+            landmarks[19],
             landmarks[12],
             landmarks[14],
             landmarks[16],
+            landmarks[20],
             landmarks[23],
             landmarks[25],
             landmarks[29],
+            landmarks[31],
             landmarks[24],
             landmarks[26],
-            landmarks[30]
+            landmarks[30],
+            landmarks[32]
         };
 
-        //四肢の部位の距離を計算
-        _mediaPipeLimbDistance = ReturnLimbDistance(_mediaPipeLimbArray);
-
-        //モデルの隣接距離とランドマークの隣接距離で比率計算
-        float dis_diff_body = model_dis_body / mp_dis_body;
-        float dis_diff_shoulder = model_dis_shoulder / mp_dis_shoulder;
-
-        float disDiffLeftToe = _modelDisLToe / mpDisLeftToe;
-        float disDiffRightToe = _modelDisRToe / mpDisRightToe;
-        float disDiffLeftFinger = _modelDisLFinger / mpDisLeftFinger;
-        float disDiffRightFinger = _modelDisRFinger / mpDisRightFinger;
+        //四肢の部位の距離を計算  (MediaPipe)
+        _mediaPipeLimbDistance = ReturnDistance(_mediaPipeLimbArray);
 
         //モデルの部位の距離と、mediaPipeの部位の距離で比率を計算
-        float[] DistanceDiff = new float[8];
-        for (int i = 0; i < DistanceDiff.Length; i++)
-        {
-            DistanceDiff[i] = _modelLimbDistance[i] / _mediaPipeLimbDistance[i];
-        }
-
-        Body.transform.position = (mp_body_dot - new Vector3(0, 1, 0)) * dis_diff_body + Hips.transform.position;
-
-        middleDot.transform.position = (mp_middleDot_shoulderpos - mp_body_dot) * dis_diff_shoulder + Body.transform.position;
-
-        _LeftToe.transform.position = (landmarks[31] - landmarks[29]) * disDiffLeftToe + _modelLimbObject[8].transform.position;
-        _RightToe.transform.position = (landmarks[32] - landmarks[30]) * disDiffRightToe + _modelLimbObject[11].transform.position;
-        _LeftFinger.transform.position = (landmarks[19] - landmarks[15]) * disDiffLeftFinger + _modelLimbObject[2].transform.position;
-        _RightFinger.transform.position = (landmarks[20] - landmarks[16]) * disDiffRightFinger + _modelLimbObject[5].transform.position;
+        float[] DistanceDiff;
+        DistanceDiff = ReturnDiff(_modelLimbDistance, _mediaPipeLimbDistance);
 
         _modelLimbObject[1].transform.position = (_mediaPipeLimbArray[1] - _mediaPipeLimbArray[0]) * DistanceDiff[0] + _modelLimbObject[0].transform.position;
         _modelLimbObject[2].transform.position = (_mediaPipeLimbArray[2] - _mediaPipeLimbArray[1]) * DistanceDiff[1] + _modelLimbObject[1].transform.position;
+
         _modelLimbObject[4].transform.position = (_mediaPipeLimbArray[4] - _mediaPipeLimbArray[3]) * DistanceDiff[2] + _modelLimbObject[3].transform.position;
         _modelLimbObject[5].transform.position = (_mediaPipeLimbArray[5] - _mediaPipeLimbArray[4]) * DistanceDiff[3] + _modelLimbObject[4].transform.position;
-        _modelLimbObject[7].transform.position = (_mediaPipeLimbArray[7] - _mediaPipeLimbArray[6]) * DistanceDiff[4] + _modelLimbObject[6].transform.position;
-        _modelLimbObject[8].transform.position = (_mediaPipeLimbArray[8] - _mediaPipeLimbArray[7]) * DistanceDiff[5] + _modelLimbObject[7].transform.position;
-        _modelLimbObject[10].transform.position = (_mediaPipeLimbArray[10] - _mediaPipeLimbArray[9]) * DistanceDiff[6] + _modelLimbObject[9].transform.position;
-        _modelLimbObject[11].transform.position = (_mediaPipeLimbArray[11] - _mediaPipeLimbArray[10]) * DistanceDiff[7] + _modelLimbObject[10].transform.position;
+        _modelLimbObject[6].transform.position = (_mediaPipeLimbArray[6] - _mediaPipeLimbArray[5]) * DistanceDiff[4] + _modelLimbObject[5].transform.position;
 
+        _modelLimbObject[8].transform.position = (_mediaPipeLimbArray[8] - _mediaPipeLimbArray[7]) * DistanceDiff[5] + _modelLimbObject[7].transform.position;
+        _modelLimbObject[9].transform.position = (_mediaPipeLimbArray[9] - _mediaPipeLimbArray[8]) * DistanceDiff[6] + _modelLimbObject[8].transform.position;
+        _modelLimbObject[10].transform.position = (_mediaPipeLimbArray[10] - _mediaPipeLimbArray[9]) * DistanceDiff[7] + _modelLimbObject[9].transform.position;
+
+        _modelLimbObject[12].transform.position = (_mediaPipeLimbArray[12] - _mediaPipeLimbArray[11]) * DistanceDiff[8] + _modelLimbObject[11].transform.position;
+        _modelLimbObject[13].transform.position = (_mediaPipeLimbArray[13] - _mediaPipeLimbArray[12]) * DistanceDiff[9] + _modelLimbObject[12].transform.position;
+        _modelLimbObject[14].transform.position = (_mediaPipeLimbArray[14] - _mediaPipeLimbArray[13]) * DistanceDiff[10] + _modelLimbObject[13].transform.position;
+
+        _modelLimbObject[16].transform.position = (_mediaPipeLimbArray[16] - _mediaPipeLimbArray[15]) * DistanceDiff[11] + _modelLimbObject[15].transform.position;
+        _modelLimbObject[17].transform.position = (_mediaPipeLimbArray[17] - _mediaPipeLimbArray[16]) * DistanceDiff[12] + _modelLimbObject[16].transform.position;
+        _modelLimbObject[18].transform.position = (_mediaPipeLimbArray[18] - _mediaPipeLimbArray[17]) * DistanceDiff[13] + _modelLimbObject[17].transform.position;
         
 
         Vector3[] part_position = new Vector3[]
         {
-            _modelLimbObject[2].transform.position,
             _modelLimbObject[5].transform.position,
-            _modelLimbObject[8].transform.position,
-            _modelLimbObject[11].transform.position,
-            _modelLimbObject[1].transform.position,
+            _modelLimbObject[9].transform.position,
+            _modelLimbObject[13].transform.position,
+            _modelLimbObject[17].transform.position,
             _modelLimbObject[4].transform.position,
-            _modelLimbObject[7].transform.position,
+            _modelLimbObject[8].transform.position,
+            _modelLimbObject[12].transform.position,
+            _modelLimbObject[16].transform.position,
+            _modelLimbObject[1].transform.position,
+            _modelLimbObject[2].transform.position,
+            _modelLimbObject[6].transform.position,
             _modelLimbObject[10].transform.position,
-            Body.transform.position,
-            middleDot.transform.position,
-            _LeftFinger.transform.position,
-            _RightFinger.transform.position,
-            _LeftToe.transform.position,
-            _RightToe.transform.position,
+            _modelLimbObject[14].transform.position,
+            _modelLimbObject[18].transform.position
         };
 
-
-
         modelPos.Add(currentFrame, part_position);
-
 
         //関節の前フレームとの距離検出
         if (currentFrame == 0 || currentFrame == totalFrames - 1)
@@ -250,14 +203,15 @@ public class IKTargetPos : BaseCalc
             before_part_position[i] = part_position[i];
         }
 
-
-
         currentFrame++;
 
         if (currentFrame > totalFrames - 1)
         {
             DetectionKeyPose();
-            isCreated = true;
+        }
+        else
+        {
+            CreateAnimation();
         }
     }
 
@@ -372,18 +326,20 @@ public class IKTargetPos : BaseCalc
 
             for(int i = 1; i < totalFrames - 1; i++)
             {
-                if(i % 10 == 0)
+                if(i % 10 == 0 && (totalFrames -1) - i >= 5)
                 {
                     KeyPose_List.Add(i);
                 }
             }
-
-
         }
+        
+        LandmarkManager.GetInstance().TotalFrame = totalFrames;
         LandmarkManager.GetInstance().CSVLandmarkPositions = modelPos;
-        Destroy(this);
+        
+        Destroy(this.gameObject);
     }
 
+    /*
     void nextPhase()
     {
         AnimationSceneManager.SetTotalKeyFrame(KeyPose_List.Count);
@@ -399,4 +355,5 @@ public class IKTargetPos : BaseCalc
         created_check = true;
         Destroy(this.gameObject);
     }
+    */
 }

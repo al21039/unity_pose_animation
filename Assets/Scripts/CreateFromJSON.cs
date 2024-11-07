@@ -1,49 +1,47 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[System.Serializable]
-public class Landmark
-{
-    public float x;
-    public float y;
-    public float z;
-}
 
-[System.Serializable]
-public class LandmarkData
-{
-    public int num_landmarks;
-    public List<Landmark> landmarksArray;
-}
 
 public class CreateFromJSON : BaseCalculation
 {
+    [System.Serializable]
+    public class Landmark
+    {
+        public float x;
+        public float y;
+        public float z;
+    }
+
+    [System.Serializable]
+    public class LandmarkData
+    {
+        public int num_landmarks;
+        public List<Landmark> landmarks;
+    }
+
     [SerializeField] GameObject[] modelPartObject;
 
     private Vector3[] landmarksArray;
     private float[] _modelPartDistance;
     private float[] _mediapipePartDistance;
     private float[] _distanceDiff;
-    private Vector3[] mediaPipePositions;
+    private Vector3[] _mediaPipePositions;
+    private Vector3[] _modelPartPosition;
 
-    // Start is called before the first frame update
-    void Start()
+
+    public void SetJsonLandmark(TextAsset textFile)
     {
+        landmarksArray = DetectionLandmarkPosition(textFile);
 
-    }
+        if (landmarksArray.Length == 1)
+        {
+            Debug.LogError("正しく読み取れていません");
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetJsonLandmark(string fileName)
-    {
-        DetectionLandmarkPosition(fileName);
-
-        mediaPipePositions = new Vector3[19] { 
+        _mediaPipePositions = new Vector3[19] { 
             new Vector3(0, 1, 0),   //mediaPipeの腰の位置
             (landmarksArray[11] + landmarksArray[12] + landmarksArray[23] + landmarksArray[24]) / 4,   //体の中心
             (landmarksArray[11] + landmarksArray[12]) / 2,
@@ -63,56 +61,109 @@ public class CreateFromJSON : BaseCalculation
             landmarksArray[26],
             landmarksArray[30],
             landmarksArray[32]
-    };
-
+        };
 
         _modelPartDistance = ReturnDistance(modelPartObject);
-        _mediapipePartDistance = ReturnDistance(mediaPipePositions);
+        _mediapipePartDistance = ReturnDistance(_mediaPipePositions);
         _distanceDiff = ReturnDiff(_modelPartDistance, _mediapipePartDistance);
         SetNewPosition();
     }
 
-    private void DetectionLandmarkPosition(string fileName)
+    private Vector3[] DetectionLandmarkPosition(TextAsset jsonData)
     {
-        string filePath = Path.Combine(Application.dataPath, fileName);
-        if (File.Exists(filePath))
-        {
-            string jsonData = File.ReadAllText(filePath);
-            LandmarkData landmarkData = JsonUtility.FromJson<LandmarkData>(jsonData);
-            landmarksArray = new Vector3[landmarkData.num_landmarks];
+        LandmarkData landmarkData = JsonUtility.FromJson<LandmarkData>(jsonData.text);
 
-            for (int i = 0; i < landmarkData.landmarksArray.Count; i++)
-            {
-                landmarksArray[i] = new Vector3(-landmarkData.landmarksArray[i].x, -landmarkData.landmarksArray[i].y + 1, -landmarkData.landmarksArray[i].z);
-            }
-        }
-        else
+        Vector3[] landmarkArray = new Vector3[landmarkData.num_landmarks];
+
+        for (int i = 0; i < landmarkData.num_landmarks; i++)
         {
-            Debug.LogError("File not found: " + filePath);
+            Landmark lm = landmarkData.landmarks[i];
+            landmarkArray[i] = new Vector3(-lm.x, -lm.y + 1, -lm.z);
         }
+
+        return landmarkArray;
+
     }
 
     private void SetNewPosition()
     {
-        modelPartObject[1].transform.position = (mediaPipePositions[1] - mediaPipePositions[0]) * _distanceDiff[0] + mediaPipePositions[0];
-        modelPartObject[2].transform.position = (mediaPipePositions[2] - mediaPipePositions[1]) * _distanceDiff[1] + mediaPipePositions[1];
+        modelPartObject[1].transform.position = (_mediaPipePositions[1] - _mediaPipePositions[0]) * _distanceDiff[0] + modelPartObject[0].transform.position;
+        modelPartObject[2].transform.position = (_mediaPipePositions[2] - _mediaPipePositions[1]) * _distanceDiff[1] + modelPartObject[1].transform.position;
 
-        modelPartObject[4].transform.position = (mediaPipePositions[4] - mediaPipePositions[3]) * _distanceDiff[2] + mediaPipePositions[3];
-        modelPartObject[5].transform.position = (mediaPipePositions[5] - mediaPipePositions[4]) * _distanceDiff[3] + mediaPipePositions[4];
-        modelPartObject[6].transform.position = (mediaPipePositions[6] - mediaPipePositions[5]) * _distanceDiff[4] + mediaPipePositions[5];
+        modelPartObject[4].transform.position = (_mediaPipePositions[4] - _mediaPipePositions[3]) * _distanceDiff[2] + modelPartObject[3].transform.position;
+        modelPartObject[5].transform.position = (_mediaPipePositions[5] - _mediaPipePositions[4]) * _distanceDiff[3] + modelPartObject[4].transform.position;
+        modelPartObject[6].transform.position = (_mediaPipePositions[6] - _mediaPipePositions[5]) * _distanceDiff[4] + modelPartObject[5].transform.position;     
 
-        modelPartObject[8].transform.position = (mediaPipePositions[8] - mediaPipePositions[7]) * _distanceDiff[5] + mediaPipePositions[7];
-        modelPartObject[9].transform.position = (mediaPipePositions[9] - mediaPipePositions[8]) * _distanceDiff[6] + mediaPipePositions[8];
-        modelPartObject[10].transform.position = (mediaPipePositions[10] - mediaPipePositions[9]) * _distanceDiff[7] + mediaPipePositions[9];
+        modelPartObject[8].transform.position = (_mediaPipePositions[8] - _mediaPipePositions[7]) * _distanceDiff[5] + modelPartObject[7].transform.position;
+        modelPartObject[9].transform.position = (_mediaPipePositions[9] - _mediaPipePositions[8]) * _distanceDiff[6] + modelPartObject[8].transform.position;
+        modelPartObject[10].transform.position = (_mediaPipePositions[10] - _mediaPipePositions[9]) * _distanceDiff[7] + modelPartObject[9].transform.position;
 
-        modelPartObject[12].transform.position = (mediaPipePositions[12] - mediaPipePositions[11]) * _distanceDiff[8] + mediaPipePositions[11];
-        modelPartObject[13].transform.position = (mediaPipePositions[13] - mediaPipePositions[12]) * _distanceDiff[9] + mediaPipePositions[12];
-        modelPartObject[14].transform.position = (mediaPipePositions[14] - mediaPipePositions[13]) * _distanceDiff[10] + mediaPipePositions[13];
+        modelPartObject[12].transform.position = (_mediaPipePositions[12] - _mediaPipePositions[11]) * _distanceDiff[8] + modelPartObject[11].transform.position;
+        modelPartObject[13].transform.position = (_mediaPipePositions[13] - _mediaPipePositions[12]) * _distanceDiff[9] + modelPartObject[12].transform.position;
+        modelPartObject[14].transform.position = (_mediaPipePositions[14] - _mediaPipePositions[13]) * _distanceDiff[10] + modelPartObject[13].transform.position;
 
-        modelPartObject[16].transform.position = (mediaPipePositions[16] - mediaPipePositions[17]) * _distanceDiff[11] + mediaPipePositions[15];
-        modelPartObject[17].transform.position = (mediaPipePositions[17] - mediaPipePositions[16]) * _distanceDiff[12] + mediaPipePositions[16];
-        modelPartObject[18].transform.position = (mediaPipePositions[18] - mediaPipePositions[17]) * _distanceDiff[13] + mediaPipePositions[17];
+        modelPartObject[16].transform.position = (_mediaPipePositions[16] - _mediaPipePositions[15]) * _distanceDiff[11] + modelPartObject[15].transform.position;
+        modelPartObject[17].transform.position = (_mediaPipePositions[17] - _mediaPipePositions[16]) * _distanceDiff[12] + modelPartObject[16].transform.position;
+        modelPartObject[18].transform.position = (_mediaPipePositions[18] - _mediaPipePositions[17]) * _distanceDiff[13] + modelPartObject[17].transform.position;
 
+
+        _modelPartPosition = new Vector3[14] {
+            modelPartObject[5].transform.position,
+            modelPartObject[9].transform.position,
+            modelPartObject[13].transform.position,
+            modelPartObject[17].transform.position,
+            modelPartObject[4].transform.position,
+            modelPartObject[8].transform.position,
+            modelPartObject[12].transform.position,
+            modelPartObject[16].transform.position,
+            modelPartObject[1].transform.position,
+            modelPartObject[2].transform.position,
+            modelPartObject[6].transform.position,
+            modelPartObject[10].transform.position,
+            modelPartObject[14].transform.position,
+            modelPartObject[18].transform.position
+        };
+
+        StartCoroutine(CaptureScreenshot());
+        
+    }
+
+    private void CreatedAnimation()
+    {
+        LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition);
+        Destroy(gameObject);
+    }
+
+
+    private IEnumerator CaptureScreenshot()
+    {
+        yield return new WaitForEndOfFrame();
+
+        string startDate = LandmarkManager.GetInstance().StartDate;
+        int jsonCount = LandmarkManager.GetInstance().JsonCount;
+
+        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenshot.Apply();
+
+        string fileName = jsonCount + ".png";
+        string folderPath = "JSON/ModelImages/";
+        string fullFolderPath = Path.Combine(Application.dataPath, folderPath, startDate);
+        if (!Directory.Exists(fullFolderPath))
+        {
+            Directory.CreateDirectory(fullFolderPath); // フォルダが存在しない場合は作成
+        }
+
+        string filePath = Path.Combine(fullFolderPath, fileName);
+
+        // PNG形式で保存
+        byte[] bytes = screenshot.EncodeToPNG();
+        File.WriteAllBytes(filePath, bytes);
+        Debug.Log("Screenshot saved to: " + filePath);
+
+        // テクスチャを破棄
+        Destroy(screenshot);
+        CreatedAnimation();
     }
 
 }
