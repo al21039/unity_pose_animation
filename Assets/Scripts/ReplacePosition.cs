@@ -15,17 +15,22 @@ public class ReplacePosition : MonoBehaviour
 
     private float _frameInterval = 0.30f;
 
-    private void GetRequiredalue()
+    private void GetRequiredValue()
     {
         _modelPos = _sceneManager.GetModelPos();
         _changedPos = _sceneManager.GetChangedPos();
         _keyPoseList = _sceneManager.GetKeyPoseList();
     }
 
+    public void SetAllLine()
+    {
+
+    }
+
     //最初のフレームの編集時
     public void SetFirstFrameLinePos(Vector3 targetPosition, int positionID, LineRenderer lineRenderer)
     {
-        GetRequiredalue();
+        GetRequiredValue();
 
         int numberOfPoints = _keyPoseList[1];
         Vector3[] points = new Vector3[numberOfPoints];
@@ -71,7 +76,7 @@ public class ReplacePosition : MonoBehaviour
     //最後のフレームの編集時
     public void SetLastFrameLinePos(Vector3 targetPosition, int positionID, LineRenderer lineRenderer)
     {
-        GetRequiredalue();
+        GetRequiredValue();
 
         int previousKey = _keyPoseList[_keyPoseList.Count - 2];
         int numberOfPoints = _keyPoseList[_keyPoseList.Count - 1] - previousKey;
@@ -116,7 +121,7 @@ public class ReplacePosition : MonoBehaviour
     //２番目のキーフレーム編集時
     public void SetSecondFrameLinePos(Vector3 targetPosition, int positionID, LineRenderer lineRenderer, int frame)
     {
-        GetRequiredalue();
+        GetRequiredValue();
 
         int listIndex = _keyPoseList.IndexOf(frame);
         int currentKey = _keyPoseList[listIndex];
@@ -204,7 +209,7 @@ public class ReplacePosition : MonoBehaviour
     //最後から２番目のキーフレーム編集時
     public void SetSecondToLastFrameLinePos(Vector3 targetPosition, int positionID, LineRenderer lineRenderer, int frame)
     {
-        GetRequiredalue();
+        GetRequiredValue();
 
         int listIndex = _keyPoseList.IndexOf(frame);
         int currentKey = _keyPoseList[listIndex];
@@ -292,7 +297,7 @@ public class ReplacePosition : MonoBehaviour
     //それ以外のフレーム編集時
     public void SetOtherFramesLinePos(Vector3 targetPosition, int positionID, LineRenderer lineRenderer, int frame)
     {
-        GetRequiredalue();
+        GetRequiredValue();
 
         int listIndex = _keyPoseList.IndexOf(frame);
         int currentKey = _keyPoseList[listIndex];

@@ -8,8 +8,6 @@ public class IKTargetPos : BaseCalculation
     public bool roop = false;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
-    //[SerializeField] GameObject scene_manager_object;
-    //AnimationSceneManager AnimationSceneManager;
     
     public int currentFrame = 0;
     int totalFrames = 0;
@@ -18,6 +16,7 @@ public class IKTargetPos : BaseCalculation
     bool created_check = false;
     bool detection_check = false;
     bool isCreated = false;
+    bool isLoaded = false;
     
     Vector3[] before_part_position = new Vector3[4];
 
@@ -45,7 +44,11 @@ public class IKTargetPos : BaseCalculation
     // Update is called once per frame
     void Update()
     {
+        if (isLoaded && !isCreated)
+        {
+            CreateAnimation();
 
+        }
     }
     private void CalcModelDistance()
     {
@@ -83,7 +86,7 @@ public class IKTargetPos : BaseCalculation
                 totalFrames++;
             }
         }
-        CreateAnimation();
+        isLoaded = true;
     }
 
 
@@ -207,11 +210,8 @@ public class IKTargetPos : BaseCalculation
 
         if (currentFrame > totalFrames - 1)
         {
+
             DetectionKeyPose();
-        }
-        else
-        {
-            CreateAnimation();
         }
     }
 
@@ -335,7 +335,7 @@ public class IKTargetPos : BaseCalculation
         
         LandmarkManager.GetInstance().TotalFrame = totalFrames;
         LandmarkManager.GetInstance().CSVLandmarkPositions = modelPos;
-        
+        LandmarkManager.GetInstance().KeyPoseList = KeyPose_List;
         Destroy(this.gameObject);
     }
 

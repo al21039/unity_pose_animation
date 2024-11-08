@@ -65,6 +65,18 @@ public class LandmarkManager : MonoBehaviour
         }
     }
 
+    public List<int> KeyPoseList
+    {
+        get
+        {
+            return _keyPoseList;
+        }
+        set
+        {
+            _keyPoseList = value;
+        }
+    }
+
     public void SetJsonLandmarkPosition(Vector3[] jsonLandmark)
     {
         _jsonLandmarkPositions.Add(_jsonCount, jsonLandmark);
@@ -72,9 +84,7 @@ public class LandmarkManager : MonoBehaviour
         _jsonCount++;
         if(_jsonCount >= _jsonFilePaths.Length)
         {
-            ///
-            //　　次の処理へ　　　　キーフレームを表示
-            ///
+            EditManager.GetInstance().PrepareEditing();
             Debug.Log("スタート処理完了");
         }
         else
