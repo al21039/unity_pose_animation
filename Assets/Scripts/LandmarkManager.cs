@@ -16,6 +16,8 @@ public class LandmarkManager : MonoBehaviour
 
     private static LandmarkManager instance;
 
+    private string fileName;
+
     private string _startDate;
 
     public Dictionary<int, Vector3[]> CSVLandmarkPositions
@@ -28,6 +30,14 @@ public class LandmarkManager : MonoBehaviour
         {
             _csvLandmarkPositions = value;
             SetJsonLandmark();
+        }
+    }
+
+    public Dictionary<int, Vector3[]> JSONLandmarkPositions
+    {
+        get
+        {
+            return _csvLandmarkPositions;
         }
     }
 
@@ -77,6 +87,18 @@ public class LandmarkManager : MonoBehaviour
         }
     }
 
+    public string FileName
+    {
+        get
+        {
+            return fileName;
+        }
+        set
+        {
+            fileName = value;
+        }
+    }
+
     public void SetJsonLandmarkPosition(Vector3[] jsonLandmark)
     {
         _jsonLandmarkPositions.Add(_jsonCount, jsonLandmark);
@@ -85,7 +107,6 @@ public class LandmarkManager : MonoBehaviour
         if(_jsonCount >= _jsonFilePaths.Length)
         {
             EditManager.GetInstance().PrepareEditing();
-            Debug.Log("スタート処理完了");
         }
         else
         {
@@ -119,8 +140,8 @@ public class LandmarkManager : MonoBehaviour
 
     private void SetJsonLandmark()
     {
-            GameObject imageModel = Instantiate(_jsonModel, Vector3.zero, Quaternion.identity);
-            CreateFromJSON createFromJSON = imageModel.GetComponent<CreateFromJSON>();
-            createFromJSON.SetJsonLandmark(_jsonFilePaths[_jsonCount]);
+        GameObject imageModel = Instantiate(_jsonModel, Vector3.zero, Quaternion.identity);
+        CreateFromJSON createFromJSON = imageModel.GetComponent<CreateFromJSON>();
+        createFromJSON.SetJsonLandmark(_jsonFilePaths[_jsonCount]);
     }
 }

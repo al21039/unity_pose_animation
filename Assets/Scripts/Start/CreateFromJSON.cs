@@ -161,6 +161,8 @@ public class CreateFromJSON : BaseCalculation
         File.WriteAllBytes(filePath, bytes);
         Debug.Log("Screenshot saved to: " + filePath);
 
+        LandmarkManager.GetInstance().FileName = folderPath + startDate;
+
         // テクスチャを破棄
         Destroy(screenshot);
         CreatedAnimation();

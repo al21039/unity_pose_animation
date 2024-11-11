@@ -45,4 +45,12 @@ public class Spline : MonoBehaviour
     {
         _splineRenderer[splineNo].SetPosition(index, point);
     }
+
+    public void SerializeSpline(int totaFrame)
+    {
+        for (int i = 0; i < _splines.Length; i++)
+        {
+            _splineRenderer[i].positionCount = totaFrame;
+        }
+    }
 }

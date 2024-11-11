@@ -457,6 +457,7 @@ public class AnimationSceneManager : MonoBehaviour
 
     private void SetSplineAndJointPosition(int frame, Vector3 targetPosition, int positionID, LineRenderer lineRenderer)
     {
+        /*
         if (_keyPoseList.Contains(frame))
         {
             //編集したキーフレームが１番目なら
@@ -485,5 +486,6 @@ public class AnimationSceneManager : MonoBehaviour
                 _replaceScript.SetOtherFramesLinePos(targetPosition, positionID, lineRenderer, frame);
             }
         }
+        */
     }
 }
