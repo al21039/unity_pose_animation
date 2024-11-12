@@ -11,7 +11,7 @@ public class ImageButton : MonoBehaviour
     public void OnClickedImageButton()
     {
         Debug.Log(this.gameObject.name);
-        Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions[int.Parse(this.gameObject.name)];
+        Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(int.Parse(this.gameObject.name));
         EditManager.GetInstance().SetPosition(_addFrame, JsonLandmark);
         List<int> keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
         int index = keyPoseList.BinarySearch(_addFrame);

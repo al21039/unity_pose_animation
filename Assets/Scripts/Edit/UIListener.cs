@@ -31,7 +31,7 @@ public class UIListener : MonoBehaviour
 
     public void OnClickedAddModelButton()
     {
-        ChangeScrollDisplay(true);
+        _scrollView.SetActive(!_scrollView.activeSelf);
     }
 
     public void ChangeUIDisplay(bool status)

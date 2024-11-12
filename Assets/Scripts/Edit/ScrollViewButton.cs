@@ -11,6 +11,7 @@ public class ScrollViewButton : MonoBehaviour
     [SerializeField] private LineInterpolation _lineInterpolation;
     [SerializeField] private int _addFrame = 100;
     private Texture2D[] loadedImages;
+    private float _frameInterval = 0.30f;
 
     public void LoadImagesFromFolder()
     {
@@ -75,19 +76,31 @@ public class ScrollViewButton : MonoBehaviour
 
     void OnButtonClick(int buttonNo)
     {
-        Debug.Log(buttonNo);
-        Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions[buttonNo];
-        EditManager.GetInstance().SetPosition(_addFrame, JsonLandmark);
+        Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(buttonNo);
+        Dictionary<int, Vector3[]> changedPos = EditManager.GetInstance().ChangePos;   
         List<int> keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
-        int index = keyPoseList.BinarySearch(_addFrame);
 
-        keyPoseList.Insert(index, _addFrame);
-        LandmarkManager.GetInstance().KeyPoseList = keyPoseList;
-        for (int i = 0; i < 4; i++)
+        if(!keyPoseList.Contains(_addFrame))
         {
-            Spline.GetInstance().SetSpline(i, _addFrame, JsonLandmark[i]);
-        }
+            int index = keyPoseList.BinarySearch(_addFrame);
+            if (index < 0)
+            {
+                index = ~index;
+            }
 
-        _lineInterpolation.InterpolationAllLine();
+            keyPoseList.Insert(index, _addFrame);
+            changedPos[_addFrame] = JsonLandmark;
+            EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index);
+            LandmarkManager.GetInstance().KeyPoseList = keyPoseList;
+            EditManager.GetInstance().ChangePos = changedPos;
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                Spline.GetInstance().SetSpline(i, _addFrame, JsonLandmark[i] + new Vector3(0, 0, _addFrame * _frameInterval));
+            }
+
+            _lineInterpolation.InterpolationAllLine();
+        } 
     }
 }

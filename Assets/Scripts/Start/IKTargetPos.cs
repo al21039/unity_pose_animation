@@ -12,9 +12,6 @@ public class IKTargetPos : BaseCalculation
     public int currentFrame = 0;
     int totalFrames = 0;
     
-    bool check = true;
-    bool created_check = false;
-    bool detection_check = false;
     bool isCreated = false;
     bool isLoaded = false;
     

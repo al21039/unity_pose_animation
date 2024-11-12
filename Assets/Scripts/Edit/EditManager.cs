@@ -12,12 +12,13 @@ public class EditManager : MonoBehaviour
     [SerializeField] private LineInterpolation _lineInterpolation;
     [SerializeField] private GameObject _createModel;
     [SerializeField] private ScrollViewButton _scrollViewButton;
+    [SerializeField] private GameObject _cubePrefab;
 
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private List<int> _keyPoseList = new List<int>();                                    //キーポーズのリスト　　　後からJSONファイルのやつ追加できるように
 
     private List<GameObject> _keyPoseModel = new List<GameObject>();
-    private int _keyPoseModelCount = 0;
+    private List<GameObject> _keyCube = new List<GameObject>();
     private float _frameInterval = 0.30f;
     private int _totalFrames;
     private CreateNewAnim _createNewAnim;
@@ -102,7 +103,15 @@ public class EditManager : MonoBehaviour
         _keyPoseModel.Add(humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
         setAnimationTransform.SetPartTransform(frame, pos_list);
-        _keyPoseModelCount++;
+    }
+
+    public void SetJsonPosition(int frame, Vector3[] pos_list, int listIndex)
+    {
+        GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
+        humanoid.name = frame + "_frame_model";
+        _keyPoseModel.Insert(listIndex, humanoid);
+        SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
+        setAnimationTransform.SetPartTransform(frame, pos_list);
     }
 
     public void DisplayNewAnimation()
@@ -125,17 +134,14 @@ public class EditManager : MonoBehaviour
         _uiListener.ChangeScrollDisplay(false);
         _positionMover.DeleteIndirectOption();
 
-        for (int i = 0; i < _keyPoseList.Count; i++)
+        for (int i = _keyPoseModel.Count - 1; i >= 0; i--)
         {
-            string tmpName = _keyPoseList[i].ToString() + "_frame_model";
-            GameObject destroyObject = GameObject.Find(tmpName);
-            Destroy(destroyObject);
+            Destroy(_keyPoseModel[i]);
         }
 
         GameObject created_model = Instantiate(_createModel, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         _createNewAnim = created_model.GetComponent<CreateNewAnim>();
 
-        int muscleNum = _keyPoseHumanPose[0].muscles.Length;
         _createNewAnim.CreateNewAnimation(_keyPoseHumanPose, _keyPoseList);
     }
 }

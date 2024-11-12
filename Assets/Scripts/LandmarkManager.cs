@@ -33,12 +33,9 @@ public class LandmarkManager : MonoBehaviour
         }
     }
 
-    public Dictionary<int, Vector3[]> JSONLandmarkPositions
+    public Vector3[] JSONLandmarkPositions(int jsonFileNo)
     {
-        get
-        {
-            return _csvLandmarkPositions;
-        }
+            return _jsonLandmarkPositions[jsonFileNo - 1];   
     }
 
     public int TotalFrame
@@ -102,7 +99,6 @@ public class LandmarkManager : MonoBehaviour
     public void SetJsonLandmarkPosition(Vector3[] jsonLandmark)
     {
         _jsonLandmarkPositions.Add(_jsonCount, jsonLandmark);
-
         _jsonCount++;
         if(_jsonCount >= _jsonFilePaths.Length)
         {

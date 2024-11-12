@@ -159,7 +159,6 @@ public class CreateFromJSON : BaseCalculation
         // PNGŒ`Ž®‚Å•Û‘¶
         byte[] bytes = screenshot.EncodeToPNG();
         File.WriteAllBytes(filePath, bytes);
-        Debug.Log("Screenshot saved to: " + filePath);
 
         LandmarkManager.GetInstance().FileName = folderPath + startDate;
 

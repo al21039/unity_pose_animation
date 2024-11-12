@@ -6404,7 +6404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1517476696
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6438,6 +6438,7 @@ GameObject:
   - component: {fileID: 1548807042}
   - component: {fileID: 1548807041}
   - component: {fileID: 1548807040}
+  - component: {fileID: 1548807043}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6519,6 +6520,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1548807043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548807039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872e37bd87f2f5b4eb0097a6e1acef16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  lookSpeed: 2
 --- !u!1 &1561731729
 GameObject:
   m_ObjectHideFlags: 0
@@ -9443,6 +9458,7 @@ MonoBehaviour:
   _lineInterpolation: {fileID: 1483645609}
   _createModel: {fileID: 8932000906575889375, guid: fba873322e2c39246bf691389f8169dd, type: 3}
   _scrollViewButton: {fileID: 2108368690}
+  _cubePrefab: {fileID: 3094057138889818175, guid: b5cab63a2900d6b4db3a7393070ea700, type: 3}
 --- !u!4 &2108368687
 Transform:
   m_ObjectHideFlags: 0

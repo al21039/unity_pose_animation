@@ -6,7 +6,6 @@ public class CreateNewAnim : MonoBehaviour
 {
     private Dictionary<int, Vector3[]> _modelPos;
     private int _totalFrame;
-    private int _currentFrame = 0;
     private bool _isPlaying = false;
 
     private HumanPoseHandler _humanPoseHandler;

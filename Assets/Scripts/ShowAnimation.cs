@@ -4,7 +4,6 @@ public class ShowAnimation : MonoBehaviour
 {
     [SerializeField] GameObject humanoid;
     private Animator animator;
-    private int totalFlames = 0;
     GameObject go;
 
     public bool show;
