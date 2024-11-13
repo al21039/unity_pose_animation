@@ -15,7 +15,6 @@ public class PositionMover : MonoBehaviour
     private bool _isDisplay = false;                              //球が表示されているかいないか
     private GameObject _indirectSphere;
     private Camera _mainCamera;
-    private int _positionID = -1;
 
     private GameObject _selectedIKObject; //マウスで選択したIKのオブジェクト
     private GameObject _selectedKeyModel;
@@ -32,7 +31,6 @@ public class PositionMover : MonoBehaviour
 
     private bool _touchIndirectSphere = false;
     private Vector3 _sphereDefaultPosition;
-    private float _frameInterval = 0.30f;
     private float _indeirectEffectiveGainValue = 0;
 
     public int SelectPositionID
@@ -82,6 +80,10 @@ public class PositionMover : MonoBehaviour
 
                     else if (hit.collider.CompareTag("KeyModel"))
                     {
+                        if (_selectedKeyModel != null)
+                        {
+                            ReplaceSpherePosition();
+                        }
                         _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject; //元のモデルフレームを取得
                         Debug.Log(_selectedKeyModel);
                         _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
@@ -92,7 +94,6 @@ public class PositionMover : MonoBehaviour
                     {
                         _indeirectEffectiveGainValue = _slider.value;
                         _touchIndirectSphere = true;　//球を触っている判定
-                        Debug.Log("touch");
                         if (_selectedKeyModel != null && _selectPositionID != -1)
                         {
                             _sphereDefaultPosition = _indirectSphere.transform.position;
@@ -100,7 +101,6 @@ public class PositionMover : MonoBehaviour
                             _isSphereMoved = true;
                             _selectedTargetObject = _searchEndPoint.ReturnEndPoint(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
                             _selectedTargetAnker = _searchEndPoint.ReturnEndAnker(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
-                            Debug.Log(_selectedTargetObject.gameObject.name);
                         }
                     }
                 }
@@ -141,6 +141,17 @@ public class PositionMover : MonoBehaviour
             _selectedTargetAnker.position += (_indirectSphere.transform.position - _sphereDefaultPosition) * _indeirectEffectiveGainValue;
             _sphereDefaultPosition = _indirectSphere.transform.position;
         }
+    }
+
+    private void ReplaceSpherePosition()
+    {
+        if (_indirectSphere != null) 
+        {
+            Destroy(_indirectSphere);
+        }
+        
+        Vector3 _sphereSpawnPosition = Camera.main.transform.position + _mainCamera.transform.forward * 3.0f;       //カメラより少し前の位置
+        _indirectSphere = Instantiate(_spherePrefab, _sphereSpawnPosition, Quaternion.identity);
     }
 
     public void OnClickedIndirectButton()
@@ -260,7 +271,6 @@ public class PositionMover : MonoBehaviour
     private void ReplacePosition(GameObject rootObject, int positionID, Transform moved_position)
     {
         int frameNumber = int.Parse(rootObject.name.Replace("_frame_model", ""));
-        Debug.Log(frameNumber);
         Vector3 targetPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         Transform hitTarget = null;
