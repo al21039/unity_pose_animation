@@ -10,11 +10,11 @@ public class PositionMover : MonoBehaviour
     [SerializeField] private SearchEndPoint _searchEndPoint;
     [SerializeField] private LineInterpolation _lineInterpolation;
 
-
     private int _selectPositionID = -1;
     private bool _isDisplay = false;                              //球が表示されているかいないか
     private GameObject _indirectSphere;
     private Camera _mainCamera;
+    private bool _isLineDisplay = false;
 
     private GameObject _selectedIKObject; //マウスで選択したIKのオブジェクト
     private GameObject _selectedKeyModel;
@@ -48,7 +48,6 @@ public class PositionMover : MonoBehaviour
     public void DropdownValueChanged(Dropdown change)
     {
         int selectPosition = change.value - 1;
-        Debug.Log(selectPosition);
         SelectPositionID = selectPosition;
     }
 
@@ -85,7 +84,6 @@ public class PositionMover : MonoBehaviour
                             ReplaceSpherePosition();
                         }
                         _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject; //元のモデルフレームを取得
-                        Debug.Log(_selectedKeyModel);
                         _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
                     }
 
@@ -141,7 +139,9 @@ public class PositionMover : MonoBehaviour
             _selectedTargetAnker.position += (_indirectSphere.transform.position - _sphereDefaultPosition) * _indeirectEffectiveGainValue;
             _sphereDefaultPosition = _indirectSphere.transform.position;
         }
+
     }
+
 
     private void ReplaceSpherePosition()
     {
