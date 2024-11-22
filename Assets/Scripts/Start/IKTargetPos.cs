@@ -335,22 +335,4 @@ public class IKTargetPos : BaseCalculation
         LandmarkManager.GetInstance().KeyPoseList = KeyPose_List;
         Destroy(this.gameObject);
     }
-
-    /*
-    void nextPhase()
-    {
-        AnimationSceneManager.SetTotalKeyFrame(KeyPose_List.Count);
-        for (int i = 0; i < KeyPose_List.Count; i++)
-        {
-            AnimationSceneManager.SetPosition(KeyPose_List[i], modelPos[KeyPose_List[i]]);
-        }
-        AnimationSceneManager.SetTotalFrame(totalFrames);
-        AnimationSceneManager.SetKeyPoseList(KeyPose_List);
-        AnimationSceneManager.SetModelPos(modelPos);
-        AnimationSceneManager.SetChangedPos(modelPos);
-        AnimationSceneManager.SetSpline();
-        created_check = true;
-        Destroy(this.gameObject);
-    }
-    */
 }
