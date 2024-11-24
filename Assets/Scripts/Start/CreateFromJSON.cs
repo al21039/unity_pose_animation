@@ -87,6 +87,27 @@ public class CreateFromJSON : BaseCalculation
 
     private void SetNewPosition()
     {
+
+        Vector3 _middleShoulder = (landmarksArray[11] + landmarksArray[12]) / 2;
+        Vector3 _middleThigh = (landmarksArray[23] + landmarksArray[24]) / 2;
+
+        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 horizontalAxis = (landmarksArray[24] - landmarksArray[23]).normalized;
+
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+
+        Vector3 hipForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion hip = Quaternion.LookRotation(hipForward, verticalAxis);
+        modelPartObject[0].transform.rotation = hip;
+
+        horizontalAxis = (landmarksArray[12] - landmarksArray[11]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
+        modelPartObject[2].transform.rotation = shoulder;
+
         modelPartObject[1].transform.position = (_mediaPipePositions[1] - _mediaPipePositions[0]) * _distanceDiff[0] + modelPartObject[0].transform.position;
         modelPartObject[2].transform.position = (_mediaPipePositions[2] - _mediaPipePositions[1]) * _distanceDiff[1] + modelPartObject[1].transform.position;
 

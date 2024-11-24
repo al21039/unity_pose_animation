@@ -6,9 +6,14 @@ public class CheckDirection : MonoBehaviour
     [SerializeField] private GameObject _leftShoulder;
     [SerializeField] private GameObject _rightThigh;
     [SerializeField] private GameObject _leftThigh;
+    [SerializeField] private GameObject _neck;
 
-    [SerializeField] private GameObject _spherePrefab;
-    [SerializeField] private Transform _ModelTransform;
+    [SerializeField] private Transform[] _ModelTransform;
+
+    [SerializeField] private Vector3 _landmarkRightShoulder;
+    [SerializeField] private Vector3 _landmarkLeftShoulder;
+    [SerializeField] private Vector3 _landmarkRightThigh;
+    [SerializeField] private Vector3 _landmarkLeftThigh;
 
     Vector3 _middleShoulder;
     Vector3 _middleThigh;
@@ -19,7 +24,7 @@ public class CheckDirection : MonoBehaviour
         _middleShoulder = (_rightShoulder.transform.position + _leftShoulder.transform.position) / 2;
         _middleThigh = (_rightThigh.transform.position + _leftThigh.transform.position) / 2;
 
-        GetHumanoidForward();
+        LandmarkHipRotation();
     }
 
     // Update is called once per frame
@@ -28,20 +33,49 @@ public class CheckDirection : MonoBehaviour
         
     }
 
-    private void GetHumanoidForward()
+    private void LandmarkHipRotation()
     {
-        Vector3 haimen = (_middleShoulder - _middleThigh).normalized;
-        Debug.Log("çòÇ©ÇÁå®" + haimen);
-        
-        Vector3 migi = (_rightThigh.transform.position - _leftThigh.transform.position).normalized;
-        Debug.Log("ç∂çòÇ©ÇÁâEçò" + migi);
+        _landmarkLeftThigh += new Vector3(0, 1, 0);
+        _landmarkRightThigh += new Vector3(0, 1, 0);
+        _landmarkLeftShoulder += new Vector3(0, 1, 0);
+        _landmarkLeftShoulder += new Vector3(0, 1, 0);
 
-        Vector3 syoumen = Vector3.Cross(migi, haimen).normalized;
-        Debug.Log("ê≥ñ ï˚å¸" + syoumen);
+        Vector3 middleShoulder = (_landmarkLeftShoulder + _landmarkRightShoulder) / 2;
+        Vector3 middleThigh = (_landmarkLeftThigh + _landmarkRightThigh) / 2;
+
+        Vector3 horizontalAxis = (_landmarkRightThigh - _landmarkLeftThigh).normalized;
+        Vector3 rawVerticalAxis = (middleShoulder - middleThigh).normalized;
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+
+        Vector3 forward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        _ModelTransform[0].rotation = Quaternion.LookRotation(forward, verticalAxis);
+    }
 
 
-        _ModelTransform.rotation = Quaternion.LookRotation(syoumen, haimen);
+    private void HipRotation()
+    {
+        Vector3 horizontalAxis = (_rightThigh.transform.position - _leftThigh.transform.position).normalized;
+        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
 
-        Instantiate(_spherePrefab, syoumen, Quaternion.identity);
+        Vector3 forward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        _ModelTransform[0].rotation = Quaternion.LookRotation(forward, verticalAxis);
+    }
+
+    private void ChestRotation()
+    {
+        Vector3 horizontalAxis = (_rightThigh.transform.position - _leftThigh.transform.position).normalized;
+        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+
+        Vector3 forward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        _ModelTransform[0].rotation = Quaternion.LookRotation(forward, verticalAxis);
+    }
+    Vector3 Orthogonalize(Vector3 baseVector, Vector3 toOrthogonalize)
+    {
+        return toOrthogonalize - Vector3.Project(toOrthogonalize, baseVector);
     }
 }

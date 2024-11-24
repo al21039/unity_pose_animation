@@ -84,4 +84,9 @@ public class BaseCalculation : MonoBehaviour
 
         return diff;
     }
+
+    public Vector3 Orthogonalize(Vector3 baseVector, Vector3 toOrthogonalize)
+    {
+        return toOrthogonalize - Vector3.Project(toOrthogonalize, baseVector);
+    }
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class IKTargetPos : BaseCalculation
 {
-    public string csvFilePath = "Assets/CSV/kick.csv";
-    public bool roop = false;
+    [SerializeField] private string csvFilePath = "Assets/CSV/kick.csv";
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
-    public Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
-    
+    private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
+    private Dictionary<int, Quaternion[]> _modelQuaternion = new Dictionary<int, Quaternion[]>();
+
     public int currentFrame = 0;
     int totalFrames = 0;
     
@@ -19,20 +19,22 @@ public class IKTargetPos : BaseCalculation
 
     List<int> keyPose_candidate_frames = new List<int>();
     List<float> keyPose_candidate_frames_distance = new List<float>();
-    public List<int> KeyPose_List = new List<int>();
+    private List<int> KeyPose_List = new List<int>();
 
     float[] part_distance = new float[4];
     public float threshold = 10.0f;
 
     [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
+    [SerializeField] Transform[] _modelTransform = new Transform[2];
+
+    [SerializeField] private Animator _modelAnimator;
 
 
     private float[] _modelLimbDistance;
     private float[] _mediaPipeLimbDistance;
 
-
-    Vector3 mp_middleDot_shoulderpos = new Vector3(0, 0, 0);
-    // Start is called before the first frame update
+    private Vector3 _middleShoulder;
+    private Vector3 _middleThigh;
     void Start()
     {
         CalcModelDistance();
@@ -44,7 +46,6 @@ public class IKTargetPos : BaseCalculation
         if (isLoaded && !isCreated)
         {
             CreateAnimation();
-
         }
     }
     private void CalcModelDistance()
@@ -92,6 +93,26 @@ public class IKTargetPos : BaseCalculation
         //フレーム毎の各ランドマーク座標
         Vector3[] landmarks = landmarkData[currentFrame];
 
+        Vector3 _middleShoulder = (landmarks[11] + landmarks[12]) / 2;
+        Vector3 _middleThigh = (landmarks[23] + landmarks[24]) / 2;
+        
+        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 horizontalAxis = (landmarks[24] -  landmarks[23]).normalized;
+
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+
+        Vector3 hipForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion hip = Quaternion.LookRotation(hipForward, verticalAxis);
+        _modelLimbObject[0].transform.rotation = hip;
+
+        horizontalAxis = (landmarks[12] - landmarks[11]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
+        _modelLimbObject[2].transform.rotation = shoulder;
+
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
             new Vector3(0, 1, 0),
@@ -114,6 +135,7 @@ public class IKTargetPos : BaseCalculation
             landmarks[30],
             landmarks[32]
         };
+
 
         //四肢の部位の距離を計算  (MediaPipe)
         _mediaPipeLimbDistance = ReturnDistance(_mediaPipeLimbArray);
@@ -160,7 +182,14 @@ public class IKTargetPos : BaseCalculation
             _modelLimbObject[18].transform.position
         };
 
+        Quaternion[] _modelRotation = new Quaternion[]
+        {
+            _modelLimbObject[0].transform.rotation,
+            _modelLimbObject[2].transform.rotation
+        };
+
         modelPos.Add(currentFrame, part_position);
+        _modelQuaternion.Add(currentFrame, _modelRotation);
 
         //関節の前フレームとの距離検出
         if (currentFrame == 0 || currentFrame == totalFrames - 1)
@@ -207,8 +236,8 @@ public class IKTargetPos : BaseCalculation
 
         if (currentFrame > totalFrames - 1)
         {
-
             DetectionKeyPose();
+            isCreated = true;
         }
     }
 
@@ -332,7 +361,9 @@ public class IKTargetPos : BaseCalculation
         
         LandmarkManager.GetInstance().TotalFrame = totalFrames;
         LandmarkManager.GetInstance().CSVLandmarkPositions = modelPos;
+        LandmarkManager.GetInstance().CSVLandmarkRotations = _modelQuaternion;
         LandmarkManager.GetInstance().KeyPoseList = KeyPose_List;
         Destroy(this.gameObject);
     }
+
 }

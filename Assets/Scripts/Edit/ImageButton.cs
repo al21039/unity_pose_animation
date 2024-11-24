@@ -7,12 +7,12 @@ public class ImageButton : MonoBehaviour
     [SerializeField] private LineInterpolation _lineInterpolation;
     private int _addFrame = 100;
 
-
+    /*
     public void OnClickedImageButton()
     {
         Debug.Log(this.gameObject.name);
         Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(int.Parse(this.gameObject.name));
-        EditManager.GetInstance().SetPosition(_addFrame, JsonLandmark);
+        EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark);
         List<int> keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
         int index = keyPoseList.BinarySearch(_addFrame);
 
@@ -25,4 +25,5 @@ public class ImageButton : MonoBehaviour
 
         _lineInterpolation.InterpolationAllLine();
     }
+    */
 }

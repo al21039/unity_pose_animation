@@ -4,6 +4,7 @@ using UnityEngine;
 public class SetAnimationTransform : MonoBehaviour
 {
     [SerializeField] private GameObject[] _modelPart;
+    [SerializeField] private GameObject[] _modelRotationPart;
     int animation_frame = 0;
 
     private Animator _animator;
@@ -12,20 +13,12 @@ public class SetAnimationTransform : MonoBehaviour
     private HumanPose _humanPose;
 
     GameObject manager_obj;
-
-    // Start is called before the first frame update
     void Start()
     {
         manager_obj = GameObject.Find("AnimationSceneManager");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetPartTransform(int frame, Vector3[] pos_list)
+    public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot)
     {
         Vector3[] positions = pos_list;
         animation_frame = frame;
@@ -34,6 +27,10 @@ public class SetAnimationTransform : MonoBehaviour
         {
             _modelPart[i].transform.position = positions[i] + new Vector3(0, 0, animation_frame * _frameInterval);
         }
+
+        _modelRotationPart[0].transform.rotation = posRot[0];
+        _modelRotationPart[1].transform.rotation = posRot[1];
+
     }
 
     //各キーフレームのモデルのHumanPoseを返す

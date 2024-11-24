@@ -211,7 +211,7 @@ public class AnimationSceneManager : MonoBehaviour
         _keyPoseModel[_keyPoseModelCount] = Instantiate(humanoid_model, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
         _keyPoseModel[_keyPoseModelCount].name = frame + "_frame_model";
         SetAnimationTransform setAnimationTransform = _keyPoseModel[_keyPoseModelCount].GetComponent<SetAnimationTransform>();
-        setAnimationTransform.SetPartTransform(frame, pos_list);
+        //setAnimationTransform.SetPartTransform(frame, pos_list);
         _keyPoseModelCount++;
 
     }
