@@ -77,7 +77,9 @@ public class ScrollViewButton : MonoBehaviour
     void OnButtonClick(int buttonNo)
     {
         Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(buttonNo);
+        Quaternion[] JsonRotation = LandmarkManager.GetInstance().JSONLandmarkRotations(buttonNo);
         Dictionary<int, Vector3[]> changedPos = EditManager.GetInstance().ChangePos;   
+        Dictionary<int, Quaternion[]> changedRot = EditManager.GetInstance().ChangeRot;
         List<int> keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
 
         if(!keyPoseList.Contains(_addFrame))
@@ -90,7 +92,8 @@ public class ScrollViewButton : MonoBehaviour
 
             keyPoseList.Insert(index, _addFrame);
             changedPos[_addFrame] = JsonLandmark;
-            EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index);
+            changedRot[_addFrame] = JsonRotation;
+            EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index, JsonRotation);
             LandmarkManager.GetInstance().KeyPoseList = keyPoseList;
             EditManager.GetInstance().ChangePos = changedPos;
 

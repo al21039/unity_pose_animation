@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-
-
 public class CreateFromJSON : BaseCalculation
 {
     [System.Serializable]
@@ -30,6 +28,7 @@ public class CreateFromJSON : BaseCalculation
     private float[] _distanceDiff;
     private Vector3[] _mediaPipePositions;
     private Vector3[] _modelPartPosition;
+    private Quaternion[] _modelPartRotation;
 
 
     public void SetJsonLandmark(TextAsset textFile)
@@ -145,13 +144,19 @@ public class CreateFromJSON : BaseCalculation
             modelPartObject[18].transform.position
         };
 
+        _modelPartRotation = new Quaternion[2]
+        {
+            modelPartObject[0].transform.rotation,
+            modelPartObject[2].transform.rotation
+        };
+
         StartCoroutine(CaptureScreenshot());
         
     }
 
     private void CreatedAnimation()
     {
-        LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition);
+        LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition, _modelPartRotation);
         Destroy(gameObject);
     }
 

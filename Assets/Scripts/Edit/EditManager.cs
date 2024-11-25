@@ -37,6 +37,18 @@ public class EditManager : MonoBehaviour
         }
     }
 
+    public Dictionary<int, Quaternion[]> ChangeRot
+    { 
+        get
+        {
+            return _changeRot;
+        }
+        set
+        {
+            _changeRot = value;
+        }
+    }
+
     public List<int> KeyPoseList
     {
         get
@@ -71,7 +83,7 @@ public class EditManager : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(15.0f, -90.0f, 0.0f);
         _startDate = LandmarkManager.GetInstance().StartDate;
         ChangePos = LandmarkManager.GetInstance().CSVLandmarkPositions;
-        _changeRot = LandmarkManager.GetInstance().CSVLandmarkRotations;
+        ChangeRot = LandmarkManager.GetInstance().CSVLandmarkRotations;
         _keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
         _totalFrames = LandmarkManager.GetInstance().TotalFrame;
         for (int i = 0; i < _keyPoseList.Count; i++)
@@ -98,22 +110,22 @@ public class EditManager : MonoBehaviour
         }
     }
 
-    public void SetPosition(int frame, Vector3[] pos_list, Quaternion[] posRot)
+    public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot)
     {
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Add(humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
-        setAnimationTransform.SetPartTransform(frame, pos_list, posRot);
+        setAnimationTransform.SetPartTransform(frame, posList, posRot);
     }
 
-    public void SetJsonPosition(int frame, Vector3[] pos_list, int listIndex)
+    public void SetJsonPosition(int frame, Vector3[] posList, int listIndex, Quaternion[] posRot)
     {
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Insert(listIndex, humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
-        //setAnimationTransform.SetPartTransform(frame, pos_list);
+        setAnimationTransform.SetPartTransform(frame, posList, posRot);
     }
 
     public void DisplayNewAnimation()

@@ -12,6 +12,7 @@ public class LandmarkManager : MonoBehaviour
     private Dictionary<int, Vector3[]> _csvLandmarkPositions = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> _jsonLandmarkPositions = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Quaternion[]> _csvLandmarkRotations = new Dictionary<int, Quaternion[]>();
+    private Dictionary<int, Quaternion[]> _jsonLandmarkRotations = new Dictionary<int, Quaternion[]>();
     private List<int> _keyPoseList = new List<int>();
     private int _totalFrame = 0;
 
@@ -50,6 +51,11 @@ public class LandmarkManager : MonoBehaviour
     public Vector3[] JSONLandmarkPositions(int jsonFileNo)
     {
             return _jsonLandmarkPositions[jsonFileNo - 1];   
+    }
+
+    public Quaternion[] JSONLandmarkRotations(int jsonFileNo)
+    {
+        return _jsonLandmarkRotations[jsonFileNo - 1];
     }
 
     public int TotalFrame
@@ -110,9 +116,10 @@ public class LandmarkManager : MonoBehaviour
         }
     }
 
-    public void SetJsonLandmarkPosition(Vector3[] jsonLandmark)
+    public void SetJsonLandmarkPosition(Vector3[] jsonLandmark, Quaternion[] jsonLandmarkRotation)
     {
         _jsonLandmarkPositions.Add(_jsonCount, jsonLandmark);
+        _jsonLandmarkRotations.Add(JsonCount, jsonLandmarkRotation);
         _jsonCount++;
         if(_jsonCount >= _jsonFilePaths.Length)
         {
@@ -123,7 +130,6 @@ public class LandmarkManager : MonoBehaviour
             SetJsonLandmark();
         }
     }
-
 
     public static LandmarkManager GetInstance() => instance;
 
