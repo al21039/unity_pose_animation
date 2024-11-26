@@ -41,6 +41,8 @@ public class Spline : MonoBehaviour
         _splines[splineNo].SetActive(!_splines[splineNo].activeSelf);
     }
 
+
+    //スプラインの点の設定
     public void SetSpline(int splineNo, int index, Vector3 point)
     {
         _splineRenderer[splineNo].SetPosition(index, point);

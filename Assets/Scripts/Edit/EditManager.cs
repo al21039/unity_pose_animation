@@ -86,6 +86,7 @@ public class EditManager : MonoBehaviour
         ChangeRot = LandmarkManager.GetInstance().CSVLandmarkRotations;
         _keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
         _totalFrames = LandmarkManager.GetInstance().TotalFrame;
+        
         for (int i = 0; i < _keyPoseList.Count; i++)
         {
             SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]]);    //キーフレームのモデルを表示
