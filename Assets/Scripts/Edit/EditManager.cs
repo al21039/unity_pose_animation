@@ -6,7 +6,6 @@ public class EditManager : MonoBehaviour
 {
     [SerializeField] private GameObject _humanoidModel;
 
-    [SerializeField] private Spline _spline;
     [SerializeField] private PositionMover _positionMover;
     [SerializeField] private UIListener _uiListener;
     [SerializeField] private LineInterpolation _lineInterpolation;
@@ -17,6 +16,7 @@ public class EditManager : MonoBehaviour
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
     private List<int> _keyPoseList = new List<int>();                                    //キーポーズのリスト　　　後からJSONファイルのやつ追加できるように
+    private List<float> _hipHeight = new List<float>();
 
     private List<GameObject> _keyPoseModel = new List<GameObject>();
     private List<GameObject> _keyCube = new List<GameObject>();
@@ -86,10 +86,11 @@ public class EditManager : MonoBehaviour
         ChangeRot = LandmarkManager.GetInstance().CSVLandmarkRotations;
         _keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
         _totalFrames = LandmarkManager.GetInstance().TotalFrame;
+        _hipHeight = LandmarkManager.GetInstance().HipHeight;
         
         for (int i = 0; i < _keyPoseList.Count; i++)
         {
-            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]]);    //キーフレームのモデルを表示
+            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]], _hipHeight[i]);    //キーフレームのモデルを表示
         }
 
         Spline.GetInstance().SerializeSpline(_totalFrames);
@@ -111,9 +112,9 @@ public class EditManager : MonoBehaviour
         }
     }
 
-    public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot)
+    public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot, float hipHeight)
     {
-        GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
+        GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0.0f, hipHeight - 1.0f, frame * _frameInterval), Quaternion.identity);
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Add(humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();

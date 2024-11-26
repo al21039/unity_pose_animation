@@ -5274,6 +5274,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2024080398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2024080400}
+  - component: {fileID: 2024080399}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2024080399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024080398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b1c1d95b454ff40bfe7c1d0b81a9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  csvFilePath: Assets/CSV/jump2.csv
+  landmarkPrefab: {fileID: 7322892745076488792, guid: 94a1aee55906e6e4797a185377a84458, type: 3}
+  scale: 1.2
+  offset: {x: 0, y: 1, z: 0}
+  lineMaterial: {fileID: 2100000, guid: 4edc978871804164f847620d264a83f1, type: 2}
+--- !u!4 &2024080400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024080398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.18350096, y: 1.6829659, z: 3.4763663}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2054930868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5471,7 +5520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _humanoidModel: {fileID: 777457059534871339, guid: aeb1e7e10ef8e7d4dbca86b6c0832cb3, type: 3}
-  _spline: {fileID: 1483645608}
   _positionMover: {fileID: 2108368688}
   _uiListener: {fileID: 2091358208}
   _lineInterpolation: {fileID: 1483645609}
@@ -5813,6 +5861,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+      propertyPath: csvFilePath
+      value: Assets/CSV/sokuten.csv
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
       propertyPath: _modelTransform.Array.data[0]
       value: 
       objectReference: {fileID: 952591295}
@@ -5868,6 +5920,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartModel
       objectReference: {fileID: 0}
+    - target: {fileID: 6930776539323902817, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7811874641181682775, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -5904,3 +5960,4 @@ SceneRoots:
   - {fileID: 2091358207}
   - {fileID: 8006753332040785622}
   - {fileID: 2108368687}
+  - {fileID: 2024080400}

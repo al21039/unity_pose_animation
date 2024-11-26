@@ -13,6 +13,7 @@ public class LandmarkManager : MonoBehaviour
     private Dictionary<int, Vector3[]> _jsonLandmarkPositions = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Quaternion[]> _csvLandmarkRotations = new Dictionary<int, Quaternion[]>();
     private Dictionary<int, Quaternion[]> _jsonLandmarkRotations = new Dictionary<int, Quaternion[]>();
+    private List<float> _hipHeight = new List<float>();
     private List<int> _keyPoseList = new List<int>();
     private int _totalFrame = 0;
 
@@ -44,6 +45,18 @@ public class LandmarkManager : MonoBehaviour
         set
         {
             _csvLandmarkRotations = value;
+        }
+    }
+
+    public List<float> HipHeight
+    {
+        get
+        {
+            return _hipHeight;
+        }
+        set
+        {
+            _hipHeight = value;
         }
     }
 

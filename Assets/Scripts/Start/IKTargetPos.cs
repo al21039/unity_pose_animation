@@ -5,10 +5,14 @@ using UnityEngine;
 public class IKTargetPos : BaseCalculation
 {
     [SerializeField] private string csvFilePath = "Assets/CSV/kick.csv";
+    [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
+    [SerializeField] Transform[] _modelTransform = new Transform[2];
+    [SerializeField] private List<float> _hipHeightRatio = new List<float>();
+    [SerializeField] private Animator _modelAnimator;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Quaternion[]> _modelQuaternion = new Dictionary<int, Quaternion[]>();
-
+    
     public int currentFrame = 0;
     int totalFrames = 0;
     
@@ -23,12 +27,6 @@ public class IKTargetPos : BaseCalculation
 
     float[] part_distance = new float[4];
     public float threshold = 10.0f;
-
-    [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
-    [SerializeField] Transform[] _modelTransform = new Transform[2];
-
-    [SerializeField] private Animator _modelAnimator;
-
 
     private float[] _modelLimbDistance;
     private float[] _mediaPipeLimbDistance;
@@ -81,6 +79,7 @@ public class IKTargetPos : BaseCalculation
                     landmarks[i] = new Vector3(-x, -y + 1, -z);
                 }
                 landmarkData[frame] = landmarks;
+                _hipHeightRatio.Add(float.Parse(values[100]));
                 totalFrames++;
             }
         }
@@ -92,6 +91,9 @@ public class IKTargetPos : BaseCalculation
     {
         //フレーム毎の各ランドマーク座標
         Vector3[] landmarks = landmarkData[currentFrame];
+        float hipHight = _hipHeightRatio[currentFrame];
+
+        transform.position = new Vector3(0.0f, hipHight - 1.0f, 0.0f);
 
         Vector3 _middleShoulder = (landmarks[11] + landmarks[12]) / 2;
         Vector3 _middleThigh = (landmarks[23] + landmarks[24]) / 2;
@@ -135,7 +137,6 @@ public class IKTargetPos : BaseCalculation
             landmarks[30],
             landmarks[32]
         };
-
 
         //四肢の部位の距離を計算  (MediaPipe)
         _mediaPipeLimbDistance = ReturnDistance(_mediaPipeLimbArray);
@@ -363,6 +364,7 @@ public class IKTargetPos : BaseCalculation
         LandmarkManager.GetInstance().CSVLandmarkPositions = modelPos;
         LandmarkManager.GetInstance().CSVLandmarkRotations = _modelQuaternion;
         LandmarkManager.GetInstance().KeyPoseList = KeyPose_List;
+        LandmarkManager.GetInstance().HipHeight = _hipHeightRatio;
         Destroy(this.gameObject);
     }
 
