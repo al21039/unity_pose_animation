@@ -570,6 +570,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258828643}
   m_CullTransparentMesh: 1
+--- !u!1 &266170960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7801535091092796001, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+  m_PrefabInstance: {fileID: 8006753332040785622}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &271311749
 GameObject:
   m_ObjectHideFlags: 0
@@ -5323,6 +5328,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2053469165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5078700222541717906, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+  m_PrefabInstance: {fileID: 8006753332040785622}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2054930868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5862,7 +5872,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
       propertyPath: csvFilePath
-      value: Assets/CSV/sokuten.csv
+      value: Assets/CSV/kick2.csv
       objectReference: {fileID: 0}
     - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
       propertyPath: _modelTransform.Array.data[0]
@@ -5876,6 +5886,14 @@ PrefabInstance:
       propertyPath: _modelLimbObject.Array.data[0]
       value: 
       objectReference: {fileID: 952591294}
+    - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+      propertyPath: _modelLimbObject.Array.data[3]
+      value: 
+      objectReference: {fileID: 266170960}
+    - target: {fileID: 1841912143979912669, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
+      propertyPath: _modelLimbObject.Array.data[7]
+      value: 
+      objectReference: {fileID: 2053469165}
     - target: {fileID: 3315165209112002505, guid: cdef84cf4b3cd584882dd5ea90e9ed99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
