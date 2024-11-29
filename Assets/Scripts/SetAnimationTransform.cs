@@ -18,7 +18,7 @@ public class SetAnimationTransform : MonoBehaviour
         manager_obj = GameObject.Find("AnimationSceneManager");
     }
 
-    public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot)
+    public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot, float hieght)
     {
         Vector3[] positions = pos_list;
         animation_frame = frame;
@@ -28,9 +28,10 @@ public class SetAnimationTransform : MonoBehaviour
             _modelPart[i].transform.position = positions[i] + new Vector3(0, 0, animation_frame * _frameInterval);
         }
 
-        _modelRotationPart[0].transform.rotation = posRot[0];
-        _modelRotationPart[1].transform.rotation = posRot[1];
-
+        for (int i = 0; i < _modelRotationPart.Length; i++)
+        {
+            _modelRotationPart[i].transform.rotation = posRot[i];
+        }
     }
 
     //各キーフレームのモデルのHumanPoseを返す

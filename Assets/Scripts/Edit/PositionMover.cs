@@ -77,7 +77,7 @@ public class PositionMover : MonoBehaviour
                         _IKTargetOffset = _selectedIKObject.transform.position - GetMouseWorldPos(false);
                     }
 
-                    else if (hit.collider.CompareTag("KeyModel"))
+                    else if (hit.collider.CompareTag("KeyModel") && _isDisplay)
                     {
                         if (_selectedKeyModel != null)
                         {

@@ -3,84 +3,59 @@ using UnityEngine;
 
 public class SetNewPosition : MonoBehaviour
 {
-    [SerializeField] GameObject Hips;
-    [SerializeField] GameObject Body;
-    [SerializeField] GameObject Left_shoulder;
-    [SerializeField] GameObject Left_elbow;
-    [SerializeField] GameObject Left_hand;
-    [SerializeField] GameObject Right_shoulder;
-    [SerializeField] GameObject Right_elbow;
-    [SerializeField] GameObject Right_hand;
-    [SerializeField] GameObject Left_hip;
-    [SerializeField] GameObject Left_knee;
-    [SerializeField] GameObject Left_ankle;
-    [SerializeField] GameObject Right_hip;
-    [SerializeField] GameObject Right_knee;
-    [SerializeField] GameObject Right_ankle;
-    [SerializeField] GameObject middleDot;
+    [SerializeField] private GameObject[] modelPartObject;
+    [SerializeField] private GameObject[] rotationObject;
+    [SerializeField] private Animator _thisAnimator;
 
-    private Dictionary<int, Vector3[]> _modelPos;
+    private Dictionary<int, Vector3[]> _changedPosition;
+    private Dictionary<int, Quaternion[]> _chagedRotation;
+    private List<float> _modelHeight;
     private int _totalFrame;
     private int _currentFrame = 0;
-    private bool _isPlaying = false;
 
     private HumanPoseHandler _humanPoseHandler;
     private HumanPose _humanPose;
-    [SerializeField] private Animator _animator;
+    private int currentFrame = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        _animator = GetComponent<Animator>();
-        Debug.Log(_animator);
-        _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
+        SetStatus();
+        _humanPoseHandler = new HumanPoseHandler(_thisAnimator.avatar, _thisAnimator.transform);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_isPlaying)
+        Debug.Log("new");
+        if (currentFrame < _totalFrame)
         {
-            //CreateNewAnimation();
+            SetAnimation();
+
+            currentFrame++;
         }
     }
 
-    public void SetStatus(Dictionary<int, Vector3[]> modelPos, int totalFrame)
+    public void SetStatus()
     {
-        _modelPos = modelPos;
-        _totalFrame = totalFrame;
-        _isPlaying = true;
+        _changedPosition = EditManager.GetInstance().ChangePos;
+        _chagedRotation = EditManager.GetInstance().ChangeRot;
+        _totalFrame = LandmarkManager.GetInstance().TotalFrame;
+        _modelHeight = LandmarkManager.GetInstance().HipHeight;
     }
 
-    private void CreateNewAnimation()
+    private void SetAnimation()
     {
-        Left_hand.transform.position = _modelPos[_currentFrame][0];
-        Right_hand.transform.position = _modelPos[_currentFrame][1];
-        Left_ankle.transform.position = _modelPos[_currentFrame][2];
-        Right_ankle.transform.position = _modelPos[_currentFrame][3];
-        Left_elbow.transform.position = _modelPos[_currentFrame][4];
-        Right_elbow.transform.position = _modelPos[_currentFrame][5];
-        Left_knee.transform.position = _modelPos[_currentFrame][6];
-        Right_knee.transform.position= _modelPos[_currentFrame][7];
-        Body.transform.position = _modelPos[_currentFrame][8];
-        middleDot.transform.position = _modelPos[_currentFrame][9];
+        transform.position = new Vector3(0.0f, _modelHeight[currentFrame] - 1.0f, 0.0f);
 
-        _currentFrame++;
-        if (_currentFrame >= _totalFrame)
+        for (int i = 0; i < modelPartObject.Length; i++)
         {
-            _currentFrame = 0;
+            modelPartObject[i].transform.position = _changedPosition[currentFrame][i];
         }
-    }
 
-    public void SetNewAnimation(HumanPose framePose)
-    {
-        _animator = GetComponent<Animator>();
-        Debug.Log(_animator);
-        _humanPoseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
-        HumanPose humanPose = new HumanPose();
-        humanPose = framePose;
-
-        Debug.Log(framePose.muscles[32]);
-        _humanPoseHandler.SetHumanPose(ref humanPose);
+        for (int i = 0; i < rotationObject.Length; i++)
+        {
+            rotationObject[i].transform.rotation = _chagedRotation[currentFrame][i];
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,7 +89,7 @@ public class EditManager : MonoBehaviour
         
         for (int i = 0; i < _keyPoseList.Count; i++)
         {
-            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]], _hipHeight[i]);    //キーフレームのモデルを表示
+            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]], _hipHeight[  _keyPoseList[i]]);    //キーフレームのモデルを表示
         }
 
         Spline.GetInstance().SerializeSpline(_totalFrames);
@@ -114,11 +113,14 @@ public class EditManager : MonoBehaviour
 
     public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot, float hipHeight)
     {
+        Debug.Log(hipHeight);
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0.0f, hipHeight - 1.0f, frame * _frameInterval), Quaternion.identity);
+        GameObject cube = Instantiate(_cubePrefab, new Vector3(1.5f, 0.387f, frame * _frameInterval), Quaternion.identity);
+        cube.transform.parent = humanoid.transform;
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Add(humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
-        setAnimationTransform.SetPartTransform(frame, posList, posRot);
+        setAnimationTransform.SetPartTransform(frame, posList, posRot, hipHeight);
     }
 
     public void SetJsonPosition(int frame, Vector3[] posList, int listIndex, Quaternion[] posRot)
@@ -127,7 +129,7 @@ public class EditManager : MonoBehaviour
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Insert(listIndex, humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
-        setAnimationTransform.SetPartTransform(frame, posList, posRot);
+        setAnimationTransform.SetPartTransform(frame, posList, posRot, 1.0f);
     }
 
     public void DisplayNewAnimation()
@@ -155,9 +157,14 @@ public class EditManager : MonoBehaviour
             Destroy(_keyPoseModel[i]);
         }
 
+        GameObject createAnimationModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
+
+        
+        /*
         GameObject created_model = Instantiate(_createModel, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
         _createNewAnim = created_model.GetComponent<CreateNewAnim>();
 
         _createNewAnim.CreateNewAnimation(_keyPoseHumanPose, _keyPoseList);
+        */
     }
 }

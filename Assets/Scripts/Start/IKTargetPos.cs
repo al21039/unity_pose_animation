@@ -6,7 +6,7 @@ public class IKTargetPos : BaseCalculation
 {
     [SerializeField] private string csvFilePath = "Assets/CSV/kick.csv";
     [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
-    [SerializeField] Transform[] _modelTransform = new Transform[2];
+    [SerializeField] GameObject[] _modelTransform = new GameObject[3];
     [SerializeField] private List<float> _hipHeightRatio = new List<float>();
     [SerializeField] private Animator _modelAnimator;
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
@@ -95,6 +95,8 @@ public class IKTargetPos : BaseCalculation
 
         transform.position = new Vector3(0.0f, hipHight - 1.0f, 0.0f);
 
+        Vector3 _middleHead = (landmarks[1] + landmarks[4]) / 2;
+        Vector3 _middleMouth = (landmarks[9] + landmarks[10]) / 2;
         Vector3 _middleShoulder = (landmarks[11] + landmarks[12]) / 2;
         Vector3 _middleThigh = (landmarks[23] + landmarks[24]) / 2;
         
@@ -106,14 +108,25 @@ public class IKTargetPos : BaseCalculation
         Vector3 hipForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion hip = Quaternion.LookRotation(hipForward, verticalAxis);
-        _modelLimbObject[0].transform.rotation = hip;
+        _modelTransform[0].transform.rotation = hip;
 
         horizontalAxis = (landmarks[12] - landmarks[11]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
-        _modelLimbObject[2].transform.rotation = shoulder;
+        _modelTransform[1].transform.rotation = shoulder;
+
+        rawVerticalAxis = (_middleHead - _middleMouth).normalized;
+        horizontalAxis = (landmarks[8] - landmarks[7]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 headForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion head = Quaternion.LookRotation(headForward, verticalAxis);
+        head = Quaternion.Inverse(shoulder) * head;
+
+        _modelTransform[2].transform.localRotation = head;
+
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
@@ -185,8 +198,9 @@ public class IKTargetPos : BaseCalculation
 
         Quaternion[] _modelRotation = new Quaternion[]
         {
-            _modelLimbObject[0].transform.rotation,
-            _modelLimbObject[2].transform.rotation
+            _modelTransform[0].transform.rotation,
+            _modelTransform[1].transform.rotation,
+            _modelTransform[2].transform.rotation
         };
 
         modelPos.Add(currentFrame, part_position);
@@ -351,13 +365,15 @@ public class IKTargetPos : BaseCalculation
             KeyPose_List.Clear();
             KeyPose_List.Add(0);
 
-            for(int i = 1; i < totalFrames - 1; i++)
+            for(int i = 1; i < totalFrames - 5; i++)
             {
                 if(i % 10 == 0 && (totalFrames -1) - i >= 5)
                 {
                     KeyPose_List.Add(i);
                 }
             }
+
+            KeyPose_List.Add(totalFrames - 1);
         }
         
         LandmarkManager.GetInstance().TotalFrame = totalFrames;
