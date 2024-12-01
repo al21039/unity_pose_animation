@@ -11,6 +11,7 @@ public class EditManager : MonoBehaviour
     [SerializeField] private GameObject _createModel;
     [SerializeField] private ScrollViewButton _scrollViewButton;
     [SerializeField] private GameObject _cubePrefab;
+    [SerializeField] private GameObject _celllingPrefab; 
 
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
@@ -58,6 +59,27 @@ public class EditManager : MonoBehaviour
         {
             _keyPoseList = value;
         }
+    }
+
+    public List<float> HipHeight
+    {
+        get
+        {
+            return _hipHeight;
+        }
+    }
+
+    public void DeleteKeyPose(int index)
+    {
+        int listNo = _keyPoseList.IndexOf(index);
+        _keyPoseList.RemoveAt(listNo);
+        _keyPoseModel.RemoveAt(listNo);
+        _lineInterpolation.InterpolationAllLine();
+    }
+
+    public void SetFrameHipHeight(int frame, float hipHeight)
+    {
+        _hipHeight[frame] = hipHeight;
     }
 
     private static EditManager instance;
@@ -113,7 +135,6 @@ public class EditManager : MonoBehaviour
 
     public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot, float hipHeight)
     {
-        Debug.Log(hipHeight);
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0.0f, hipHeight - 1.0f, frame * _frameInterval), Quaternion.identity);
         GameObject cube = Instantiate(_cubePrefab, new Vector3(1.5f, 0.387f, frame * _frameInterval), Quaternion.identity);
         cube.transform.parent = humanoid.transform;
@@ -126,6 +147,8 @@ public class EditManager : MonoBehaviour
     public void SetJsonPosition(int frame, Vector3[] posList, int listIndex, Quaternion[] posRot)
     {
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
+        GameObject cube = Instantiate(_cubePrefab, new Vector3(1.5f, 0.387f, frame * _frameInterval), Quaternion.identity);
+        cube.transform.parent = humanoid.transform;
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Insert(listIndex, humanoid);
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();

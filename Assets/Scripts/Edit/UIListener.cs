@@ -4,6 +4,7 @@ public class UIListener : MonoBehaviour
 {
     [SerializeField] private GameObject[] _UIs;
     [SerializeField] private GameObject _scrollView;
+    [SerializeField] private GameObject _heightClacButton;
 
     public void OnClickedLeftHandSplineButton()
     {
@@ -31,6 +32,10 @@ public class UIListener : MonoBehaviour
 
     public void OnClickedAddModelButton()
     {
+        _UIs[4].SetActive(!_UIs[4].activeSelf);
+        _UIs[5].SetActive(!_UIs[5].activeSelf);
+        _UIs[6].SetActive(!_UIs[6].activeSelf);
+        _UIs[8].SetActive(!_UIs[8].activeSelf);
         _scrollView.SetActive(!_scrollView.activeSelf);
     }
 
@@ -47,4 +52,28 @@ public class UIListener : MonoBehaviour
         _scrollView.SetActive(status);
     }
 
+    public void OnClickedIndirectButton()
+    {
+        _UIs[4].SetActive(!_UIs[4].activeSelf);
+        _UIs[6].SetActive(!_UIs[6].activeSelf);
+        _UIs[7].SetActive(!_UIs[7].activeSelf);
+        _UIs[8].SetActive(!_UIs[8].activeSelf);
+    }
+
+    public void OnClickedHeightButton()
+    {
+        _UIs[4].SetActive(!_UIs[4].activeSelf);
+        _UIs[5].SetActive(!_UIs[5].activeSelf);
+        _UIs[7].SetActive(!_UIs[7].activeSelf);
+        _UIs[8].SetActive(!_UIs[8].activeSelf);
+        _heightClacButton.SetActive(!_heightClacButton.activeSelf);
+    }
+
+    public void OnClickedDeleteButton()
+    {
+        _UIs[4].SetActive(!_UIs[4].activeSelf);
+        _UIs[5].SetActive(!_UIs[5].activeSelf);
+        _UIs[6].SetActive(!_UIs[6].activeSelf);
+        _UIs[7].SetActive(!_UIs[7].activeSelf);
+    }
 }

@@ -10,14 +10,23 @@ public class PositionMover : MonoBehaviour
     [SerializeField] private SearchEndPoint _searchEndPoint;
     [SerializeField] private LineInterpolation _lineInterpolation;
 
+    private static PositionMover instance;
+
     private int _selectPositionID = -1;
     private bool _isDisplay = false;                              //球が表示されているかいないか
+    private bool _heightChange = false;
     private GameObject _indirectSphere;
     private Camera _mainCamera;
     private bool _isLineDisplay = false;
+    private bool _deleteMode = false;
 
     private GameObject _selectedIKObject; //マウスで選択したIKのオブジェクト
     private GameObject _selectedKeyModel;
+    private Vector3 _modelPosition;
+    private GameObject _selectHeightObject;
+    private string _selectHeightFrame;
+    private float _selectmodelHeight;
+    private Transform _cube;
     private Transform _selectedTargetObject;
     private Transform _selectedTargetAnker;
     private Vector3 _IKTargetOffset;
@@ -45,10 +54,52 @@ public class PositionMover : MonoBehaviour
         }
     }
 
+    public void ChangeHeight(float addHeight)
+    {
+        if (_selectHeightObject != null)
+        {
+            float height = _modelPosition.y;
+            height += addHeight;
+
+            int frame = int.Parse(_selectHeightFrame);
+            EditManager.GetInstance().SetFrameHipHeight(frame, height + 1.0f);
+
+            _modelPosition = new Vector3(_modelPosition.x, height, _modelPosition.z);
+            _selectHeightObject.transform.position = _modelPosition;
+
+            SetAnimationTransform setAnimationTransform = _selectHeightObject.GetComponent<SetAnimationTransform>();
+            GameObject[] IKObject = setAnimationTransform.IKObjectArray();
+
+            for (int i = 0; i < 8; i++)
+            {
+                _lineInterpolation.SetSplineAndJointPosition(frame, IKObject[i].transform.position, i);
+            }
+
+            _cube.transform.position = new Vector3(_cube.transform.position.x, _selectmodelHeight, _cube.transform.position.z);
+        }
+    }
+
     public void DropdownValueChanged(Dropdown change)
     {
         int selectPosition = change.value - 1;
         SelectPositionID = selectPosition;
+    }
+
+    public static PositionMover GetInstance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()
@@ -77,14 +128,35 @@ public class PositionMover : MonoBehaviour
                         _IKTargetOffset = _selectedIKObject.transform.position - GetMouseWorldPos(false);
                     }
 
-                    else if (hit.collider.CompareTag("KeyModel") && _isDisplay)
+                    else if (hit.collider.CompareTag("KeyModel"))
                     {
-                        if (_selectedKeyModel != null)
+                        if (_isDisplay && !_heightChange && !_deleteMode)
                         {
-                            ReplaceSpherePosition();
+                            if (_selectedKeyModel != null)
+                            {
+                                ReplaceSpherePosition();
+                            }
+                            _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject; //元のモデルフレームを取得
+                            _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
                         }
-                        _selectedKeyModel = hit.collider.gameObject.transform.parent.gameObject; //元のモデルフレームを取得
-                        _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
+
+                        else if (_heightChange && !_isDisplay && !_deleteMode)
+                        {
+                            _selectHeightObject = hit.collider.gameObject.transform.parent.gameObject;
+                            _selectHeightFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
+                            _cube = _selectHeightObject.transform.GetChild(_selectHeightObject.transform.childCount - 1);
+                            _selectmodelHeight = _cube.transform.position.y;
+                            _modelPosition = hit.collider.gameObject.transform.parent.gameObject.transform.position; //元のモデルフレームを取得
+                        }
+
+                        else if (_deleteMode && !_isDisplay && !_heightChange)
+                        {
+                            _selectedIKObject = hit.collider.gameObject.transform.root.gameObject;
+                            _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
+                            int frame = int.Parse(_selectedFrame);
+                            Destroy(_selectedIKObject);
+                            EditManager.GetInstance().DeleteKeyPose(frame);
+                        }
                     }
 
                     //フレームのモデルがある時かつ、ドロップダウンを選んでいるときに球を触ったら
@@ -125,7 +197,6 @@ public class PositionMover : MonoBehaviour
                 _touchIndirectSphere = false;
                 _isSphereMoved = false;
             }
-
         }
 
         if (_selectedIKObject != null)
@@ -139,7 +210,6 @@ public class PositionMover : MonoBehaviour
             _selectedTargetAnker.position += (_indirectSphere.transform.position - _sphereDefaultPosition) * _indeirectEffectiveGainValue;
             _sphereDefaultPosition = _indirectSphere.transform.position;
         }
-
     }
 
 
@@ -152,6 +222,16 @@ public class PositionMover : MonoBehaviour
         
         Vector3 _sphereSpawnPosition = Camera.main.transform.position + _mainCamera.transform.forward * 3.0f;       //カメラより少し前の位置
         _indirectSphere = Instantiate(_spherePrefab, _sphereSpawnPosition, Quaternion.identity);
+    }
+
+    public void OnClickedDeleteButton()
+    {
+        _deleteMode = !_deleteMode;
+    }
+
+    public void OnClickedHeightButton()
+    {
+        _heightChange = !_heightChange;
     }
 
     public void OnClickedIndirectButton()

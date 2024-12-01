@@ -27,7 +27,6 @@ public class SetNewPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("new");
         if (currentFrame < _totalFrame)
         {
             SetAnimation();
@@ -41,7 +40,7 @@ public class SetNewPosition : MonoBehaviour
         _changedPosition = EditManager.GetInstance().ChangePos;
         _chagedRotation = EditManager.GetInstance().ChangeRot;
         _totalFrame = LandmarkManager.GetInstance().TotalFrame;
-        _modelHeight = LandmarkManager.GetInstance().HipHeight;
+        _modelHeight = EditManager.GetInstance().HipHeight;
     }
 
     private void SetAnimation()

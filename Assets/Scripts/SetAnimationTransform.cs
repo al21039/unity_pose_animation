@@ -18,6 +18,23 @@ public class SetAnimationTransform : MonoBehaviour
         manager_obj = GameObject.Find("AnimationSceneManager");
     }
 
+    public GameObject[] IKObjectArray()
+    {
+        GameObject[] _IKModelPart = new GameObject[8]
+        {
+            _modelPart[0],
+            _modelPart[1],
+            _modelPart[2],
+            _modelPart[3],
+            _modelPart[4],
+            _modelPart[5],
+            _modelPart[6],
+            _modelPart[7]
+        };
+
+        return _IKModelPart; 
+    }
+
     public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot, float hieght)
     {
         Vector3[] positions = pos_list;
