@@ -79,6 +79,11 @@ public class PositionMover : MonoBehaviour
         }
     }
 
+    public void InitializeHeightObject()
+    {
+        _selectHeightObject = null;
+    }
+
     public void DropdownValueChanged(Dropdown change)
     {
         int selectPosition = change.value - 1;
@@ -151,11 +156,15 @@ public class PositionMover : MonoBehaviour
 
                         else if (_deleteMode && !_isDisplay && !_heightChange)
                         {
-                            _selectedIKObject = hit.collider.gameObject.transform.root.gameObject;
+                            GameObject deleteModel = hit.collider.gameObject.transform.root.gameObject;
                             _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
                             int frame = int.Parse(_selectedFrame);
-                            Destroy(_selectedIKObject);
-                            EditManager.GetInstance().DeleteKeyPose(frame);
+                            if (frame != 0 && frame != EditManager.GetInstance().GetLastKeyPoseFrame())
+                            {
+                                Destroy(deleteModel);
+                                EditManager.GetInstance().DeleteKeyPose(frame);
+                            }
+                            _selectedFrame = null;
                         }
                     }
 

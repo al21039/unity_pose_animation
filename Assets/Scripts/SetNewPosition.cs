@@ -33,6 +33,10 @@ public class SetNewPosition : MonoBehaviour
 
             currentFrame++;
         }
+        else
+        {
+            currentFrame = 0;
+        }
     }
 
     public void SetStatus()

@@ -24,38 +24,38 @@ public class LineInterpolation : MonoBehaviour
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    SetFirstFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j);
+                    SetFirstFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, true);
                 }
             }
             else if (i == _keyPoseList.Count - 1)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    SetLastFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j);
+                    SetLastFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, true);
                 }
             }           
             else if(i == 1)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    SetSecondLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j);
-                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i]);
+                    SetSecondLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, true);
+                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i], true);
                 }
             } 
             else if(i == _keyPoseList.Count - 2)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i]);
-                    SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j);
+                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i], true);
+                    SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, true);
                 }
             }
             else
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i]);
-                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i]);
+                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i], true);
+                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j] + new Vector3(0, 0, _keyPoseList[i] * _frameInterval), j, _keyPoseList[i], true);
                 }
             }    
         }
@@ -65,42 +65,47 @@ public class LineInterpolation : MonoBehaviour
     {
         GetRequiredValue();
 
-        
         if (_keyPoseList.Contains(frame))
         {
             //編集したキーフレームが１番目なら
             if (frame == 0)
             {
-                SetFirstFrameLinePos(targetPosition, positionID);
+                SetFirstFrameLinePos(targetPosition, positionID , false);
             }
             //編集したキーフレームが最後なら
             else if (frame == _keyPoseList[_keyPoseList.Count - 1])
             {
-                SetLastFrameLinePos(targetPosition, positionID);
+                SetLastFrameLinePos(targetPosition, positionID, false);
             }
             //編集したキーフレームが２番目なら
             else if (frame == _keyPoseList[1])
             {
-                SetSecondLinePos(targetPosition, positionID);
-                SetOtherAfterLinePos(targetPosition, positionID, frame);
+                SetSecondLinePos(targetPosition, positionID, false);
+                SetOtherAfterLinePos(targetPosition, positionID, frame, false);
             }
             //編集したキーフレームが最後から２番目なら
             else if (frame == _keyPoseList[_keyPoseList.Count - 2])
             {
-                SetOtherBeforeLinePos(targetPosition, positionID, frame);
-                SetSecondToLastFrameLinePos(targetPosition, positionID);
+                SetOtherBeforeLinePos(targetPosition, positionID, frame, false);
+                SetSecondToLastFrameLinePos(targetPosition, positionID, false);
             }
             //編集したキーフレームが上記以外なら
             else
             {
-                SetOtherAfterLinePos(targetPosition, positionID, frame);
-                SetOtherBeforeLinePos(targetPosition, positionID, frame);
+                SetOtherAfterLinePos(targetPosition, positionID, frame, false);
+                SetOtherBeforeLinePos(targetPosition, positionID, frame, false);
             }
         }     
     }
 
+    private void InitializeFirstFrameLinePos(Vector3 targetPosition, int positionID)
+    {
+
+    }
+
+
     //最初のフレームの編集時
-    public void SetFirstFrameLinePos(Vector3 targetPosition, int positionID)
+    public void SetFirstFrameLinePos(Vector3 targetPosition, int positionID, bool isFirst)
     {
         GetRequiredValue();
 
@@ -110,14 +115,14 @@ public class LineInterpolation : MonoBehaviour
         int twoAfterKey = _keyPoseList[2];
         points[0] = targetPosition;
 
+        Vector3 p0 = targetPosition;
+        Vector3 p1 = targetPosition;
+        Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+        Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
+
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = targetPosition;
-            Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
-            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
-
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
 
             points[i] = splinedPoint;
@@ -130,15 +135,18 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
+        if (!isFirst)
         {
-            _changedPos[i][positionID] = points[i] - new Vector3(0.0f, 0.0f, i * _frameInterval);
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i][positionID] = points[i] - new Vector3(0.0f, 0.0f, i * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
         }
-        EditManager.GetInstance().ChangePos = _changedPos;
     }
 
     //最後のフレームの編集時
-    public void SetLastFrameLinePos(Vector3 targetPosition, int positionID)
+    public void SetLastFrameLinePos(Vector3 targetPosition, int positionID, bool isFirst)
     {
         GetRequiredValue();
 
@@ -148,18 +156,18 @@ public class LineInterpolation : MonoBehaviour
         int twoPreviousKey = _keyPoseList[_keyPoseList.Count - 3];
         points[numberOfPoints - 1] = targetPosition;
 
+        Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
+        Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p2 = targetPosition;
+        Vector3 p3 = targetPosition;
+
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p2 = targetPosition;
-            Vector3 p3 = targetPosition;
-
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
-
             points[i] = splinedPoint;
         }
+
         if (positionID < 4)
         {
             for (int i = 0; i < numberOfPoints; i++)
@@ -168,14 +176,16 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            _changedPos[i + previousKey + 1][positionID] = points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
-        }
-        EditManager.GetInstance().ChangePos = _changedPos;
+        if (!isFirst) {
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i + previousKey + 1][positionID] = points[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
+        } 
     }
 
-    public void SetSecondLinePos(Vector3 targetPosition, int positionID)
+    public void SetSecondLinePos(Vector3 targetPosition, int positionID, bool isFirst)
     {
         GetRequiredValue();
 
@@ -186,18 +196,17 @@ public class LineInterpolation : MonoBehaviour
         Vector3[] beforePoints = new Vector3[numberOfPoints];
         beforePoints[numberOfPoints - 1] = targetPosition;
 
+        Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p2 = targetPosition;
+        Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p2 = targetPosition;
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
             var savedPoint = _changedPos[i + previousKey + 1][positionID] + new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
-
             beforePoints[i] = splinedPoint;
         }
 
@@ -209,14 +218,17 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
+        if (!isFirst)
         {
-            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
         }
-        EditManager.GetInstance().ChangePos = _changedPos;
     }
 
-    public void SetSecondToLastFrameLinePos(Vector3 targetPosition, int positionID)
+    public void SetSecondToLastFrameLinePos(Vector3 targetPosition, int positionID, bool isFirst)
     {
         int currentKey = _keyPoseList[_keyPoseList.Count - 2];
         int afterKey = _keyPoseList[_keyPoseList.Count - 1];
@@ -227,13 +239,14 @@ public class LineInterpolation : MonoBehaviour
         Vector3[] afterPoints = new Vector3[numberOfPoints];
         afterPoints[0] = targetPosition;
 
+        Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p1 = targetPosition;
+        Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+        Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
             var savedPoint = _changedPos[i + currentKey][positionID] + new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
@@ -248,14 +261,17 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
+        if (!isFirst)
         {
-            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
         }
-        EditManager.GetInstance().ChangePos = _changedPos;
     }
 
-    public void SetOtherBeforeLinePos(Vector3 targetPosition, int positionID, int frame)
+    public void SetOtherBeforeLinePos(Vector3 targetPosition, int positionID, int frame, bool isFirst)
     {
         GetRequiredValue();
 
@@ -268,14 +284,14 @@ public class LineInterpolation : MonoBehaviour
         Vector3[] beforePoints = new Vector3[numberOfPoints];
         beforePoints[numberOfPoints - 1] = targetPosition;
 
+        Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
+        Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p2 = targetPosition;
+        Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
             float t = (float)(i + 1) / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[twoPreviousKey][positionID] + new Vector3(0, 0, (twoPreviousKey) * _frameInterval);
-            Vector3 p1 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p2 = targetPosition;
-            Vector3 p3 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
 
@@ -289,14 +305,17 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
+        if (!isFirst)
         {
-            _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i + previousKey + 1][positionID] = beforePoints[i] - new Vector3(0.0f, 0.0f, (i + previousKey + 1) * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
         }
-        EditManager.GetInstance().ChangePos = _changedPos;
     }
 
-    public void SetOtherAfterLinePos(Vector3 targetPosition, int positionID, int frame)
+    public void SetOtherAfterLinePos(Vector3 targetPosition, int positionID, int frame, bool isFirst)
     {
         GetRequiredValue();
 
@@ -309,13 +328,14 @@ public class LineInterpolation : MonoBehaviour
         Vector3[] afterPoints = new Vector3[numberOfPoints];
         afterPoints[0] = targetPosition;
 
+        Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
+        Vector3 p1 = targetPosition;
+        Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
+        Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
+
         for (int i = 1; i < numberOfPoints; i++)
         {
             float t = (float)i / (float)numberOfPoints;
-            Vector3 p0 = _changedPos[previousKey][positionID] + new Vector3(0, 0, (previousKey) * _frameInterval);
-            Vector3 p1 = targetPosition;
-            Vector3 p2 = _changedPos[afterKey][positionID] + new Vector3(0, 0, (afterKey) * _frameInterval);
-            Vector3 p3 = _changedPos[twoAfterKey][positionID] + new Vector3(0, 0, (twoAfterKey) * _frameInterval);
 
             var splinedPoint = CatmullRomSpline(p0, p1, p2, p3, t);
 
@@ -330,11 +350,14 @@ public class LineInterpolation : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numberOfPoints; i++)
+        if (!isFirst)
         {
-            _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                _changedPos[i + currentKey][positionID] = afterPoints[i] - new Vector3(0.0f, 0.0f, (i + currentKey) * _frameInterval);
+            }
+            EditManager.GetInstance().ChangePos = _changedPos;
         }
-        EditManager.GetInstance().ChangePos = _changedPos;
     }
 
     //スプライン補完　関数

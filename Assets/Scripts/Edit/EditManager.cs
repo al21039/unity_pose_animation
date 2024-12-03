@@ -11,7 +11,8 @@ public class EditManager : MonoBehaviour
     [SerializeField] private GameObject _createModel;
     [SerializeField] private ScrollViewButton _scrollViewButton;
     [SerializeField] private GameObject _cubePrefab;
-    [SerializeField] private GameObject _celllingPrefab; 
+    [SerializeField] private GameObject _celllingPrefab;
+    [SerializeField] private HeightInterpolationer _heightInterpolationer;
 
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
@@ -61,11 +62,20 @@ public class EditManager : MonoBehaviour
         }
     }
 
+    public int GetLastKeyPoseFrame()
+    {
+        return _keyPoseList[_keyPoseList.Count - 1];
+    }
+
     public List<float> HipHeight
     {
         get
         {
             return _hipHeight;
+        }
+        set
+        {
+            _hipHeight = value;
         }
     }
 
@@ -79,7 +89,7 @@ public class EditManager : MonoBehaviour
 
     public void SetFrameHipHeight(int frame, float hipHeight)
     {
-        _hipHeight[frame] = hipHeight;
+        _heightInterpolationer.Interpolation(frame, hipHeight + 1);
     }
 
     private static EditManager instance;

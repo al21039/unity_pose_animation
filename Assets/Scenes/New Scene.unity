@@ -408,7 +408,7 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: 0, y: 0, z: 0}
+    m_Offset: {x: -26.358, y: -0.003, z: 0.013}
     m_ConstrainedAxes:
       x: 1
       y: 1
@@ -2911,6 +2911,18 @@ MonoBehaviour:
       - m_Target: {fileID: 2108368688}
         m_TargetAssemblyTypeName: PositionMover, Assembly-CSharp
         m_MethodName: OnClickedHeightButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2108368688}
+        m_TargetAssemblyTypeName: PositionMover, Assembly-CSharp
+        m_MethodName: InitializeHeightObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7148,6 +7160,7 @@ GameObject:
   - component: {fileID: 2108368688}
   - component: {fileID: 2108368689}
   - component: {fileID: 2108368690}
+  - component: {fileID: 2108368691}
   m_Layer: 0
   m_Name: EditManager
   m_TagString: Untagged
@@ -7175,6 +7188,7 @@ MonoBehaviour:
   _scrollViewButton: {fileID: 2108368690}
   _cubePrefab: {fileID: 3094057138889818175, guid: b5cab63a2900d6b4db3a7393070ea700, type: 3}
   _celllingPrefab: {fileID: 2755290245810966149, guid: e77763e8424860c42b31b87b225e4a44, type: 3}
+  _heightInterpolationer: {fileID: 2108368691}
 --- !u!4 &2108368687
 Transform:
   m_ObjectHideFlags: 0
@@ -7238,6 +7252,18 @@ MonoBehaviour:
   contentParent: {fileID: 720373453}
   _lineInterpolation: {fileID: 1483645609}
   _addFrame: 100
+--- !u!114 &2108368691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108368685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf30f2045d4a01849a57808948c1726f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2112790248
 GameObject:
   m_ObjectHideFlags: 0
@@ -7930,13 +7956,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7922506554465978347}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5821513, y: 0.42152175, z: 0.5924369, w: 0.36392}
+  m_LocalRotation: {x: 0.5833665, y: 0.41983837, z: 0.59348565, w: 0.36220714}
   m_LocalPosition: {x: 0.18006095, y: 0.0693399, z: -0.070203945}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 950343694242473558}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.344, y: 91.906, z: 112.718}
 --- !u!1 &1074159975316433429
 GameObject:
   m_ObjectHideFlags: 0
@@ -9032,6 +9058,7 @@ GameObject:
   - component: {fileID: 7674737546033439533}
   - component: {fileID: 8042413625122718139}
   - component: {fileID: 5272806364930422024}
+  - component: {fileID: 8042413625122718140}
   m_Layer: 0
   m_Name: HandRTarget
   m_TagString: Untagged
@@ -9725,12 +9752,12 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: 0, y: 0, z: 0}
+    m_Offset: {x: 16.476, y: 4.509, z: 110.293}
     m_ConstrainedAxes:
       x: 1
       y: 1
       z: 1
-    m_MaintainOffset: 0
+    m_MaintainOffset: 1
 --- !u!4 &4920675168392127109
 Transform:
   m_ObjectHideFlags: 0
@@ -9775,7 +9802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96048f604eb614408b23132103c023e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/dance.csv
+  csvFilePath: Assets/CSV/kick.csv
   _modelLimbObject:
   - {fileID: 1461463164138993215}
   - {fileID: 3444762418971865908}
@@ -11502,6 +11529,53 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.7
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8042413625122718140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3376792796230913355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb90b913935e644baaa86c076d788e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 8079249006258075268}
+    m_SourceObjects:
+      m_Length: 1
+      m_Item0:
+        transform: {fileID: 7114924997670902158}
+        weight: 1
+      m_Item1:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item2:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item3:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item4:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item5:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item6:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item7:
+        transform: {fileID: 0}
+        weight: 0
+    m_Offset: {x: -8.137, y: 4.368, z: -109.631}
+    m_ConstrainedAxes:
+      x: 1
+      y: 1
+      z: 1
+    m_MaintainOffset: 1
 --- !u!1 &8049000577210950619
 GameObject:
   m_ObjectHideFlags: 0
