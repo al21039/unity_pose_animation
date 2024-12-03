@@ -143,6 +143,7 @@ public class LineInterpolation : MonoBehaviour
                 _changedPos[i][positionID] = points[i];
             }
             EditManager.GetInstance().ChangePos = _changedPos;
+
         }
     }
 
