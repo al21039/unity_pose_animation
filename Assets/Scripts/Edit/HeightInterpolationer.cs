@@ -41,9 +41,6 @@ public class HeightInterpolationer : MonoBehaviour
                 ChangeMiddleHeight(heightPosition, frame);
             }
         }
-
-
-
         return _heightPosition;
     }
 
