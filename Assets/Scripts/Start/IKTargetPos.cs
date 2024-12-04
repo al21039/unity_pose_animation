@@ -135,13 +135,13 @@ public class IKTargetPos : BaseCalculation
 
 
         rawVerticalAxis = (middleLeftHand - landmarks[15]).normalized;
-        horizontalAxis = (landmarks[19] - landmarks[17]).normalized;
+        horizontalAxis = (landmarks[17] - landmarks[19]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
-        Vector3 diffrenceVertivcalRotation = verticalAxis - _leftHandRotationOffset.eulerAngles;
         Vector3 leftHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
-        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), new Vector3(0, 0, 1));
+        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), -Vector3.forward);
+
         _modelTransform[3].transform.rotation = leftHand * offsetRotation;
 
         rawVerticalAxis = (middleRightHand - landmarks[16]).normalized;
@@ -149,8 +149,10 @@ public class IKTargetPos : BaseCalculation
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 rightHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
-        Quaternion rightHand = Quaternion.LookRotation(-rightHandForward, verticalAxis) * Quaternion.Euler(0, -90f, 0);
-        _modelTransform[4].transform.rotation = rightHand;
+        Quaternion rightHand = Quaternion.LookRotation(rightHandForward, verticalAxis);
+        offsetRotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), -Vector3.forward);
+
+        _modelTransform[4].transform.rotation = rightHand * offsetRotation;
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
