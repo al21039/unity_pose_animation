@@ -18,6 +18,8 @@ public class IKTargetPos : BaseCalculation
     
     bool isCreated = false;
     bool isLoaded = false;
+    private Quaternion _leftHandRotationOffset;
+    private Quaternion _rightHandRotationOffset;
     
     Vector3[] before_part_position = new Vector3[4];
 
@@ -31,10 +33,12 @@ public class IKTargetPos : BaseCalculation
     private float[] _modelLimbDistance;
     private float[] _mediaPipeLimbDistance;
 
-    private Vector3 _middleShoulder;
-    private Vector3 _middleThigh;
+    private Vector3 middleShoulder;
+    private Vector3 middleThigh;
     void Start()
     {
+        _leftHandRotationOffset = _modelTransform[3].transform.rotation;
+        _rightHandRotationOffset = _modelTransform[4].transform.rotation;
         CalcModelDistance();
     }
 
@@ -95,12 +99,14 @@ public class IKTargetPos : BaseCalculation
 
         transform.position = new Vector3(0.0f, hipHight - 1.0f, 0.0f);
 
-        Vector3 _middleHead = (landmarks[1] + landmarks[4]) / 2;
-        Vector3 _middleMouth = (landmarks[9] + landmarks[10]) / 2;
-        Vector3 _middleShoulder = (landmarks[11] + landmarks[12]) / 2;
-        Vector3 _middleThigh = (landmarks[23] + landmarks[24]) / 2;
+        Vector3 middleHead = (landmarks[1] + landmarks[4]) / 2;
+        Vector3 middleMouth = (landmarks[9] + landmarks[10]) / 2;
+        Vector3 middleShoulder = (landmarks[11] + landmarks[12]) / 2;
+        Vector3 middleThigh = (landmarks[23] + landmarks[24]) / 2;
+        Vector3 middleLeftHand = (landmarks[17] + landmarks[19]) / 2;
+        Vector3 middleRightHand = (landmarks[18] + landmarks[20]) / 2;
         
-        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 rawVerticalAxis = (middleShoulder - middleThigh).normalized;
         Vector3 horizontalAxis = (landmarks[24] -  landmarks[23]).normalized;
 
         Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
@@ -115,9 +121,9 @@ public class IKTargetPos : BaseCalculation
         Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
-        _modelTransform[1].transform.rotation = shoulder;
+        _modelTransform[1].transform.localRotation = shoulder;
 
-        rawVerticalAxis = (_middleHead - _middleMouth).normalized;
+        rawVerticalAxis = (middleHead - middleMouth).normalized;
         horizontalAxis = (landmarks[8] - landmarks[7]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 headForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
@@ -127,6 +133,24 @@ public class IKTargetPos : BaseCalculation
 
         _modelTransform[2].transform.localRotation = head;
 
+
+        rawVerticalAxis = (middleLeftHand - landmarks[15]).normalized;
+        horizontalAxis = (landmarks[19] - landmarks[17]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 diffrenceVertivcalRotation = verticalAxis - _leftHandRotationOffset.eulerAngles;
+        Vector3 leftHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
+        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), new Vector3(0, 0, 1));
+        _modelTransform[3].transform.rotation = leftHand * offsetRotation;
+
+        rawVerticalAxis = (middleRightHand - landmarks[16]).normalized;
+        horizontalAxis = (landmarks[20] - landmarks[18]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 rightHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion rightHand = Quaternion.LookRotation(-rightHandForward, verticalAxis) * Quaternion.Euler(0, -90f, 0);
+        _modelTransform[4].transform.rotation = rightHand;
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
@@ -200,7 +224,11 @@ public class IKTargetPos : BaseCalculation
         {
             _modelTransform[0].transform.rotation,
             _modelTransform[1].transform.rotation,
-            _modelTransform[2].transform.rotation
+            _modelTransform[2].transform.rotation,
+            _modelTransform[3].transform.rotation,
+            _modelTransform[4].transform.rotation,
+            _modelTransform[5].transform.rotation,
+            _modelTransform[6].transform.rotation,
         };
 
         modelPos.Add(currentFrame, part_position);
