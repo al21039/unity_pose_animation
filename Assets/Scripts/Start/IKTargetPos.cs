@@ -9,17 +9,20 @@ public class IKTargetPos : BaseCalculation
     [SerializeField] GameObject[] _modelTransform = new GameObject[3];
     [SerializeField] private List<float> _hipHeightRatio = new List<float>();
     [SerializeField] private Animator _modelAnimator;
+    [SerializeField] private Transform[] _modelPartTransform = new Transform[2];
+    
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Quaternion[]> _modelQuaternion = new Dictionary<int, Quaternion[]>();
+
     
     public int currentFrame = 0;
     int totalFrames = 0;
     
     bool isCreated = false;
     bool isLoaded = false;
-    private Quaternion _leftHandRotationOffset;
-    private Quaternion _rightHandRotationOffset;
+    private Quaternion _leftFootRotationOffset;
+    private Quaternion _rightFootRotationOffset;
     
     Vector3[] before_part_position = new Vector3[4];
 
@@ -37,8 +40,8 @@ public class IKTargetPos : BaseCalculation
     private Vector3 middleThigh;
     void Start()
     {
-        _leftHandRotationOffset = _modelTransform[3].transform.rotation;
-        _rightHandRotationOffset = _modelTransform[4].transform.rotation;
+        _leftFootRotationOffset = _modelTransform[5].transform.rotation;
+        _rightFootRotationOffset = _modelTransform[6].transform.rotation;
         CalcModelDistance();
     }
 
@@ -99,7 +102,7 @@ public class IKTargetPos : BaseCalculation
 
         transform.position = new Vector3(0.0f, hipHight - 1.0f, 0.0f);
 
-        Vector3 middleHead = (landmarks[1] + landmarks[4]) / 2;
+        Vector3 middleHead = (landmarks[7] + landmarks[8]) / 2;
         Vector3 middleMouth = (landmarks[9] + landmarks[10]) / 2;
         Vector3 middleShoulder = (landmarks[11] + landmarks[12]) / 2;
         Vector3 middleThigh = (landmarks[23] + landmarks[24]) / 2;
@@ -123,36 +126,50 @@ public class IKTargetPos : BaseCalculation
         Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
         _modelTransform[1].transform.localRotation = shoulder;
 
-        rawVerticalAxis = (middleHead - middleMouth).normalized;
+        rawVerticalAxis = (middleHead - middleShoulder).normalized;
         horizontalAxis = (landmarks[8] - landmarks[7]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 headForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion head = Quaternion.LookRotation(headForward, verticalAxis);
-        head = Quaternion.Inverse(shoulder) * head;
 
-        _modelTransform[2].transform.localRotation = head;
+        _modelTransform[2].transform.rotation = head;
 
 
         rawVerticalAxis = (middleLeftHand - landmarks[15]).normalized;
-        horizontalAxis = (landmarks[17] - landmarks[19]).normalized;
+        horizontalAxis = (landmarks[19] - landmarks[17]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 leftHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
-        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), -Vector3.forward);
+        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), Vector3.forward);
 
         _modelTransform[3].transform.rotation = leftHand * offsetRotation;
 
         rawVerticalAxis = (middleRightHand - landmarks[16]).normalized;
-        horizontalAxis = (landmarks[20] - landmarks[18]).normalized;
+        horizontalAxis = (landmarks[18] - landmarks[20]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 rightHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion rightHand = Quaternion.LookRotation(rightHandForward, verticalAxis);
-        offsetRotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), -Vector3.forward);
+        offsetRotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), Vector3.forward);
 
         _modelTransform[4].transform.rotation = rightHand * offsetRotation;
+
+        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]).normalized;
+        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+
+        var targetRotation = Quaternion.FromToRotation(_modelPartTransform[0].forward, leftHandForward);
+
+        _modelTransform[5].transform.rotation = Quaternion.Inverse(_modelPartTransform[0].parent.rotation) * targetRotation;
+
+
+        Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+
+        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+        _modelTransform[6].transform.rotation = rightFootForward * targetRotation;
+
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
