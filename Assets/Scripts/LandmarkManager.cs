@@ -166,7 +166,6 @@ public class LandmarkManager : MonoBehaviour
         Application.targetFrameRate = 30;
     }
 
-
     private void SetJsonLandmark()
     {
         GameObject imageModel = Instantiate(_jsonModel, Vector3.zero, Quaternion.identity);

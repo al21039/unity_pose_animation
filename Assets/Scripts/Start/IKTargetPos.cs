@@ -306,6 +306,7 @@ public class IKTargetPos : BaseCalculation
     //キーポーズの摘出
     void DetectionKeyPose()
     {
+        /*
         bool serial = false;
         bool first = true;
         int num = 0;
@@ -406,6 +407,7 @@ public class IKTargetPos : BaseCalculation
                 }
             }
         }
+        */
 
         if(KeyPose_List.Count <= 3)
         {
@@ -414,7 +416,7 @@ public class IKTargetPos : BaseCalculation
 
             for(int i = 1; i < totalFrames - 5; i++)
             {
-                if(i % 10 == 0 && (totalFrames -1) - i >= 5)
+                if(i % 5 == 0 && (totalFrames -1) - i >= 5)
                 {
                     KeyPose_List.Add(i);
                 }

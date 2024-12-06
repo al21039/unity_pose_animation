@@ -61,6 +61,53 @@ public class LineInterpolation : MonoBehaviour
         }
     }
 
+    public void InterpolationJson(int index)
+    {
+        GetRequiredValue();
+
+
+
+        if (index == 0)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                SetFirstFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
+            }
+        }
+        else if (index == _keyPoseList.Count - 1)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                SetLastFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
+            }
+        }
+        else if (index == 1)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                SetSecondLinePos(_changedPos[_keyPoseList[index]][j], j, false);
+                SetOtherAfterLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
+            }
+        }
+        else if (index == _keyPoseList.Count - 2)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                SetOtherBeforeLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
+                SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
+            }
+        }
+        else
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                SetOtherAfterLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
+                SetOtherBeforeLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
+            }
+        }
+
+    }
+
     public void SetSplineAndJointPosition(int frame, Vector3 targetPosition, int positionID)
     {
         GetRequiredValue();
@@ -98,12 +145,6 @@ public class LineInterpolation : MonoBehaviour
             }
         }     
     }
-
-    private void InitializeFirstFrameLinePos(Vector3 targetPosition, int positionID)
-    {
-
-    }
-
 
     //Å‰‚ÌƒtƒŒ[ƒ€‚Ì•ÒWŽž
     public void SetFirstFrameLinePos(Vector3 targetPosition, int positionID, bool isFirst)

@@ -21,6 +21,7 @@ public class CreateFromJSON : BaseCalculation
     }
 
     [SerializeField] GameObject[] modelPartObject;
+    [SerializeField] GameObject[] _modelRotation;
 
     private Vector3[] landmarksArray;
     private float[] _modelPartDistance;
@@ -81,16 +82,18 @@ public class CreateFromJSON : BaseCalculation
         }
 
         return landmarkArray;
-
     }
 
     private void SetNewPosition()
     {
+        Vector3 middleHead = (landmarksArray[7] + landmarksArray[8]) / 2;
+        Vector3 middleMouth = (landmarksArray[9] + landmarksArray[10]) / 2;
+        Vector3 middleShoulder = (landmarksArray[11] + landmarksArray[12]) / 2;
+        Vector3 middleThigh = (landmarksArray[23] + landmarksArray[24]) / 2;
+        Vector3 middleLeftHand = (landmarksArray[17] + landmarksArray[19]) / 2;
+        Vector3 middleRightHand = (landmarksArray[18] + landmarksArray[20]) / 2;
 
-        Vector3 _middleShoulder = (landmarksArray[11] + landmarksArray[12]) / 2;
-        Vector3 _middleThigh = (landmarksArray[23] + landmarksArray[24]) / 2;
-
-        Vector3 rawVerticalAxis = (_middleShoulder - _middleThigh).normalized;
+        Vector3 rawVerticalAxis = (middleShoulder - middleThigh).normalized;
         Vector3 horizontalAxis = (landmarksArray[24] - landmarksArray[23]).normalized;
 
         Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
@@ -98,14 +101,58 @@ public class CreateFromJSON : BaseCalculation
         Vector3 hipForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion hip = Quaternion.LookRotation(hipForward, verticalAxis);
-        modelPartObject[0].transform.rotation = hip;
+        _modelRotation[0].transform.rotation = hip;
 
         horizontalAxis = (landmarksArray[12] - landmarksArray[11]).normalized;
         verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
         Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
 
         Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
-        modelPartObject[2].transform.rotation = shoulder;
+        _modelRotation[1].transform.rotation = shoulder;
+
+        rawVerticalAxis = (middleHead - middleShoulder).normalized;
+        horizontalAxis = (landmarksArray[8] - landmarksArray[7]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 headForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion head = Quaternion.LookRotation(headForward, verticalAxis);
+
+        _modelRotation[2].transform.rotation = head;
+
+
+        rawVerticalAxis = (middleLeftHand - landmarksArray[15]).normalized;
+        horizontalAxis = (landmarksArray[19] - landmarksArray[17]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 leftHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
+        var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), Vector3.forward);
+
+        _modelRotation[3].transform.rotation = leftHand * offsetRotation;
+
+        rawVerticalAxis = (middleRightHand - landmarksArray[16]).normalized;
+        horizontalAxis = (landmarksArray[18] - landmarksArray[20]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 rightHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion rightHand = Quaternion.LookRotation(rightHandForward, verticalAxis);
+        offsetRotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), Vector3.forward);
+
+        _modelRotation[4].transform.rotation = rightHand * offsetRotation;
+
+        Vector3 leftFootDirection = (landmarksArray[31] - landmarksArray[29]).normalized;
+        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+
+        var targetRotation = Quaternion.FromToRotation(Vector3.up, leftHandForward);
+
+        _modelRotation[5].transform.rotation = leftFootForward * targetRotation;
+
+
+        Vector3 rightFootDirection = (landmarksArray[32] - landmarksArray[30]).normalized;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+
+        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+        _modelRotation[6].transform.rotation = rightFootForward * targetRotation;
 
         modelPartObject[1].transform.position = (_mediaPipePositions[1] - _mediaPipePositions[0]) * _distanceDiff[0] + modelPartObject[0].transform.position;
         modelPartObject[2].transform.position = (_mediaPipePositions[2] - _mediaPipePositions[1]) * _distanceDiff[1] + modelPartObject[1].transform.position;
@@ -144,10 +191,15 @@ public class CreateFromJSON : BaseCalculation
             modelPartObject[18].transform.position
         };
 
-        _modelPartRotation = new Quaternion[2]
+        _modelPartRotation = new Quaternion[7]
         {
-            modelPartObject[0].transform.rotation,
-            modelPartObject[2].transform.rotation
+            _modelRotation[0].transform.rotation,
+            _modelRotation[1].transform.rotation,
+            _modelRotation[2].transform.rotation,
+            _modelRotation[3].transform.rotation,
+            _modelRotation[4].transform.rotation,
+            _modelRotation[5].transform.rotation,
+            _modelRotation[6].transform.rotation
         };
 
         StartCoroutine(CaptureScreenshot());

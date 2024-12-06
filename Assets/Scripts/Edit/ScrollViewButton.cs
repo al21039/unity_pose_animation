@@ -9,13 +9,13 @@ public class ScrollViewButton : MonoBehaviour
     [SerializeField] private GameObject buttonPrefab;         // ボタンのプレハブ
     [SerializeField] private Transform contentParent;         // Scroll ViewのContent（ボタンを配置する親）
     [SerializeField] private LineInterpolation _lineInterpolation;
-    [SerializeField] private int _addFrame = 100;
+    [SerializeField] private int _addFrame = 32;
     private Texture2D[] loadedImages;
     private float _frameInterval = 0.30f;
 
     public void LoadImagesFromFolder()
     {
-        
+
         string absoluteFolderPath = Path.Combine(Application.dataPath, LandmarkManager.GetInstance().FileName);
 
         if (!Directory.Exists(absoluteFolderPath))
@@ -78,11 +78,11 @@ public class ScrollViewButton : MonoBehaviour
     {
         Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(buttonNo);
         Quaternion[] JsonRotation = LandmarkManager.GetInstance().JSONLandmarkRotations(buttonNo);
-        Dictionary<int, Vector3[]> changedPos = EditManager.GetInstance().ChangePos;   
+        Dictionary<int, Vector3[]> changedPos = EditManager.GetInstance().ChangePos;
         Dictionary<int, Quaternion[]> changedRot = EditManager.GetInstance().ChangeRot;
         List<int> keyPoseList = LandmarkManager.GetInstance().KeyPoseList;
 
-        if(!keyPoseList.Contains(_addFrame))
+        if (!keyPoseList.Contains(_addFrame))
         {
             int index = keyPoseList.BinarySearch(_addFrame);
             if (index < 0)
@@ -93,17 +93,17 @@ public class ScrollViewButton : MonoBehaviour
             keyPoseList.Insert(index, _addFrame);
             changedPos[_addFrame] = JsonLandmark;
             changedRot[_addFrame] = JsonRotation;
-            EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index, JsonRotation);
             LandmarkManager.GetInstance().KeyPoseList = keyPoseList;
             EditManager.GetInstance().ChangePos = changedPos;
 
+            EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index, JsonRotation);
 
             for (int i = 0; i < 4; i++)
             {
                 Spline.GetInstance().SetSpline(i, _addFrame, JsonLandmark[i] + new Vector3(0, 0, _addFrame * _frameInterval));
             }
 
-            _lineInterpolation.InterpolationAllLine();
-        } 
+            _lineInterpolation.InterpolationJson(index);
+        }
     }
 }

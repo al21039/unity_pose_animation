@@ -90,7 +90,7 @@ public class EditManager : MonoBehaviour
 
     public void SetFrameHipHeight(int frame, float hipHeight)
     {
-        _heightInterpolationer.Interpolation(frame, hipHeight + 1);
+        _heightInterpolationer.Interpolation(frame, hipHeight);
     }
 
     private static EditManager instance;
