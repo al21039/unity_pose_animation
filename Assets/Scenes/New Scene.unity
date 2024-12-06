@@ -7161,6 +7161,7 @@ GameObject:
   - component: {fileID: 2108368689}
   - component: {fileID: 2108368690}
   - component: {fileID: 2108368691}
+  - component: {fileID: 2108368692}
   m_Layer: 0
   m_Name: EditManager
   m_TagString: Untagged
@@ -7189,6 +7190,7 @@ MonoBehaviour:
   _cubePrefab: {fileID: 3094057138889818175, guid: b5cab63a2900d6b4db3a7393070ea700, type: 3}
   _celllingPrefab: {fileID: 2755290245810966149, guid: e77763e8424860c42b31b87b225e4a44, type: 3}
   _heightInterpolationer: {fileID: 2108368691}
+  _rotationInterpolationer: {fileID: 2108368692}
 --- !u!4 &2108368687
 Transform:
   m_ObjectHideFlags: 0
@@ -7262,6 +7264,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf30f2045d4a01849a57808948c1726f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2108368692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108368685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15324f2fad5555e448ea59da591ff424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2112790248
