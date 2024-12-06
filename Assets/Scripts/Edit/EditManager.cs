@@ -13,6 +13,7 @@ public class EditManager : MonoBehaviour
     [SerializeField] private GameObject _cubePrefab;
     [SerializeField] private GameObject _celllingPrefab;
     [SerializeField] private HeightInterpolationer _heightInterpolationer;
+    [SerializeField] private QuaternionInterpolationer _rotationInterpolationer;
 
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
@@ -161,6 +162,9 @@ public class EditManager : MonoBehaviour
         cube.transform.parent = humanoid.transform;
         humanoid.name = frame + "_frame_model";
         _keyPoseModel.Insert(listIndex, humanoid);
+
+        _rotationInterpolationer.Interpolation(listIndex);
+
         SetAnimationTransform setAnimationTransform = humanoid.GetComponent<SetAnimationTransform>();
         setAnimationTransform.SetPartTransform(frame, posList, posRot, 1.0f);
     }

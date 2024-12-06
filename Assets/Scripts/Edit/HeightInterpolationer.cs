@@ -114,8 +114,8 @@ public class HeightInterpolationer : MonoBehaviour
         float[] beforePoints = new float[numberOfPoints];
         beforePoints[numberOfPoints - 1] = hipHeight;
 
-        float p0 = hipHeight;
-        float p1 = hipHeight;
+        float p0 = _heightPosition[previousKey];
+        float p1 = _heightPosition[previousKey];
         float p2 = hipHeight;
         float p3 = _heightPosition[afterKey];
         for (int i = 0; i < numberOfPoints - 1; i++)
