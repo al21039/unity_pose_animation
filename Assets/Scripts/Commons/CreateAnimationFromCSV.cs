@@ -94,6 +94,18 @@ public class CreateAnimationFromCSV : MonoBehaviour
         AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick.anim"));
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
+
+        AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        animator.runtimeAnimatorController = overrideController;
+
+        overrideController["DefaultHumanoidAnimation"] = animclip;
+        animator.Play("DefaultHumanoidAnimation");
+
+        
+        
+        
+        
     }
 
     List<HumanPose> ReadCSVToHumanPoses(string csvText)
@@ -102,11 +114,9 @@ public class CreateAnimationFromCSV : MonoBehaviour
 
         try
         {
-            // テキストデータを行ごとに分割
             string[] lines = csvText.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
             {
-                // CSVの1行をカンマで分割
                 string[] values = line.Split(',');
 
                 if (values.Length < 3 + 3 + HumanTrait.MuscleCount)
@@ -115,17 +125,14 @@ public class CreateAnimationFromCSV : MonoBehaviour
                     continue;
                 }
 
-                // HumanPoseを再構築
                 var pose = new HumanPose();
 
-                // BodyPosition (x, y, z)
                 pose.bodyPosition = new Vector3(
                     float.Parse(values[0]),
                     float.Parse(values[1]),
                     float.Parse(values[2])
                 );
 
-                // BodyRotation (Euler角 → Quaternion)
                 Quaternion eulerRotation = new Quaternion(
                     float.Parse(values[3]),
                     float.Parse(values[4]),
@@ -134,7 +141,6 @@ public class CreateAnimationFromCSV : MonoBehaviour
                 );
                 pose.bodyRotation = eulerRotation;
 
-                // Muscles
                 pose.muscles = new float[HumanTrait.MuscleCount];
                 for (int i = 0; i < HumanTrait.MuscleCount; i++)
                 {

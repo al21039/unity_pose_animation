@@ -2265,7 +2265,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Weight: 1
-  m_Effectors: []
+  m_Effectors:
+  - m_Transform: {fileID: 6654864398598934527}
+    m_Style:
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
 --- !u!1 &5778414244465829336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,7 +2602,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 6228209510446254324}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2602,7 +2610,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 3862988131655119239}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2610,7 +2618,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 4266461671472054775}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2618,7 +2626,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 133889535148059737}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2626,7 +2634,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 6213775108392416492}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2634,7 +2642,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 635559711632165911}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2642,7 +2650,7 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 6401398342903636167}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -2650,7 +2658,23 @@ MonoBehaviour:
     m_Visible: 1
   - m_Transform: {fileID: 6966088027074494547}
     m_Style:
-      shape: {fileID: 0}
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
+  - m_Transform: {fileID: 8116719905004634720}
+    m_Style:
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
+  - m_Transform: {fileID: 7919856835794945964}
+    m_Style:
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
       color: {r: 1, g: 0, b: 0, a: 0.5}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
@@ -3382,7 +3406,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7478624704600419168}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 

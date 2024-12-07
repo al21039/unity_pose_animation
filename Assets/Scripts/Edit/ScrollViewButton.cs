@@ -51,11 +51,20 @@ public class ScrollViewButton : MonoBehaviour
             // ボタンプレハブをインスタンス化
             GameObject buttonInstance = Instantiate(buttonPrefab, contentParent);
 
-            // Image コンポーネントを取得し、null チェックを追加
-            Image buttonImage = buttonInstance.GetComponent<Image>();
+            // ボタンコンポーネントの取得
+            Button button = buttonInstance.GetComponent<Button>();
+            if (button == null)
+            {
+                Debug.LogError("ボタンプレハブに Button コンポーネントがありません。");
+                Destroy(buttonInstance);
+                continue;
+            }
+
+            // Image コンポーネントの取得（ボタン内部の子オブジェクトにアタッチされている場合）
+            Image buttonImage = buttonInstance.GetComponentInChildren<Image>();
             if (buttonImage == null)
             {
-                Debug.LogError("ボタンプレハブに Image コンポーネントがありません。");
+                Debug.LogError("ボタンプレハブに Image コンポーネントが見つかりません。");
                 Destroy(buttonInstance);
                 continue;
             }
@@ -67,15 +76,21 @@ public class ScrollViewButton : MonoBehaviour
                 new Vector2(0.5f, 0.5f)
             );
 
-            // 必要であればボタンに他の設定（例えば名前やイベントリスナー）も追加
-            buttonInstance.name = count.ToString();
-            buttonInstance.GetComponent<Button>().onClick.AddListener(() => OnButtonClick(count));
+            // 名前を設定
+            buttonInstance.name = "Button_" + count;
+
+            // ローカル変数でキャプチャを回避
+            int buttonIndex = count;
+            button.onClick.AddListener(() => OnButtonClick(buttonIndex));
+
             count++;
         }
     }
 
     void OnButtonClick(int buttonNo)
     {
+        Debug.Log(buttonNo);
+
         Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(buttonNo);
         Quaternion[] JsonRotation = LandmarkManager.GetInstance().JSONLandmarkRotations(buttonNo);
         Dictionary<int, Vector3[]> changedPos = EditManager.GetInstance().ChangePos;
@@ -95,6 +110,7 @@ public class ScrollViewButton : MonoBehaviour
             changedRot[_addFrame] = JsonRotation;
             LandmarkManager.GetInstance().KeyPoseList = keyPoseList;
             EditManager.GetInstance().ChangePos = changedPos;
+            EditManager.GetInstance().ChangeRot = changedRot;
 
             EditManager.GetInstance().SetJsonPosition(_addFrame, JsonLandmark, index, JsonRotation);
 

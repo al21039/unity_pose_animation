@@ -63,12 +63,12 @@ public class LandmarkManager : MonoBehaviour
 
     public Vector3[] JSONLandmarkPositions(int jsonFileNo)
     {
-            return _jsonLandmarkPositions[jsonFileNo - 1];   
+            return _jsonLandmarkPositions[jsonFileNo];   
     }
 
     public Quaternion[] JSONLandmarkRotations(int jsonFileNo)
     {
-        return _jsonLandmarkRotations[jsonFileNo - 1];
+        return _jsonLandmarkRotations[jsonFileNo];
     }
 
     public int TotalFrame

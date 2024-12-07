@@ -10965,6 +10965,7 @@ MonoBehaviour:
   - {fileID: 4467197645985234785}
   - {fileID: 1579671937957913429}
   - {fileID: 5888979980783916966}
+  - {fileID: 5888979980783916966}
   _hipHeightRatio: []
   _modelAnimator: {fileID: 3757575868436173462}
   _modelPartTransform:

@@ -13,7 +13,7 @@ public class LineInterpolation : MonoBehaviour
         _keyPoseList = EditManager.GetInstance().KeyPoseList;
     }
 
-    public void InterpolationAllLine()
+    public void InterpolationAllLine(bool isFirst)
     {
         GetRequiredValue();
 
@@ -22,40 +22,40 @@ public class LineInterpolation : MonoBehaviour
         {
             if (i == 0)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    SetFirstFrameLinePos(_changedPos[_keyPoseList[i]][j], j, true);
+                    SetFirstFrameLinePos(_changedPos[_keyPoseList[i]][j], j, isFirst);
                 }
             }
             else if (i == _keyPoseList.Count - 1)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    SetLastFrameLinePos(_changedPos[_keyPoseList[i]][j], j, true);
+                    SetLastFrameLinePos(_changedPos[_keyPoseList[i]][j], j, isFirst);
                 }
             }           
             else if(i == 1)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    SetSecondLinePos(_changedPos[_keyPoseList[i]][j], j, true);
-                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], true);
+                    SetSecondLinePos(_changedPos[_keyPoseList[i]][j], j, isFirst);
+                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], isFirst);
                 }
             } 
             else if(i == _keyPoseList.Count - 2)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], true);
-                    SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[i]][j], j, true);
+                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], isFirst);
+                    SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[i]][j], j, isFirst);
                 }
             }
             else
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], true);
-                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], true);
+                    SetOtherAfterLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], isFirst);
+                    SetOtherBeforeLinePos(_changedPos[_keyPoseList[i]][j], j, _keyPoseList[i], isFirst);
                 }
             }    
         }
@@ -69,21 +69,21 @@ public class LineInterpolation : MonoBehaviour
 
         if (index == 0)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SetFirstFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
             }
         }
         else if (index == _keyPoseList.Count - 1)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SetLastFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
             }
         }
         else if (index == 1)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SetSecondLinePos(_changedPos[_keyPoseList[index]][j], j, false);
                 SetOtherAfterLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
@@ -91,7 +91,7 @@ public class LineInterpolation : MonoBehaviour
         }
         else if (index == _keyPoseList.Count - 2)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SetOtherBeforeLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
                 SetSecondToLastFrameLinePos(_changedPos[_keyPoseList[index]][j], j, false);
@@ -99,7 +99,7 @@ public class LineInterpolation : MonoBehaviour
         }
         else
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SetOtherAfterLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);
                 SetOtherBeforeLinePos(_changedPos[_keyPoseList[index]][j], j, _keyPoseList[index], false);

@@ -31,6 +31,7 @@ public class BaseCalculation : MonoBehaviour
             modelDistance[13] = CalcDictance(modelObjects[17], modelObjects[18]);
 
         }
+
         return modelDistance;
     }
 
@@ -62,7 +63,7 @@ public class BaseCalculation : MonoBehaviour
         return mediaPipeDistance;
     }
 
-    private float CalcDictance(GameObject a, GameObject b)
+    public float CalcDictance(GameObject a, GameObject b)
     {
         return Vector3.Distance(a.transform.position, b.transform.position);   
     }

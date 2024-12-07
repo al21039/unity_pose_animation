@@ -9,6 +9,7 @@ public class SetNewPosition : MonoBehaviour
     [SerializeField] private GameObject[] modelPartObject;
     [SerializeField] private GameObject[] rotationObject;
     [SerializeField] private Animator _thisAnimator;
+    [SerializeField] private GameObject _hipObject;
 
     private Dictionary<int, Vector3[]> _changedPosition;
     private Dictionary<int, Quaternion[]> _chagedRotation;
@@ -47,7 +48,6 @@ public class SetNewPosition : MonoBehaviour
                 _firstLoop = false;
             }
             currentFrame = 0;
-
         }
     }
 
@@ -78,7 +78,7 @@ public class SetNewPosition : MonoBehaviour
 
         _humanPoseHandler.GetHumanPose(ref _humanPose);
         _humanPose.bodyPosition = transform.position + Vector3.up;
-        _humanPose.bodyRotation = _chagedRotation[currentFrame][0];
+        _humanPose.bodyRotation = _hipObject.transform.rotation;
         
         _humanPoses.Add(_humanPose);
     }

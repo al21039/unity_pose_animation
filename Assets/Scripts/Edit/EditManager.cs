@@ -85,7 +85,7 @@ public class EditManager : MonoBehaviour
         int listNo = _keyPoseList.IndexOf(index);
         _keyPoseList.RemoveAt(listNo);
         _keyPoseModel.RemoveAt(listNo);
-        _lineInterpolation.InterpolationAllLine();
+        _lineInterpolation.InterpolationAllLine(false);
     }
 
     public void SetFrameHipHeight(int frame, float hipHeight)
@@ -136,7 +136,7 @@ public class EditManager : MonoBehaviour
         }
 
         _scrollViewButton.LoadImagesFromFolder();
-        _lineInterpolation.InterpolationAllLine();
+        _lineInterpolation.InterpolationAllLine(true);
         _uiListener.ChangeUIDisplay(true);
         for (int i = 0; i < 4; i++)
         {
@@ -157,6 +157,7 @@ public class EditManager : MonoBehaviour
 
     public void SetJsonPosition(int frame, Vector3[] posList, int listIndex, Quaternion[] posRot)
     {
+        Debug.Log("画像から追加");
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0, 0, frame * _frameInterval), Quaternion.identity);
         GameObject cube = Instantiate(_cubePrefab, new Vector3(1.5f, 0.387f, frame * _frameInterval), Quaternion.identity);
         cube.transform.parent = humanoid.transform;
@@ -169,6 +170,7 @@ public class EditManager : MonoBehaviour
         setAnimationTransform.SetPartTransform(frame, posList, posRot, 1.0f);
     }
 
+    //編集したアニメーションを表示
     public void DisplayNewAnimation()
     {
         HumanPose[] _keyPoseHumanPose = new HumanPose[_keyPoseList.Count];

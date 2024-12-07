@@ -17,7 +17,7 @@ public class QuaternionInterpolationer : MonoBehaviour
     {
         _QuaternionDic = EditManager.GetInstance().ChangeRot;
 
-        if (listIndex >= 1 && listIndex <= _keyPoseList.Count - 2)
+        if (listIndex >= 1 || listIndex <= _keyPoseList.Count - 2)
         {
             ChangeRotation(listIndex);
         }
@@ -54,6 +54,7 @@ public class QuaternionInterpolationer : MonoBehaviour
             for (int j = 0; j < numberOfPoints; j++)
             {
                 _QuaternionDic[j + previousKey + 1][i] = beforePoints[j];
+                Debug.Log(j + previousKey + 1);
             }
         }
 
@@ -81,6 +82,7 @@ public class QuaternionInterpolationer : MonoBehaviour
             for (int j = 0; j < numberOfPoints; j++)
             {
                 _QuaternionDic[j + currentKey][i] = afterPoints[j];
+                Debug.Log(j + currentKey);
             }
         }
 

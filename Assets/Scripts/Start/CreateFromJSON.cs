@@ -69,6 +69,11 @@ public class CreateFromJSON : BaseCalculation
         SetNewPosition();
     }
 
+    private void Update()
+    {
+
+    }
+
     private Vector3[] DetectionLandmarkPosition(TextAsset jsonData)
     {
         LandmarkData landmarkData = JsonUtility.FromJson<LandmarkData>(jsonData.text);
@@ -118,7 +123,6 @@ public class CreateFromJSON : BaseCalculation
         Quaternion head = Quaternion.LookRotation(headForward, verticalAxis);
 
         _modelRotation[2].transform.rotation = head;
-
 
         rawVerticalAxis = (middleLeftHand - landmarksArray[15]).normalized;
         horizontalAxis = (landmarksArray[19] - landmarksArray[17]).normalized;
@@ -208,8 +212,8 @@ public class CreateFromJSON : BaseCalculation
 
     private void CreatedAnimation()
     {
-        LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition, _modelPartRotation);
-        Destroy(gameObject);
+        //LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition, _modelPartRotation);
+        //Destroy(gameObject);
     }
 
 
@@ -244,5 +248,4 @@ public class CreateFromJSON : BaseCalculation
         Destroy(screenshot);
         CreatedAnimation();
     }
-
 }
