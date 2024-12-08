@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIListener : MonoBehaviour
 {
     [SerializeField] private GameObject[] _UIs;
-    [SerializeField] private GameObject _scrollView;
+    [SerializeField] private ScrollViewButton _scrollViewButton;
+    [SerializeField] private GameObject _addModelView;
     [SerializeField] private GameObject _heightClacButton;
 
     public void OnClickedLeftHandSplineButton()
@@ -36,7 +38,8 @@ public class UIListener : MonoBehaviour
         _UIs[5].SetActive(!_UIs[5].activeSelf);
         _UIs[6].SetActive(!_UIs[6].activeSelf);
         _UIs[8].SetActive(!_UIs[8].activeSelf);
-        _scrollView.SetActive(!_scrollView.activeSelf);
+        _addModelView.SetActive(!_addModelView.activeSelf);
+        _scrollViewButton.DeleteAddFrameIndex();
     }
 
     public void ChangeUIDisplay(bool status)
@@ -49,7 +52,7 @@ public class UIListener : MonoBehaviour
 
     public void ChangeScrollDisplay(bool status)
     {
-        _scrollView.SetActive(status);
+        _addModelView.SetActive(status);
     }
 
     public void OnClickedIndirectButton()

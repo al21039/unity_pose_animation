@@ -31,6 +31,8 @@ public class CreateFromJSON : BaseCalculation
     private Vector3[] _modelPartPosition;
     private Quaternion[] _modelPartRotation;
 
+    private bool _isPrepared = false;
+
 
     public void SetJsonLandmark(TextAsset textFile)
     {
@@ -66,18 +68,11 @@ public class CreateFromJSON : BaseCalculation
         _modelPartDistance = ReturnDistance(modelPartObject);
         _mediapipePartDistance = ReturnDistance(_mediaPipePositions);
         _distanceDiff = ReturnDiff(_modelPartDistance, _mediapipePartDistance);
-        SetNewPosition();
+        StartCoroutine(SetNewPosition());
     }
-
-    private void Update()
-    {
-
-    }
-
     private Vector3[] DetectionLandmarkPosition(TextAsset jsonData)
     {
         LandmarkData landmarkData = JsonUtility.FromJson<LandmarkData>(jsonData.text);
-
         Vector3[] landmarkArray = new Vector3[landmarkData.num_landmarks];
 
         for (int i = 0; i < landmarkData.num_landmarks; i++)
@@ -85,11 +80,10 @@ public class CreateFromJSON : BaseCalculation
             Landmark lm = landmarkData.landmarks[i];
             landmarkArray[i] = new Vector3(-lm.x, -lm.y + 1, -lm.z);
         }
-
         return landmarkArray;
     }
 
-    private void SetNewPosition()
+    IEnumerator SetNewPosition()
     {
         Vector3 middleHead = (landmarksArray[7] + landmarksArray[8]) / 2;
         Vector3 middleMouth = (landmarksArray[9] + landmarksArray[10]) / 2;
@@ -132,7 +126,7 @@ public class CreateFromJSON : BaseCalculation
         Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
         var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), Vector3.forward);
 
-        _modelRotation[3].transform.rotation = leftHand * offsetRotation;
+        _modelRotation[3].transform.rotation = leftHand * Quaternion.Euler(0, 90, 0);
 
         rawVerticalAxis = (middleRightHand - landmarksArray[16]).normalized;
         horizontalAxis = (landmarksArray[18] - landmarksArray[20]).normalized;
@@ -142,7 +136,7 @@ public class CreateFromJSON : BaseCalculation
         Quaternion rightHand = Quaternion.LookRotation(rightHandForward, verticalAxis);
         offsetRotation = Quaternion.FromToRotation(new Vector3(1, 0, 0), Vector3.forward);
 
-        _modelRotation[4].transform.rotation = rightHand * offsetRotation;
+        _modelRotation[4].transform.rotation = rightHand * Quaternion.Euler(0, -90, 0);
 
         Vector3 leftFootDirection = (landmarksArray[31] - landmarksArray[29]).normalized;
         Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
@@ -158,25 +152,30 @@ public class CreateFromJSON : BaseCalculation
         targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
         _modelRotation[6].transform.rotation = rightFootForward * targetRotation;
 
+
+        yield return null;
+
         modelPartObject[1].transform.position = (_mediaPipePositions[1] - _mediaPipePositions[0]) * _distanceDiff[0] + modelPartObject[0].transform.position;
         modelPartObject[2].transform.position = (_mediaPipePositions[2] - _mediaPipePositions[1]) * _distanceDiff[1] + modelPartObject[1].transform.position;
 
+        yield return null;
+
         modelPartObject[4].transform.position = (_mediaPipePositions[4] - _mediaPipePositions[3]) * _distanceDiff[2] + modelPartObject[3].transform.position;
-        modelPartObject[5].transform.position = (_mediaPipePositions[5] - _mediaPipePositions[4]) * _distanceDiff[3] + modelPartObject[4].transform.position;
-        modelPartObject[6].transform.position = (_mediaPipePositions[6] - _mediaPipePositions[5]) * _distanceDiff[4] + modelPartObject[5].transform.position;     
-
         modelPartObject[8].transform.position = (_mediaPipePositions[8] - _mediaPipePositions[7]) * _distanceDiff[5] + modelPartObject[7].transform.position;
-        modelPartObject[9].transform.position = (_mediaPipePositions[9] - _mediaPipePositions[8]) * _distanceDiff[6] + modelPartObject[8].transform.position;
-        modelPartObject[10].transform.position = (_mediaPipePositions[10] - _mediaPipePositions[9]) * _distanceDiff[7] + modelPartObject[9].transform.position;
-
         modelPartObject[12].transform.position = (_mediaPipePositions[12] - _mediaPipePositions[11]) * _distanceDiff[8] + modelPartObject[11].transform.position;
-        modelPartObject[13].transform.position = (_mediaPipePositions[13] - _mediaPipePositions[12]) * _distanceDiff[9] + modelPartObject[12].transform.position;
-        modelPartObject[14].transform.position = (_mediaPipePositions[14] - _mediaPipePositions[13]) * _distanceDiff[10] + modelPartObject[13].transform.position;
-
         modelPartObject[16].transform.position = (_mediaPipePositions[16] - _mediaPipePositions[15]) * _distanceDiff[11] + modelPartObject[15].transform.position;
-        modelPartObject[17].transform.position = (_mediaPipePositions[17] - _mediaPipePositions[16]) * _distanceDiff[12] + modelPartObject[16].transform.position;
-        modelPartObject[18].transform.position = (_mediaPipePositions[18] - _mediaPipePositions[17]) * _distanceDiff[13] + modelPartObject[17].transform.position;
 
+        yield return null;
+
+        modelPartObject[5].transform.position = (_mediaPipePositions[5] - _mediaPipePositions[4]) * _distanceDiff[3] + modelPartObject[4].transform.position;
+        modelPartObject[9].transform.position = (_mediaPipePositions[9] - _mediaPipePositions[8]) * _distanceDiff[6] + modelPartObject[8].transform.position;
+        modelPartObject[13].transform.position = (_mediaPipePositions[13] - _mediaPipePositions[12]) * _distanceDiff[9] + modelPartObject[12].transform.position;
+        modelPartObject[17].transform.position = (_mediaPipePositions[17] - _mediaPipePositions[16]) * _distanceDiff[12] + modelPartObject[16].transform.position;
+
+        modelPartObject[6].transform.position = (_mediaPipePositions[6] - _mediaPipePositions[5]) * _distanceDiff[4] + modelPartObject[5].transform.position;
+        modelPartObject[10].transform.position = (_mediaPipePositions[10] - _mediaPipePositions[9]) * _distanceDiff[7] + modelPartObject[9].transform.position;
+        modelPartObject[14].transform.position = (_mediaPipePositions[14] - _mediaPipePositions[13]) * _distanceDiff[10] + modelPartObject[13].transform.position;
+        modelPartObject[18].transform.position = (_mediaPipePositions[18] - _mediaPipePositions[17]) * _distanceDiff[13] + modelPartObject[17].transform.position;
 
         _modelPartPosition = new Vector3[14] {
             modelPartObject[5].transform.position,
@@ -212,8 +211,8 @@ public class CreateFromJSON : BaseCalculation
 
     private void CreatedAnimation()
     {
-        //LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition, _modelPartRotation);
-        //Destroy(gameObject);
+        LandmarkManager.GetInstance().SetJsonLandmarkPosition(_modelPartPosition, _modelPartRotation);
+        Destroy(gameObject);
     }
 
 
@@ -244,6 +243,7 @@ public class CreateFromJSON : BaseCalculation
 
         LandmarkManager.GetInstance().FileName = folderPath + startDate;
 
+        yield return new WaitForEndOfFrame();
         // テクスチャを破棄
         Destroy(screenshot);
         CreatedAnimation();

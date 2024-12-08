@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -23,6 +24,8 @@ public class IKTargetPos : BaseCalculation
     bool isLoaded = false;
     private Quaternion _leftFootRotationOffset;
     private Quaternion _rightFootRotationOffset;
+    private Quaternion _leftHandRotationOffset;
+    private Quaternion _rightHandRotationOffset;
     
     Vector3[] before_part_position = new Vector3[4];
 
@@ -36,12 +39,13 @@ public class IKTargetPos : BaseCalculation
     private float[] _modelLimbDistance;
     private float[] _mediaPipeLimbDistance;
 
-    private Vector3 middleShoulder;
-    private Vector3 middleThigh;
     void Start()
     {
+        _leftHandRotationOffset = _modelPartTransform[0].rotation;
+        _rightHandRotationOffset = _modelPartTransform[1].rotation;
         _leftFootRotationOffset = _modelTransform[5].transform.rotation;
         _rightFootRotationOffset = _modelTransform[6].transform.rotation;
+        Debug.Log(_leftHandRotationOffset.eulerAngles);
         CalcModelDistance();
     }
 
@@ -50,7 +54,14 @@ public class IKTargetPos : BaseCalculation
     {
         if (isLoaded && !isCreated)
         {
-            CreateAnimation();
+            if (currentFrame == 0) { 
+                StartCoroutine(CreateFramePose());
+            }
+            else
+            {
+                StartCoroutine(CreateFramePose());
+                //CreateAnimation();
+            }
         }
     }
     private void CalcModelDistance()
@@ -91,6 +102,181 @@ public class IKTargetPos : BaseCalculation
             }
         }
         isLoaded = true;
+    }
+
+    IEnumerator CreateFramePose()
+    {
+        //フレーム毎の各ランドマーク座標
+        Vector3[] landmarks = landmarkData[currentFrame];
+        float hipHight = _hipHeightRatio[currentFrame];
+
+        transform.position = new Vector3(0.0f, hipHight - 1.0f, 0.0f);
+
+        Vector3 middleHead = (landmarks[7] + landmarks[8]) / 2;
+        Vector3 middleMouth = (landmarks[9] + landmarks[10]) / 2;
+        Vector3 middleShoulder = (landmarks[11] + landmarks[12]) / 2;
+        Vector3 middleThigh = (landmarks[23] + landmarks[24]) / 2;
+        Vector3 middleLeftHand = (landmarks[17] + landmarks[19]) / 2;
+        Vector3 middleRightHand = (landmarks[18] + landmarks[20]) / 2;
+
+        Vector3 rawVerticalAxis = (middleShoulder - middleThigh).normalized;
+        Vector3 horizontalAxis = (landmarks[24] - landmarks[23]).normalized;
+
+        Vector3 verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+
+        Vector3 hipForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion hip = Quaternion.LookRotation(hipForward, verticalAxis);
+        _modelTransform[0].transform.rotation = hip;
+
+        horizontalAxis = (landmarks[12] - landmarks[11]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 shoulderForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion shoulder = Quaternion.LookRotation(shoulderForward, verticalAxis);
+        _modelTransform[1].transform.localRotation = shoulder;
+
+        rawVerticalAxis = (middleHead - middleShoulder).normalized;
+        horizontalAxis = (landmarks[8] - landmarks[7]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 headForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion head = Quaternion.LookRotation(headForward, verticalAxis);
+
+        _modelTransform[2].transform.rotation = head;
+
+
+        rawVerticalAxis = (middleLeftHand - landmarks[15]).normalized;
+        horizontalAxis = (landmarks[19] - landmarks[17]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 leftHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion leftHand = Quaternion.LookRotation(leftHandForward, rawVerticalAxis);
+        var rot = Quaternion.AngleAxis(90, Vector3.up);
+
+
+        _modelTransform[3].transform.rotation = leftHand * rot;
+
+        rawVerticalAxis = (middleRightHand - landmarks[16]).normalized;
+        horizontalAxis = (landmarks[18] - landmarks[20]).normalized;
+        verticalAxis = Orthogonalize(horizontalAxis, rawVerticalAxis).normalized;
+        Vector3 rightHandForward = Vector3.Cross(horizontalAxis, verticalAxis).normalized;
+
+        Quaternion rightHand = Quaternion.LookRotation(rightHandForward, verticalAxis);
+        rot = Quaternion.AngleAxis(-90, Vector3.up);
+
+        _modelTransform[4].transform.rotation = rightHand * rot;
+
+        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]).normalized;
+        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+
+        var targetRotation = Quaternion.FromToRotation(_modelPartTransform[0].forward, leftHandForward);
+
+        _modelTransform[5].transform.rotation = Quaternion.Inverse(_modelPartTransform[0].parent.rotation) * targetRotation;
+
+
+        Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+
+        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+        _modelTransform[6].transform.rotation = rightFootForward * targetRotation;
+
+
+        Vector3[] _mediaPipeLimbArray = new Vector3[19]
+        {
+            new Vector3(0, 1, 0),
+            (landmarks[11] + landmarks[12] + landmarks[23] + landmarks[24]) / 4,
+            (landmarks[11] + landmarks[12]) / 2,
+            landmarks[11],
+            landmarks[13],
+            landmarks[15],
+            landmarks[19],
+            landmarks[12],
+            landmarks[14],
+            landmarks[16],
+            landmarks[20],
+            landmarks[23],
+            landmarks[25],
+            landmarks[29],
+            landmarks[31],
+            landmarks[24],
+            landmarks[26],
+            landmarks[30],
+            landmarks[32]
+        };
+
+        //四肢の部位の距離を計算  (MediaPipe)
+        _mediaPipeLimbDistance = ReturnDistance(_mediaPipeLimbArray);
+
+        //モデルの部位の距離と、mediaPipeの部位の距離で比率を計算
+        float[] DistanceDiff;
+        DistanceDiff = ReturnDiff(_modelLimbDistance, _mediaPipeLimbDistance);
+
+        yield return null;
+        _modelLimbObject[1].transform.position = (_mediaPipeLimbArray[1] - _mediaPipeLimbArray[0]) * DistanceDiff[0] + _modelLimbObject[0].transform.position;
+        _modelLimbObject[2].transform.position = (_mediaPipeLimbArray[2] - _mediaPipeLimbArray[1]) * DistanceDiff[1] + _modelLimbObject[1].transform.position;
+
+        yield return null;
+
+        _modelLimbObject[4].transform.position = (_mediaPipeLimbArray[4] - _mediaPipeLimbArray[3]) * DistanceDiff[2] + _modelLimbObject[3].transform.position;
+        _modelLimbObject[8].transform.position = (_mediaPipeLimbArray[8] - _mediaPipeLimbArray[7]) * DistanceDiff[5] + _modelLimbObject[7].transform.position;
+        _modelLimbObject[12].transform.position = (_mediaPipeLimbArray[12] - _mediaPipeLimbArray[11]) * DistanceDiff[8] + _modelLimbObject[11].transform.position;
+        _modelLimbObject[16].transform.position = (_mediaPipeLimbArray[16] - _mediaPipeLimbArray[15]) * DistanceDiff[11] + _modelLimbObject[15].transform.position;
+
+        yield return null;
+
+        _modelLimbObject[5].transform.position = (_mediaPipeLimbArray[5] - _mediaPipeLimbArray[4]) * DistanceDiff[3] + _modelLimbObject[4].transform.position;
+        _modelLimbObject[6].transform.position = (_mediaPipeLimbArray[6] - _mediaPipeLimbArray[5]) * DistanceDiff[4] + _modelLimbObject[5].transform.position;
+
+        _modelLimbObject[9].transform.position = (_mediaPipeLimbArray[9] - _mediaPipeLimbArray[8]) * DistanceDiff[6] + _modelLimbObject[8].transform.position;
+        _modelLimbObject[10].transform.position = (_mediaPipeLimbArray[10] - _mediaPipeLimbArray[9]) * DistanceDiff[7] + _modelLimbObject[9].transform.position;
+
+        _modelLimbObject[13].transform.position = (_mediaPipeLimbArray[13] - _mediaPipeLimbArray[12]) * DistanceDiff[9] + _modelLimbObject[12].transform.position;
+        _modelLimbObject[14].transform.position = (_mediaPipeLimbArray[14] - _mediaPipeLimbArray[13]) * DistanceDiff[10] + _modelLimbObject[13].transform.position;
+
+        _modelLimbObject[17].transform.position = (_mediaPipeLimbArray[17] - _mediaPipeLimbArray[16]) * DistanceDiff[12] + _modelLimbObject[16].transform.position;
+        _modelLimbObject[18].transform.position = (_mediaPipeLimbArray[18] - _mediaPipeLimbArray[17]) * DistanceDiff[13] + _modelLimbObject[17].transform.position;
+
+
+        Vector3[] part_position = new Vector3[]
+        {
+            _modelLimbObject[5].transform.position,
+            _modelLimbObject[9].transform.position,
+            _modelLimbObject[13].transform.position,
+            _modelLimbObject[17].transform.position,
+            _modelLimbObject[4].transform.position,
+            _modelLimbObject[8].transform.position,
+            _modelLimbObject[12].transform.position,
+            _modelLimbObject[16].transform.position,
+            _modelLimbObject[1].transform.position,
+            _modelLimbObject[2].transform.position,
+            _modelLimbObject[6].transform.position,
+            _modelLimbObject[10].transform.position,
+            _modelLimbObject[14].transform.position,
+            _modelLimbObject[18].transform.position
+        };
+
+        Quaternion[] _modelRotation = new Quaternion[]
+        {
+            _modelTransform[0].transform.rotation,
+            _modelTransform[1].transform.rotation,
+            _modelTransform[2].transform.rotation,
+            _modelTransform[3].transform.rotation,
+            _modelTransform[4].transform.rotation,
+            _modelTransform[5].transform.rotation,
+            _modelTransform[6].transform.rotation,
+        };
+
+        modelPos.Add(currentFrame, part_position);
+        _modelQuaternion.Add(currentFrame, _modelRotation);
+
+        currentFrame++;
+
+        if (currentFrame > totalFrames - 1)
+        {
+            DetectionKeyPose();
+            isCreated = true;
+        }
     }
 
 
@@ -144,7 +330,7 @@ public class IKTargetPos : BaseCalculation
         Quaternion leftHand = Quaternion.LookRotation(leftHandForward, verticalAxis);
         var offsetRotation = Quaternion.FromToRotation(new Vector3(-1, 0, 0), Vector3.forward);
 
-        _modelTransform[3].transform.rotation = leftHand * offsetRotation;
+        _modelTransform[3].transform.rotation = leftHand * Quaternion.Euler(0, 90, 0);
 
         rawVerticalAxis = (middleRightHand - landmarks[16]).normalized;
         horizontalAxis = (landmarks[18] - landmarks[20]).normalized;
@@ -205,18 +391,20 @@ public class IKTargetPos : BaseCalculation
         _modelLimbObject[2].transform.position = (_mediaPipeLimbArray[2] - _mediaPipeLimbArray[1]) * DistanceDiff[1] + _modelLimbObject[1].transform.position;
 
         _modelLimbObject[4].transform.position = (_mediaPipeLimbArray[4] - _mediaPipeLimbArray[3]) * DistanceDiff[2] + _modelLimbObject[3].transform.position;
+        _modelLimbObject[8].transform.position = (_mediaPipeLimbArray[8] - _mediaPipeLimbArray[7]) * DistanceDiff[5] + _modelLimbObject[7].transform.position;
+        _modelLimbObject[12].transform.position = (_mediaPipeLimbArray[12] - _mediaPipeLimbArray[11]) * DistanceDiff[8] + _modelLimbObject[11].transform.position;
+        _modelLimbObject[16].transform.position = (_mediaPipeLimbArray[16] - _mediaPipeLimbArray[15]) * DistanceDiff[11] + _modelLimbObject[15].transform.position;
+
+
         _modelLimbObject[5].transform.position = (_mediaPipeLimbArray[5] - _mediaPipeLimbArray[4]) * DistanceDiff[3] + _modelLimbObject[4].transform.position;
         _modelLimbObject[6].transform.position = (_mediaPipeLimbArray[6] - _mediaPipeLimbArray[5]) * DistanceDiff[4] + _modelLimbObject[5].transform.position;
 
-        _modelLimbObject[8].transform.position = (_mediaPipeLimbArray[8] - _mediaPipeLimbArray[7]) * DistanceDiff[5] + _modelLimbObject[7].transform.position;
         _modelLimbObject[9].transform.position = (_mediaPipeLimbArray[9] - _mediaPipeLimbArray[8]) * DistanceDiff[6] + _modelLimbObject[8].transform.position;
         _modelLimbObject[10].transform.position = (_mediaPipeLimbArray[10] - _mediaPipeLimbArray[9]) * DistanceDiff[7] + _modelLimbObject[9].transform.position;
 
-        _modelLimbObject[12].transform.position = (_mediaPipeLimbArray[12] - _mediaPipeLimbArray[11]) * DistanceDiff[8] + _modelLimbObject[11].transform.position;
         _modelLimbObject[13].transform.position = (_mediaPipeLimbArray[13] - _mediaPipeLimbArray[12]) * DistanceDiff[9] + _modelLimbObject[12].transform.position;
         _modelLimbObject[14].transform.position = (_mediaPipeLimbArray[14] - _mediaPipeLimbArray[13]) * DistanceDiff[10] + _modelLimbObject[13].transform.position;
 
-        _modelLimbObject[16].transform.position = (_mediaPipeLimbArray[16] - _mediaPipeLimbArray[15]) * DistanceDiff[11] + _modelLimbObject[15].transform.position;
         _modelLimbObject[17].transform.position = (_mediaPipeLimbArray[17] - _mediaPipeLimbArray[16]) * DistanceDiff[12] + _modelLimbObject[16].transform.position;
         _modelLimbObject[18].transform.position = (_mediaPipeLimbArray[18] - _mediaPipeLimbArray[17]) * DistanceDiff[13] + _modelLimbObject[17].transform.position;
         
@@ -253,6 +441,7 @@ public class IKTargetPos : BaseCalculation
         modelPos.Add(currentFrame, part_position);
         _modelQuaternion.Add(currentFrame, _modelRotation);
 
+        /*
         //関節の前フレームとの距離検出
         if (currentFrame == 0 || currentFrame == totalFrames - 1)
         {
@@ -293,6 +482,7 @@ public class IKTargetPos : BaseCalculation
         {
             before_part_position[i] = part_position[i];
         }
+        */
 
         currentFrame++;
 

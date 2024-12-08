@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EditManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class EditManager : MonoBehaviour
     [SerializeField] private GameObject _celllingPrefab;
     [SerializeField] private HeightInterpolationer _heightInterpolationer;
     [SerializeField] private QuaternionInterpolationer _rotationInterpolationer;
+    [SerializeField] private Canvas _worldCanvas;
+    [SerializeField] private GameObject _textPrefab;
 
     private Dictionary<int, Vector3[]> _changePos = new Dictionary<int, Vector3[]>();    //変更後の位置　　　　最初から曲線に変更
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
@@ -26,6 +29,8 @@ public class EditManager : MonoBehaviour
     private int _totalFrames;
     private CreateNewAnim _createNewAnim;
     private string _startDate;
+
+    private List<GameObject> _frameTextObj = new List<GameObject>();
 
     public Dictionary<int, Vector3[]> ChangePos
     {
@@ -111,8 +116,8 @@ public class EditManager : MonoBehaviour
 
     public void PrepareEditing()
     {
-        Camera.main.transform.position = new Vector3(5.0f, 2.0f, 20.0f);
-        Camera.main.transform.rotation = Quaternion.Euler(15.0f, -90.0f, 0.0f);
+        Camera.main.transform.position = new Vector3(5.0f, 1.7f, 20.0f);
+        Camera.main.transform.rotation = Quaternion.Euler(5.0f, -90.0f, 0.0f);
         _startDate = LandmarkManager.GetInstance().StartDate;
         ChangePos = LandmarkManager.GetInstance().CSVLandmarkPositions;
         ChangeRot = LandmarkManager.GetInstance().CSVLandmarkRotations;
@@ -136,7 +141,8 @@ public class EditManager : MonoBehaviour
         }
 
         _scrollViewButton.LoadImagesFromFolder();
-        _lineInterpolation.InterpolationAllLine(true);
+        _scrollViewButton.InitializeValueInputField(_keyPoseList[1], _keyPoseList[_keyPoseList.Count - 2]);
+        _lineInterpolation.InterpolationAllLine(false);
         _uiListener.ChangeUIDisplay(true);
         for (int i = 0; i < 4; i++)
         {
@@ -146,6 +152,12 @@ public class EditManager : MonoBehaviour
 
     public void SetPosition(int frame, Vector3[] posList, Quaternion[] posRot, float hipHeight)
     {
+        GameObject frameText = Instantiate(_textPrefab, _worldCanvas.transform);
+        frameText.transform.localPosition = new Vector3(frame * 6, 100, 0);
+        TextMeshProUGUI textMeshPro = frameText.GetComponent<TextMeshProUGUI>();
+        textMeshPro.text = frame.ToString();
+        _frameTextObj.Add(frameText);
+
         GameObject humanoid = Instantiate(_humanoidModel, new Vector3(0.0f, hipHeight - 1.0f, frame * _frameInterval), Quaternion.identity);
         GameObject cube = Instantiate(_cubePrefab, new Vector3(1.5f, 0.387f, frame * _frameInterval), Quaternion.identity);
         cube.transform.parent = humanoid.transform;
@@ -180,6 +192,11 @@ public class EditManager : MonoBehaviour
             _keyPoseHumanPose[i] = setAnimationTransform.GetKeyPoseMuscle(_keyPoseList[i]);
         }
 
+        foreach (var obj in _frameTextObj)
+        {
+            Destroy(obj);
+        }
+
         Camera.main.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
         Camera.main.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
@@ -197,13 +214,5 @@ public class EditManager : MonoBehaviour
         }
 
         GameObject createAnimationModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
-
-        
-        /*
-        GameObject created_model = Instantiate(_createModel, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        _createNewAnim = created_model.GetComponent<CreateNewAnim>();
-
-        _createNewAnim.CreateNewAnimation(_keyPoseHumanPose, _keyPoseList);
-        */
     }
 }

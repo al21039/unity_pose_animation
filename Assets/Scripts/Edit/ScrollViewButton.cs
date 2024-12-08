@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 
@@ -9,9 +8,60 @@ public class ScrollViewButton : MonoBehaviour
     [SerializeField] private GameObject buttonPrefab;         // ボタンのプレハブ
     [SerializeField] private Transform contentParent;         // Scroll ViewのContent（ボタンを配置する親）
     [SerializeField] private LineInterpolation _lineInterpolation;
-    [SerializeField] private int _addFrame = 32;
+    [SerializeField] private InputField _inputField;
+    [SerializeField] private Text _text;
+    private int _addFrame = -1;
     private Texture2D[] loadedImages;
     private float _frameInterval = 0.30f;
+    private int _maxValue;
+    private int _minValue;
+
+    public void InitializeValueInputField(int min, int max)
+    {
+        _maxValue = max;
+        _minValue = min;
+        Debug.Log(max + " " + min);
+        _text.text = min + "～" + max;
+        _inputField.onEndEdit.AddListener(ValidateInput);
+    }
+
+    public void DeleteAddFrameIndex()
+    {
+        _addFrame = -1;
+        _inputField.text = "";
+    }
+
+    private void ValidateInput(string input)
+    {
+        // 入力が数値かどうかを確認
+        if (int.TryParse(input, out int value))
+        {
+            Debug.Log(value);
+            _inputField.text = "";
+            // 範囲内の値に制限
+            value = Mathf.Clamp(value, _minValue, _maxValue);
+
+            // 5の倍数に調整
+            int closestMultipleOfFive = Mathf.RoundToInt(value / 5.0f) * 5;
+
+            // 調整後の値を設定
+            if (value >= _minValue && value <= _maxValue)
+            {
+                _inputField.text = closestMultipleOfFive.ToString();
+                _addFrame = closestMultipleOfFive;
+            }
+            else
+            {
+                _inputField.text = "";
+                _addFrame = -1;
+            }
+        }
+        else if (!string.IsNullOrEmpty(input))
+        {
+            // 数値でない場合は値をクリア
+            _inputField.text = "";
+        }
+    }
 
     public void LoadImagesFromFolder()
     {
@@ -89,7 +139,10 @@ public class ScrollViewButton : MonoBehaviour
 
     void OnButtonClick(int buttonNo)
     {
-        Debug.Log(buttonNo);
+        if (_addFrame == -1)
+        {
+            return;
+        }
 
         Vector3[] JsonLandmark = LandmarkManager.GetInstance().JSONLandmarkPositions(buttonNo);
         Quaternion[] JsonRotation = LandmarkManager.GetInstance().JSONLandmarkRotations(buttonNo);
@@ -121,5 +174,8 @@ public class ScrollViewButton : MonoBehaviour
 
             _lineInterpolation.InterpolationJson(index);
         }
+
+        _addFrame = -1;
+        _inputField.text = "";
     }
 }
