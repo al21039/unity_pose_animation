@@ -168,19 +168,20 @@ public class IKTargetPos : BaseCalculation
         _modelTransform[4].transform.rotation = rightHand * rot;
 
         Vector3 leftFootDirection = (landmarks[31] - landmarks[29]).normalized;
-        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+        Vector3 leftFootUp = (landmarks[27] - landmarks[29]).normalized;
+        Vector3 orthogonalUp = new Vector3(leftFootUp.x, leftFootUp.y, landmarks[29].z).normalized;
 
-        var targetRotation = Quaternion.FromToRotation(_modelPartTransform[0].forward, leftHandForward);
+        var leftFootForward = Quaternion.LookRotation(leftFootDirection, orthogonalUp);
 
-        _modelTransform[5].transform.rotation = Quaternion.Inverse(_modelPartTransform[0].parent.rotation) * targetRotation;
-
+        _modelTransform[5].transform.rotation = leftFootForward * Quaternion.Euler(0, 90, 90);
 
         Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
-        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+        Vector3 rightFootUp = (landmarks[28] - landmarks[30]).normalized;
+        orthogonalUp = new Vector3(rightFootUp.x, rightFootUp.y, rightFootUp.z).normalized;
 
-        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
-        _modelTransform[6].transform.rotation = rightFootForward * targetRotation;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, orthogonalUp);
 
+        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, 90, 90);
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
@@ -342,19 +343,24 @@ public class IKTargetPos : BaseCalculation
 
         _modelTransform[4].transform.rotation = rightHand * offsetRotation;
 
-        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]).normalized;
-        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]);
+        Vector3 leftFootUp = (landmarks[27] - landmarks[29]);
+        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, leftFootUp);
 
-        var targetRotation = Quaternion.FromToRotation(_modelPartTransform[0].forward, leftHandForward);
+        if (currentFrame == 0)
+        {
+            Debug.Log(landmarks[27]);
+            Debug.Log(landmarks[29]);
+            Debug.Log(landmarks[31]);
+        }
 
-        _modelTransform[5].transform.rotation = Quaternion.Inverse(_modelPartTransform[0].parent.rotation) * targetRotation;
+        _modelTransform[5].transform.rotation = leftFootForward;//* Quaternion.Euler(0, 90, 90);
 
 
         Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
-        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection);
 
-        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
-        _modelTransform[6].transform.rotation = rightFootForward * targetRotation;
+        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, -90, 90);
 
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
