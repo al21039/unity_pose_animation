@@ -139,18 +139,18 @@ public class CreateFromJSON : BaseCalculation
         _modelRotation[4].transform.rotation = rightHand * Quaternion.Euler(0, -90, 0);
 
         Vector3 leftFootDirection = (landmarksArray[31] - landmarksArray[29]).normalized;
-        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, Vector3.up);
+        Vector3 leftFootUp = (landmarksArray[27] - landmarksArray[29]).normalized;
+        Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, leftFootUp);
 
-        var targetRotation = Quaternion.FromToRotation(Vector3.up, leftHandForward);
 
-        _modelRotation[5].transform.rotation = leftFootForward * targetRotation;
+        _modelRotation[5].transform.rotation = leftFootForward * Quaternion.Euler(0, 90, 110);
 
 
         Vector3 rightFootDirection = (landmarksArray[32] - landmarksArray[30]).normalized;
-        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, Vector3.up);
+        Vector3 rightFootUp = (landmarksArray[28] - landmarksArray[30]).normalized;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, rightFootUp);
 
-        targetRotation = Quaternion.FromToRotation(Vector3.up, Vector3.forward);
-        _modelRotation[6].transform.rotation = rightFootForward * targetRotation;
+        _modelRotation[6].transform.rotation = rightFootForward * Quaternion.Euler(0, 90, 110);
 
 
         yield return null;

@@ -90,11 +90,12 @@ public class CreateAnimationFromCSV : MonoBehaviour
         animclip.SetCurve("", typeof(Animator), "RootQ.z", rootQZ);
         animclip.SetCurve("", typeof(Animator), "RootQ.w", rootQW);
 
+        /*
         //アニメーションを制作
         AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick.anim"));
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-
+        */
 
         AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = overrideController;

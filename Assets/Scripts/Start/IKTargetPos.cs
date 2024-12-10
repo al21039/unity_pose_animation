@@ -173,7 +173,7 @@ public class IKTargetPos : BaseCalculation
 
         var leftFootForward = Quaternion.LookRotation(leftFootDirection, orthogonalUp);
 
-        _modelTransform[5].transform.rotation = leftFootForward * Quaternion.Euler(0, 90, 90);
+        _modelTransform[5].transform.rotation = leftFootForward * Quaternion.Euler(0, 90, 110);
 
         Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
         Vector3 rightFootUp = (landmarks[28] - landmarks[30]).normalized;
@@ -181,7 +181,7 @@ public class IKTargetPos : BaseCalculation
 
         Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, orthogonalUp);
 
-        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, 90, 90);
+        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, 90, 110);
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
@@ -360,7 +360,7 @@ public class IKTargetPos : BaseCalculation
         Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
         Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection);
 
-        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, -90, 90);
+        _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, -90, 110);
 
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
