@@ -65,8 +65,6 @@ public class LineInterpolation : MonoBehaviour
     {
         GetRequiredValue();
 
-
-
         if (index == 0)
         {
             for (int j = 0; j < 10; j++)

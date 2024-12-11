@@ -63,5 +63,45 @@ public class SetAnimationTransform : MonoBehaviour
 
         return _humanPose;
     }
+
+    public Vector3[] ReturnNewPositionValue()
+    {
+        Vector3[] NewPartPosition = new Vector3[]
+        {
+            _modelPart[0].transform.position,
+            _modelPart[1].transform.position,
+            _modelPart[2].transform.position,
+            _modelPart[3].transform.position,
+            _modelPart[4].transform.position,
+            _modelPart[5].transform.position,
+            _modelPart[6].transform.position,
+            _modelPart[7].transform.position,
+            _modelPart[8].transform.position,
+            _modelPart[9].transform.position,
+            _modelPart[10].transform.position,
+            _modelPart[11].transform.position,
+            _modelPart[12].transform.position,
+            _modelPart[13].transform.position,
+        };
+
+        return NewPartPosition;
+    }
+
+    public Quaternion[] ReturnNewRotationValue()
+    {
+
+        Quaternion[] NewPartRotation = new Quaternion[]
+        {
+            _modelRotationPart[0].transform.rotation,
+            _modelRotationPart[1].transform.rotation,
+            _modelRotationPart[2].transform.rotation,
+            _modelRotationPart[3].transform.rotation,
+            _modelRotationPart[4].transform.rotation,
+            _modelRotationPart[5].transform.rotation,
+            _modelRotationPart[6].transform.rotation
+        };
+
+        return NewPartRotation;
+    }
 }
 

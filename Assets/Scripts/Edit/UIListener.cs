@@ -38,6 +38,7 @@ public class UIListener : MonoBehaviour
         _UIs[5].SetActive(!_UIs[5].activeSelf);
         _UIs[6].SetActive(!_UIs[6].activeSelf);
         _UIs[8].SetActive(!_UIs[8].activeSelf);
+        _UIs[9].SetActive(!_UIs[9].activeSelf);
         _addModelView.SetActive(!_addModelView.activeSelf);
         _scrollViewButton.DeleteAddFrameIndex();
     }
@@ -61,6 +62,7 @@ public class UIListener : MonoBehaviour
         _UIs[6].SetActive(!_UIs[6].activeSelf);
         _UIs[7].SetActive(!_UIs[7].activeSelf);
         _UIs[8].SetActive(!_UIs[8].activeSelf);
+        _UIs[9].SetActive(!_UIs[9].activeSelf);
     }
 
     public void OnClickedHeightButton()
@@ -69,6 +71,7 @@ public class UIListener : MonoBehaviour
         _UIs[5].SetActive(!_UIs[5].activeSelf);
         _UIs[7].SetActive(!_UIs[7].activeSelf);
         _UIs[8].SetActive(!_UIs[8].activeSelf);
+        _UIs[9].SetActive(!_UIs[9].activeSelf);
         _heightClacButton.SetActive(!_heightClacButton.activeSelf);
     }
 
@@ -78,5 +81,14 @@ public class UIListener : MonoBehaviour
         _UIs[5].SetActive(!_UIs[5].activeSelf);
         _UIs[6].SetActive(!_UIs[6].activeSelf);
         _UIs[7].SetActive(!_UIs[7].activeSelf);
+        _UIs[9].SetActive(!_UIs[9].activeSelf);
+    }
+    public void OnClickedRotationButton()
+    {
+        _UIs[4].SetActive(!_UIs[4].activeSelf);
+        _UIs[5].SetActive(!_UIs[5].activeSelf);
+        _UIs[6].SetActive(!_UIs[6].activeSelf);
+        _UIs[7].SetActive(!_UIs[7].activeSelf);
+        _UIs[8].SetActive(!_UIs[8].activeSelf);
     }
 }

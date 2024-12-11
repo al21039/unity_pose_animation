@@ -9,6 +9,7 @@ public class PositionMover : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private SearchEndPoint _searchEndPoint;
     [SerializeField] private LineInterpolation _lineInterpolation;
+    [SerializeField] private HumanoidRotataionSetter _humanoidRotataionSetter;
 
     private static PositionMover instance;
 
@@ -19,6 +20,7 @@ public class PositionMover : MonoBehaviour
     private Camera _mainCamera;
     private bool _isLineDisplay = false;
     private bool _deleteMode = false;
+    private bool _rotationMode = false;
 
     private GameObject _selectedIKObject; //マウスで選択したIKのオブジェクト
     private GameObject _selectedKeyModel;
@@ -41,6 +43,7 @@ public class PositionMover : MonoBehaviour
     private bool _touchIndirectSphere = false;
     private Vector3 _sphereDefaultPosition;
     private float _indeirectEffectiveGainValue = 0;
+    private Vector3 _cubePosition = Vector3.zero;
 
     public int SelectPositionID
     {
@@ -77,6 +80,11 @@ public class PositionMover : MonoBehaviour
 
             _cube.transform.position = new Vector3(_cube.transform.position.x, _selectmodelHeight, _cube.transform.position.z);
         }
+    }
+    public void FixedCubeTransform()
+    {
+        _cube.transform.position = _cubePosition;
+        _cube.transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 
     public void InitializeHeightObject()
@@ -135,7 +143,7 @@ public class PositionMover : MonoBehaviour
 
                     else if (hit.collider.CompareTag("KeyModel"))
                     {
-                        if (_isDisplay && !_heightChange && !_deleteMode)
+                        if (_isDisplay && !_heightChange && !_deleteMode && !_rotationMode)
                         {
                             if (_selectedKeyModel != null)
                             {
@@ -145,7 +153,7 @@ public class PositionMover : MonoBehaviour
                             _selectedKeyModelName = _selectedKeyModel.name; //フレームのモデルの名前
                         }
 
-                        else if (_heightChange && !_isDisplay && !_deleteMode)
+                        else if (_heightChange && !_isDisplay && !_deleteMode && !_rotationMode)
                         {
                             _selectHeightObject = hit.collider.gameObject.transform.parent.gameObject;
                             _selectHeightFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
@@ -154,7 +162,7 @@ public class PositionMover : MonoBehaviour
                             _modelPosition = hit.collider.gameObject.transform.parent.gameObject.transform.position; //元のモデルフレームを取得
                         }
 
-                        else if (_deleteMode && !_isDisplay && !_heightChange)
+                        else if (_deleteMode && !_isDisplay && !_heightChange && !_rotationMode)
                         {
                             GameObject deleteModel = hit.collider.gameObject.transform.root.gameObject;
                             _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
@@ -165,6 +173,16 @@ public class PositionMover : MonoBehaviour
                                 EditManager.GetInstance().DeleteKeyPose(frame);
                             }
                             _selectedFrame = null;
+                        }
+
+                        else if(_rotationMode && !_isDisplay && !_heightChange && !_deleteMode)
+                        {
+                            GameObject rotationModel = hit.collider.gameObject.transform.parent.gameObject;
+                            _humanoidRotataionSetter.RotationHumanoid =  rotationModel;
+                            _cube = hit.collider.gameObject.transform;
+                            _cubePosition = _cube.transform.position;
+                            _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
+                            _humanoidRotataionSetter.Frame = int.Parse(_selectedFrame);
                         }
                     }
 
@@ -261,6 +279,12 @@ public class PositionMover : MonoBehaviour
         {
             Destroy(_indirectSphere);
         }
+    }
+
+    public void OnClickedRotataionButton()
+    {
+        _rotationMode = !_rotationMode;
+        _humanoidRotataionSetter.RotationHumanoid = null;
     }
 
     public void DeleteIndirectOption()

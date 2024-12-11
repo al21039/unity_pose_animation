@@ -215,4 +215,20 @@ public class EditManager : MonoBehaviour
 
         GameObject createAnimationModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
     }
+
+    public void ChangeToNewValue(int frame, Vector3[] positionArray, Quaternion[] rotationArray)
+    {
+        for (int i = 0; i < positionArray.Length; i++)
+        {
+            positionArray[i] -= new Vector3(0, 0, frame * _frameInterval);
+        }
+
+        _changePos[frame] = positionArray;
+        _changeRot[frame] = rotationArray;
+
+        int listIndex = _keyPoseList.IndexOf(frame);
+
+        _lineInterpolation.InterpolationJson(listIndex);
+        _rotationInterpolationer.Interpolation(listIndex);
+    }
 }
