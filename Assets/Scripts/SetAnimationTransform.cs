@@ -20,7 +20,7 @@ public class SetAnimationTransform : MonoBehaviour
 
     public GameObject[] IKObjectArray()
     {
-        GameObject[] _IKModelPart = new GameObject[8]
+        GameObject[] _IKModelPart = new GameObject[10]
         {
             _modelPart[0],
             _modelPart[1],
@@ -29,7 +29,9 @@ public class SetAnimationTransform : MonoBehaviour
             _modelPart[4],
             _modelPart[5],
             _modelPart[6],
-            _modelPart[7]
+            _modelPart[7],
+            _modelPart[8],
+            _modelPart[9],
         };
 
         return _IKModelPart; 

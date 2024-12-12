@@ -7,6 +7,7 @@ public class UIListener : MonoBehaviour
     [SerializeField] private ScrollViewButton _scrollViewButton;
     [SerializeField] private GameObject _addModelView;
     [SerializeField] private GameObject _heightClacButton;
+    [SerializeField] private GameObject _backButton;
 
     public void OnClickedLeftHandSplineButton()
     {
@@ -29,6 +30,9 @@ public class UIListener : MonoBehaviour
 
     public void OnClickedCreateAnimationButton()
     {
+        ChangeUIDisplay(false);
+        _backButton.SetActive(true);
+        ChangeScrollDisplay(false);
         EditManager.GetInstance().DisplayNewAnimation();
     }
 
@@ -90,5 +94,11 @@ public class UIListener : MonoBehaviour
         _UIs[6].SetActive(!_UIs[6].activeSelf);
         _UIs[7].SetActive(!_UIs[7].activeSelf);
         _UIs[8].SetActive(!_UIs[8].activeSelf);
+    }
+
+    public void OnClickedBackButton()
+    {
+        ChangeUIDisplay(true);
+        _backButton.SetActive(false);
     }
 }

@@ -205,8 +205,6 @@ public class EditManager : MonoBehaviour
         {
             Spline.GetInstance().SwitchSplineDisplay(i);
         }
-        _uiListener.ChangeUIDisplay(false);
-        _uiListener.ChangeScrollDisplay(false);
         _positionMover.DeleteIndirectOption();
 
         for (int i = _keyPoseModel.Count - 1; i >= 0; i--)
@@ -235,6 +233,8 @@ public class EditManager : MonoBehaviour
 
     public void BackToEditInterface()
     {
+        Camera.main.transform.position = new Vector3(5.0f, 1.7f, 20.0f);
+        Camera.main.transform.rotation = Quaternion.Euler(5.0f, -90.0f, 0.0f);
         for (int i = 0; i < 4; i++)
         {
             Spline.GetInstance().SwitchSplineDisplay(i);

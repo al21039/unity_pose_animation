@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -79,6 +78,126 @@ public class CreateAnimationFromCSV : MonoBehaviour
         for (int i = 0; i < humanPoseMuscleCurves.Length; i++)
         {
             string muscleName = HumanTrait.MuscleName[i];
+            if (i == 55) 
+            {
+                muscleName = "LeftHand.Thumb.1 Stretched";
+            }
+            else if (i == 57)
+            {
+                muscleName = "LeftHand.Thumb.2 Stretched";
+            }
+            else if (i == 58)
+            {
+                muscleName = "LeftHand.Thumb.3 Stretched";
+            }
+            else if (i == 59)
+            {
+                muscleName = "LeftHand.Index.1 Stretched";
+            }
+            else if (i == 61)
+            {
+                muscleName = "LeftHand.Index.2 Stretched";
+            }
+            else if (i == 62)
+            {
+                muscleName = "LeftHand.Index.3 Stretched";
+            }
+            else if (i == 63)
+            {
+                muscleName = "LeftHand.Middle.1 Stretched";
+            }
+            else if (i == 65)
+            {
+                muscleName = "LeftHand.Middle.2 Stretched";
+            }
+            else if (i == 66)
+            {
+                muscleName = "LeftHand.Middle.3 Stretched";
+            }
+            else if (i == 67)
+            {
+                muscleName = "LeftHand.Ring.1 Stretched";
+            }
+            else if (i == 69)
+            {
+                muscleName = "LeftHand.Ring.2 Stretched";
+            }
+            else if (i == 70)
+            {
+                muscleName = "LeftHand.Ring.3 Stretched";
+            }
+            else if (i == 71)
+            {
+                muscleName = "LeftHand.Little.1 Stretched";
+            }
+            else if (i == 73)
+            {
+                muscleName = "LeftHand.Little.2 Stretched";
+            }
+            else if (i == 74)
+            {
+                muscleName = "LeftHand.Little.3 Stretched";
+            }
+            else if (i == 75)
+            {
+                muscleName = "RightHand.Thumb.1 Stretched";
+            }
+            else if (i == 77)
+            {
+                muscleName = "RightHand.Thumb.2 Stretched";
+            }
+            else if (i == 78)
+            {
+                muscleName = "RightHand.Thumb.3 Stretched";
+            }
+            else if (i == 79)
+            {
+                muscleName = "RightHand.Index.1 Stretched";
+            }
+            else if (i == 81)
+            {
+                muscleName = "RightHand.Index.2 Stretched";
+            }
+            else if (i == 82)
+            {
+                muscleName = "RightHand.Index.3 Stretched";
+            }
+            else if (i == 83)
+            {
+                muscleName = "RightHand.Middle.1 Stretched";
+            }
+            else if (i == 85)
+            {
+                muscleName = "RightHand.Middle.2 Stretched";
+            }
+            else if (i == 86)
+            {
+                muscleName = "RightHand.Middle.3 Stretched";
+            }
+            else if (i == 87)
+            {
+                muscleName = "RightHand.Ring.1 Stretched";
+            }
+            else if (i == 89)
+            {
+                muscleName = "RightHand.Ring.2 Stretched";
+            }
+            else if (i == 90)
+            {
+                muscleName = "RightHand.Ring.3 Stretched";
+            }
+            else if (i == 91)
+            {
+                muscleName = "RightHand.Little.1 Stretched";
+            }
+            else if (i == 93)
+            {
+                muscleName = "RightHand.Little.2 Stretched";
+            }
+            else if (i == 94)
+            {
+                muscleName = "RightHand.Little.3 Stretched";
+            }
             animclip.SetCurve("", typeof(Animator), muscleName, humanPoseMuscleCurves[i]);
         }
 
@@ -90,23 +209,18 @@ public class CreateAnimationFromCSV : MonoBehaviour
         animclip.SetCurve("", typeof(Animator), "RootQ.z", rootQZ);
         animclip.SetCurve("", typeof(Animator), "RootQ.w", rootQW);
 
-        /*
+        
         //アニメーションを制作
         AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick.anim"));
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        */
+        
 
         AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = overrideController;
 
         overrideController["DefaultHumanoidAnimation"] = animclip;
         animator.Play("DefaultHumanoidAnimation");
-
-        
-        
-        
-        
     }
 
     List<HumanPose> ReadCSVToHumanPoses(string csvText)

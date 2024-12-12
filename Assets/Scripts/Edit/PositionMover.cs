@@ -74,7 +74,7 @@ public class PositionMover : MonoBehaviour
             SetAnimationTransform setAnimationTransform = _selectHeightObject.GetComponent<SetAnimationTransform>();
             GameObject[] IKObject = setAnimationTransform.IKObjectArray();
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 10; i++)
             {
                 _lineInterpolation.SetSplineAndJointPosition(frame, IKObject[i].transform.position, i);
             }
