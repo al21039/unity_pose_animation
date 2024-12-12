@@ -44,6 +44,7 @@ public class PositionMover : MonoBehaviour
     private Vector3 _sphereDefaultPosition;
     private float _indeirectEffectiveGainValue = 0;
     private Vector3 _cubePosition = Vector3.zero;
+    private Quaternion _ankerLocalRot = Quaternion.identity;
 
     public int SelectPositionID
     {
@@ -139,6 +140,7 @@ public class PositionMover : MonoBehaviour
                         _selectedIKObjectName = hit.collider.gameObject.name;
                         _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
                         _IKTargetOffset = _selectedIKObject.transform.position - GetMouseWorldPos(false);
+                        _ankerLocalRot = _selectedIKObject.transform.localRotation;
                     }
 
                     else if (hit.collider.CompareTag("KeyModel"))
@@ -198,6 +200,7 @@ public class PositionMover : MonoBehaviour
                             _isSphereMoved = true;
                             _selectedTargetObject = _searchEndPoint.ReturnEndPoint(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
                             _selectedTargetAnker = _searchEndPoint.ReturnEndAnker(_selectPositionID, _selectedKeyModel); //関節のアンカーを取得
+                            _ankerLocalRot = _selectedTargetObject.transform.localRotation;
                         }
                     }
                 }
@@ -229,10 +232,12 @@ public class PositionMover : MonoBehaviour
         if (_selectedIKObject != null)
         {
             _selectedIKObject.transform.position = GetMouseWorldPos(false) + _IKTargetOffset;
+            ReplacePosition(_selectedIKObjectName, _selectedFrame, _selectedIKObject);
         }
 
         if (_isSphereMoved)
         {
+            ReplacePosition(_selectedKeyModel, _selectPositionID, _selectedTargetObject);
             _indirectSphere.transform.position = GetMouseWorldPos(true) + _IndirectSphereOffset;
             _selectedTargetAnker.position += (_indirectSphere.transform.position - _sphereDefaultPosition) * _indeirectEffectiveGainValue;
             _sphereDefaultPosition = _indirectSphere.transform.position;
@@ -377,6 +382,7 @@ public class PositionMover : MonoBehaviour
         {
             return;
         }
+        movedObject.transform.localRotation = _ankerLocalRot;
         _lineInterpolation.SetSplineAndJointPosition(frame, targetPosition, positionID);
     }
 
@@ -398,6 +404,7 @@ public class PositionMover : MonoBehaviour
             Debug.Log("Dont Catch");
             return;
         }
+        moved_position.transform.localRotation = _ankerLocalRot;
         _lineInterpolation.SetSplineAndJointPosition(frameNumber, targetPosition, positionID);
     }
 }

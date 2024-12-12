@@ -35,7 +35,7 @@ public class SetAnimationTransform : MonoBehaviour
         return _IKModelPart; 
     }
 
-    public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot, float hieght)
+    public void SetPartTransform(int frame, Vector3[] pos_list, Quaternion[] posRot, float height)
     {
         Vector3[] positions = pos_list;
         animation_frame = frame;
@@ -49,6 +49,8 @@ public class SetAnimationTransform : MonoBehaviour
         {
             _modelRotationPart[i].transform.rotation = posRot[i];
         }
+
+        
     }
 
     //各キーフレームのモデルのHumanPoseを返す

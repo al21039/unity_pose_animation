@@ -29,6 +29,7 @@ public class EditManager : MonoBehaviour
     private int _totalFrames;
     private CreateNewAnim _createNewAnim;
     private string _startDate;
+    private GameObject _createNewModel;
 
     private List<GameObject> _frameTextObj = new List<GameObject>();
 
@@ -127,7 +128,7 @@ public class EditManager : MonoBehaviour
         
         for (int i = 0; i < _keyPoseList.Count; i++)
         {
-            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]], _hipHeight[  _keyPoseList[i]]);    //キーフレームのモデルを表示
+            SetPosition(_keyPoseList[i], _changePos[_keyPoseList[i]], _changeRot[_keyPoseList[i]], _hipHeight[_keyPoseList[i]]);    //キーフレームのモデルを表示
         }
 
         Spline.GetInstance().SerializeSpline(_totalFrames);
@@ -210,10 +211,10 @@ public class EditManager : MonoBehaviour
 
         for (int i = _keyPoseModel.Count - 1; i >= 0; i--)
         {
-            Destroy(_keyPoseModel[i]);
+            _keyPoseModel[i].SetActive(false);
         }
 
-        GameObject createAnimationModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
+        _createNewModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
     }
 
     public void ChangeToNewValue(int frame, Vector3[] positionArray, Quaternion[] rotationArray)
@@ -230,5 +231,23 @@ public class EditManager : MonoBehaviour
 
         _lineInterpolation.InterpolationJson(listIndex);
         _rotationInterpolationer.Interpolation(listIndex);
+    }
+
+    public void BackToEditInterface()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            Spline.GetInstance().SwitchSplineDisplay(i);
+        }
+
+        for (int i = _keyPoseModel.Count - 1; i >= 0; i--)
+        {
+            _keyPoseModel[i].SetActive(true);
+        }
+
+        if (_createNewModel != null)
+        {
+            Destroy(_createNewModel);
+        }
     }
 }

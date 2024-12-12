@@ -1274,7 +1274,7 @@ MonoBehaviour:
     m_Target: {fileID: 33269779514149967}
     m_Hint: {fileID: 6105304375845297728}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 1
+    m_TargetRotationWeight: 0
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
@@ -4173,7 +4173,7 @@ MonoBehaviour:
     m_Target: {fileID: 2177670737248250421}
     m_Hint: {fileID: 7749831215761473996}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 1
+    m_TargetRotationWeight: 0
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0

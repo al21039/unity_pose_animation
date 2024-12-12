@@ -49,7 +49,6 @@ public class IKTargetPos : BaseCalculation
         CalcModelDistance();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isLoaded && !isCreated)
@@ -60,7 +59,6 @@ public class IKTargetPos : BaseCalculation
             else
             {
                 StartCoroutine(CreateFramePose());
-                //CreateAnimation();
             }
         }
     }
@@ -88,6 +86,8 @@ public class IKTargetPos : BaseCalculation
                 var values = line.Split(',');
                 int frame = int.Parse(values[0]);
                 Vector3[] landmarks = new Vector3[33];
+                Vector3[] leftHands = new Vector3[21];
+                Vector3[] rightHands = new Vector3[21];
 
                 for (int i = 0; i < 33; i++)
                 {
@@ -96,8 +96,29 @@ public class IKTargetPos : BaseCalculation
                     float z = float.Parse(values[3 + i * 3]);
                     landmarks[i] = new Vector3(-x, -y + 1, -z);
                 }
-                landmarkData[frame] = landmarks;
                 _hipHeightRatio.Add(float.Parse(values[100]));
+                
+                /*
+                for (int i = 0; i < 21; i++)
+                {
+                    float x = float.Parse(values[1 + (i + 33) * 3]);
+                    float y = float.Parse(values[2 + (i + 33) * 3]);
+                    float z = float.Parse(values[3 + (i + 33) * 3]);
+                    leftHands[i] = new Vector3(-x, -y + 1, -z);
+                }
+
+                for (int i = 0; i < 21; i++)
+                {
+                    float x = float.Parse(values[1 + (i + 54) * 3]);
+                    float y = float.Parse(values[2 + (i + 54) * 3]);
+                    float z = float.Parse(values[3 + (i + 54) * 3]);
+                    rightHands[i] = new Vector3(-x, -y + 1, -z);
+                }
+                _hipHeightRatio.Add(float.Parse(values[226]));
+                */                
+
+                landmarkData[frame] = landmarks;
+
                 totalFrames++;
             }
         }

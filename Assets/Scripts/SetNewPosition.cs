@@ -79,7 +79,7 @@ public class SetNewPosition : MonoBehaviour
         _humanPoseHandler.GetHumanPose(ref _humanPose);
         _humanPose.bodyPosition = transform.position + Vector3.up;
         _humanPose.bodyRotation = _hipObject.transform.rotation;
-        
+
         _humanPoses.Add(_humanPose);
     }
 
