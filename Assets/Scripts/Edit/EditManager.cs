@@ -195,7 +195,7 @@ public class EditManager : MonoBehaviour
 
         foreach (var obj in _frameTextObj)
         {
-            Destroy(obj);
+            obj.SetActive(false);
         }
 
         Camera.main.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
@@ -238,6 +238,11 @@ public class EditManager : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Spline.GetInstance().SwitchSplineDisplay(i);
+        }
+
+        foreach (var obj in _frameTextObj)
+        {
+            obj.SetActive(true);
         }
 
         for (int i = _keyPoseModel.Count - 1; i >= 0; i--)

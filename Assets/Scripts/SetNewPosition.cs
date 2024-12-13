@@ -10,10 +10,19 @@ public class SetNewPosition : MonoBehaviour
     [SerializeField] private GameObject[] rotationObject;
     [SerializeField] private Animator _thisAnimator;
     [SerializeField] private GameObject _hipObject;
+    [SerializeField] private GameObject[] _partObject;
 
     private Dictionary<int, Vector3[]> _changedPosition;
     private Dictionary<int, Quaternion[]> _chagedRotation;
     private List<HumanPose> _humanPoses = new List<HumanPose>();
+    private List<Quaternion> _leftHandRot = new List<Quaternion>();
+    private List<Quaternion> _rightHandRot = new List<Quaternion>();
+    private List<Quaternion> _leftFootRot = new List<Quaternion>();
+    private List<Quaternion> _rightFootRot = new List<Quaternion>();
+    private List<Vector3> _leftHandPos = new List<Vector3>();
+    private List<Vector3> _rightHandPos = new List<Vector3>();
+    private List<Vector3> _leftFootPos = new List<Vector3>();
+    private List<Vector3> _rightFootPos = new List<Vector3>();
     private List<float> _modelHeight;
     private int _totalFrame;
     private int _currentFrame = 0;
@@ -77,9 +86,16 @@ public class SetNewPosition : MonoBehaviour
 
 
         _humanPoseHandler.GetHumanPose(ref _humanPose);
-        _humanPose.bodyPosition = transform.position + Vector3.up;
+        _humanPose.bodyPosition = transform.localPosition + Vector3.up;
         _humanPose.bodyRotation = _hipObject.transform.rotation;
-
+        _leftHandRot.Add(_partObject[0].transform.localRotation);
+        _rightHandRot.Add(_partObject[1].transform.localRotation);
+        _leftFootRot.Add(_partObject[2].transform.localRotation);
+        _rightFootRot.Add(_partObject[3].transform.localRotation);
+        _leftHandPos.Add(_partObject[0].transform.localPosition);
+        _rightHandPos.Add(_partObject[1].transform.localPosition);
+        _leftFootPos.Add(_partObject[2].transform.localPosition);
+        _rightFootPos.Add(_partObject[3].transform.localPosition);
         _humanPoses.Add(_humanPose);
     }
 
@@ -97,10 +113,21 @@ public class SetNewPosition : MonoBehaviour
                 var sb = new StringBuilder();
                 sb.Append(_humanPoses[i].bodyPosition.x + "," + _humanPoses[i].bodyPosition.y + "," + _humanPoses[i].bodyPosition.z + ",");
                 sb.Append(_humanPoses[i].bodyRotation.x + "," + _humanPoses[i].bodyRotation.y + "," + _humanPoses[i].bodyRotation.z + "," + _humanPoses[i].bodyRotation.w + ",");
+
                 foreach (var muscle in _humanPoses[i].muscles)
                 {
                     sb.Append(muscle + ",");
                 }
+
+                sb.Append(_leftHandRot[i].x + "," + _leftHandRot[i].y + "," + _leftHandRot[i].z + "," + _leftHandRot[i].w + ",");
+                sb.Append(_rightHandRot[i].x + "," + _rightHandRot[i].y + "," + _rightHandRot[i].z + "," + _rightHandRot[i].w + ",");
+                sb.Append(_leftFootRot[i].x + "," + _leftFootRot[i].y + "," + _leftFootRot[i].z + "," + _leftFootRot[i].w + ",");
+                sb.Append(_rightFootRot[i].x + "," + _rightFootRot[i].y + "," + _rightFootRot[i].z + "," + _rightFootRot[i].w + ",");
+
+                sb.Append(_leftHandPos[i].x + "," + _leftHandPos[i].y + "," + _leftHandPos[i].z + ",");
+                sb.Append(_rightHandPos[i].x + "," + _rightHandPos[i].y + "," + _rightHandPos[i].z + ",");
+                sb.Append(_leftFootPos[i].x + "," + _leftFootPos[i].y + "," + _leftFootPos[i].z + ",");
+                sb.Append(_rightFootPos[i].x + "," + _rightFootPos[i].y + "," + _rightFootPos[i].z + ",");
 
                 File.AppendAllText(filePath, sb.ToString() + Environment.NewLine);
             }
