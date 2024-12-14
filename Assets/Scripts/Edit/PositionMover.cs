@@ -358,7 +358,6 @@ public class PositionMover : MonoBehaviour
         }
         else
         {
-            Debug.Log("obj null");
             return;
         }
         Transform hit_target = null;
@@ -370,7 +369,6 @@ public class PositionMover : MonoBehaviour
         }
         else
         {
-            Debug.Log("dont catch");
             return;
         }
         int frame;
@@ -401,7 +399,6 @@ public class PositionMover : MonoBehaviour
         }
         else
         {
-            Debug.Log("Dont Catch");
             return;
         }
         moved_position.transform.localRotation = _ankerLocalRot;

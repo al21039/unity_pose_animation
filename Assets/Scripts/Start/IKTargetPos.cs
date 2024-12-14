@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IKTargetPos : BaseCalculation
@@ -15,6 +16,7 @@ public class IKTargetPos : BaseCalculation
     private Dictionary<int, Vector3[]> landmarkData = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Vector3[]> modelPos = new Dictionary<int, Vector3[]>();
     private Dictionary<int, Quaternion[]> _modelQuaternion = new Dictionary<int, Quaternion[]>();
+    private List<Quaternion> _modelEntireRotation = new List<Quaternion>();
 
     
     public int currentFrame = 0;
@@ -203,6 +205,7 @@ public class IKTargetPos : BaseCalculation
         Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, orthogonalUp);
 
         _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, 90, 110);
+        _modelEntireRotation.Add(transform.rotation);
 
         Vector3[] _mediaPipeLimbArray = new Vector3[19]
         {
@@ -647,6 +650,7 @@ public class IKTargetPos : BaseCalculation
         LandmarkManager.GetInstance().CSVLandmarkRotations = _modelQuaternion;
         LandmarkManager.GetInstance().KeyPoseList = KeyPose_List;
         LandmarkManager.GetInstance().HipHeight = _hipHeightRatio;
+        EditManager.GetInstance().ModelEntireRot = _modelEntireRotation;
         Destroy(this.gameObject);
     }
 

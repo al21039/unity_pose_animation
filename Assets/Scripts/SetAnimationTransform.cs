@@ -105,6 +105,8 @@ public class SetAnimationTransform : MonoBehaviour
             _modelRotationPart[6].transform.rotation
         };
 
+        Debug.Log(_modelRotationPart[0].transform.rotation);
+
         return NewPartRotation;
     }
 }
