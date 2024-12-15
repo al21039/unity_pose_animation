@@ -3,8 +3,12 @@ using UnityEngine.UI;
 
 public class HumanoidRotataionSetter : MonoBehaviour
 {
-    [SerializeField] private GameObject _slider;
-    [SerializeField] private Slider _rotationSlider;
+    [SerializeField] private GameObject _sliderX;
+    [SerializeField] private GameObject _sliderY;
+    [SerializeField] private GameObject _sliderZ;
+    [SerializeField] private Slider _rotationSliderX;
+    [SerializeField] private Slider _rotationSliderY;
+    [SerializeField] private Slider _rotationSliderZ;
 
     private GameObject _rotationHumanoid;
     private int frame;
@@ -19,7 +23,6 @@ public class HumanoidRotataionSetter : MonoBehaviour
         set
         {
             _rotationHumanoid = value;
-            Debug.Log(_rotationHumanoid);
             if (RotationHumanoid != null)
             {
                 _animationTransform = _rotationHumanoid.GetComponent<SetAnimationTransform>();
@@ -47,7 +50,9 @@ public class HumanoidRotataionSetter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _rotationSlider.onValueChanged.AddListener(UpdateRotation);
+        _rotationSliderX.onValueChanged.AddListener(UpdateRotationX);
+        _rotationSliderY.onValueChanged.AddListener(UpdateRotationY);
+        _rotationSliderZ.onValueChanged.AddListener(UpdateRotationZ);
     }
 
     // Update is called once per frame
@@ -56,22 +61,61 @@ public class HumanoidRotataionSetter : MonoBehaviour
         
     }
 
-    private void UpdateRotation(float value)
+    private void UpdateRotationX(float value)
     {
         if (_animationTransform != null && frame != 0 && frame != EditManager.GetInstance().KeyPoseList.Count - 1)
         {
-            _rotationHumanoid.transform.rotation = Quaternion.Euler(0, -value, 0);
+           Vector3 originalRot = _rotationHumanoid.transform.rotation.eulerAngles;
+
+            _rotationHumanoid.transform.rotation = Quaternion.Euler(value, originalRot.y, originalRot.z);
             Vector3[] positionValue = _animationTransform.ReturnNewPositionValue();
             Quaternion[] rotationValue = _animationTransform.ReturnNewRotationValue();
 
             PositionMover.GetInstance().FixedCubeTransform();
             EditManager.GetInstance().ChangeToNewValue(frame, positionValue, rotationValue);
+            EditManager.GetInstance().ChangeToEntireRot(frame, _rotationHumanoid.transform.rotation);
+
+        }
+    }
+
+    private void UpdateRotationY(float value)
+    {
+        if (_animationTransform != null && frame != 0 && frame != EditManager.GetInstance().KeyPoseList.Count - 1)
+        {
+            Vector3 originalRot = _rotationHumanoid.transform.rotation.eulerAngles;
+
+            _rotationHumanoid.transform.rotation = Quaternion.Euler(originalRot.x, -value, originalRot.z);
+            Vector3[] positionValue = _animationTransform.ReturnNewPositionValue();
+            Quaternion[] rotationValue = _animationTransform.ReturnNewRotationValue();
+
+            PositionMover.GetInstance().FixedCubeTransform();
+            EditManager.GetInstance().ChangeToNewValue(frame, positionValue, rotationValue);
+            EditManager.GetInstance().ChangeToEntireRot(frame, _rotationHumanoid.transform.rotation);
+        }
+    }
+    private void UpdateRotationZ(float value)
+    {
+        if (_animationTransform != null && frame != 0 && frame != EditManager.GetInstance().KeyPoseList.Count - 1)
+        {
+            Vector3 originalRot = _rotationHumanoid.transform.rotation.eulerAngles;
+
+            _rotationHumanoid.transform.rotation = Quaternion.Euler(originalRot.x, originalRot.y, value);
+            Vector3[] positionValue = _animationTransform.ReturnNewPositionValue();
+            Quaternion[] rotationValue = _animationTransform.ReturnNewRotationValue();
+
+            PositionMover.GetInstance().FixedCubeTransform();
+            EditManager.GetInstance().ChangeToNewValue(frame, positionValue, rotationValue);
+            EditManager.GetInstance().ChangeToEntireRot(frame, _rotationHumanoid.transform.rotation);
         }
     }
 
     public void OnClickedRotationButton()
     {
-        _slider.SetActive(!_slider.activeSelf);
-        _rotationSlider.value = 0;
+        _sliderX.SetActive(!_sliderX.activeSelf);
+        _sliderY.SetActive(!_sliderY.activeSelf);
+        _sliderZ.SetActive(!_sliderZ.activeSelf);
+        _rotationSliderX.value = 0;
+        _rotationSliderY.value = 0;
+        _rotationSliderZ.value = 0;
     }
 }

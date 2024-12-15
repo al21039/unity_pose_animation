@@ -14,6 +14,7 @@ public class SetNewPosition : MonoBehaviour
 
     private Dictionary<int, Vector3[]> _changedPosition;
     private Dictionary<int, Quaternion[]> _chagedRotation;
+    private List<Quaternion> _modelEntireRot;
     private List<HumanPose> _humanPoses = new List<HumanPose>();
     private List<Quaternion> _leftHandRot = new List<Quaternion>();
     private List<Quaternion> _rightHandRot = new List<Quaternion>();
@@ -66,17 +67,19 @@ public class SetNewPosition : MonoBehaviour
         _chagedRotation = EditManager.GetInstance().ChangeRot;
         _totalFrame = LandmarkManager.GetInstance().TotalFrame;
         _modelHeight = EditManager.GetInstance().HipHeight;
+        _modelEntireRot = EditManager.GetInstance().ModelEntireRot;
     }
 
     private void SetAnimation()
     {
         _humanPose = new HumanPose();
 
-        transform.position = new Vector3(0.0f, _modelHeight[currentFrame] - 1.0f, 0.0f);
+        transform.position = new Vector3(10.0f, _modelHeight[currentFrame] - 1.0f, 0.0f);
+        transform.rotation = _modelEntireRot[currentFrame];
 
         for (int i = 0; i < modelPartObject.Length; i++)
         {
-            modelPartObject[i].transform.position = _changedPosition[currentFrame][i];
+            modelPartObject[i].transform.position = _changedPosition[currentFrame][i] + new Vector3(10, 0, 0);
         }
 
         for (int i = 0; i < rotationObject.Length; i++)
@@ -86,7 +89,7 @@ public class SetNewPosition : MonoBehaviour
 
 
         _humanPoseHandler.GetHumanPose(ref _humanPose);
-        _humanPose.bodyPosition = transform.localPosition + Vector3.up;
+        _humanPose.bodyPosition = transform.localPosition + Vector3.up - new Vector3(10, 0, 0);
         _humanPose.bodyRotation = _hipObject.transform.rotation;
         _leftHandRot.Add(_partObject[0].transform.localRotation);
         _rightHandRot.Add(_partObject[1].transform.localRotation);

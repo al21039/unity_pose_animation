@@ -22,6 +22,7 @@ public class EditManager : MonoBehaviour
     private Dictionary<int, Quaternion[]> _changeRot = new Dictionary<int, Quaternion[]>();
     private List<int> _keyPoseList = new List<int>();                                    //キーポーズのリスト　　　後からJSONファイルのやつ追加できるように
     private List<float> _hipHeight = new List<float>();
+    private List<Quaternion> _modelEntireRot = new List<Quaternion>();
 
     private List<GameObject> _keyPoseModel = new List<GameObject>();
     private List<GameObject> _keyCube = new List<GameObject>();
@@ -32,6 +33,18 @@ public class EditManager : MonoBehaviour
     private GameObject _createNewModel;
 
     private List<GameObject> _frameTextObj = new List<GameObject>();
+
+    public List<Quaternion> ModelEntireRot
+    {
+        get
+        {
+            return _modelEntireRot;
+        }
+        set
+        {
+            _modelEntireRot = value;
+        }
+    }
 
     public Dictionary<int, Vector3[]> ChangePos
     {
@@ -198,9 +211,10 @@ public class EditManager : MonoBehaviour
             obj.SetActive(false);
         }
 
-        Camera.main.transform.position = new Vector3(0.0f, 1.32f, 3.62f);
+        Camera.main.transform.position = new Vector3(10.0f, 1.32f, 3.62f);
         Camera.main.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
+        /*
         for (int i = 0; i < 4; i++)
         {
             Spline.GetInstance().SwitchSplineDisplay(i);
@@ -211,8 +225,9 @@ public class EditManager : MonoBehaviour
         {
             _keyPoseModel[i].SetActive(false);
         }
+        */
 
-        _createNewModel = Instantiate(_createModel, Vector3.zero, Quaternion.identity);
+        _createNewModel = Instantiate(_createModel, new Vector3(10, 0, 0), Quaternion.identity);
     }
 
     public void ChangeToNewValue(int frame, Vector3[] positionArray, Quaternion[] rotationArray)
@@ -231,24 +246,38 @@ public class EditManager : MonoBehaviour
         _rotationInterpolationer.Interpolation(listIndex);
     }
 
+    public void ChangeToEntireRot(int frame, Quaternion entireRot)
+    {
+        _modelEntireRot[frame] = entireRot;
+
+        int listIndex = _keyPoseList.IndexOf(frame);
+
+        _rotationInterpolationer.EntireInterpolation(listIndex);
+
+    }
+
     public void BackToEditInterface()
     {
         Camera.main.transform.position = new Vector3(5.0f, 1.7f, 20.0f);
         Camera.main.transform.rotation = Quaternion.Euler(5.0f, -90.0f, 0.0f);
+        /*
         for (int i = 0; i < 4; i++)
         {
             Spline.GetInstance().SwitchSplineDisplay(i);
         }
+        */
 
         foreach (var obj in _frameTextObj)
         {
             obj.SetActive(true);
         }
 
+        /*
         for (int i = _keyPoseModel.Count - 1; i >= 0; i--)
         {
             _keyPoseModel[i].SetActive(true);
         }
+        */
 
         if (_createNewModel != null)
         {

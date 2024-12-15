@@ -180,7 +180,8 @@ public class PositionMover : MonoBehaviour
                         else if(_rotationMode && !_isDisplay && !_heightChange && !_deleteMode)
                         {
                             GameObject rotationModel = hit.collider.gameObject.transform.parent.gameObject;
-                            _humanoidRotataionSetter.RotationHumanoid =  rotationModel;
+                            Debug.Log(rotationModel.name);
+                            _humanoidRotataionSetter.RotationHumanoid = rotationModel;
                             _cube = hit.collider.gameObject.transform;
                             _cubePosition = _cube.transform.position;
                             _selectedFrame = hit.collider.gameObject.transform.root.gameObject.name.Replace("_frame_model", "");
