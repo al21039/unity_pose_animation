@@ -799,7 +799,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jsonModel: {fileID: 7478624704600419168, guid: 274f44ffa59a6dd4d8ac21d7b7b4fbee, type: 3}
   _jsonFilePaths:
-  - {fileID: 4900000, guid: 3e623ce71eac86b4abc156e56cada783, type: 3}
+  - {fileID: 4900000, guid: a7c512c79b7b091419d376e12b2d7c68, type: 3}
+  - {fileID: 4900000, guid: fb14a8e1ac80d534889b3f3cf886886f, type: 3}
+  - {fileID: 4900000, guid: a4bf5fbbb803b3d4c98f9105e6160b9c, type: 3}
 --- !u!1 &114657561
 GameObject:
   m_ObjectHideFlags: 0
@@ -11377,7 +11379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96048f604eb614408b23132103c023e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: Assets/CSV/stretch.csv
+  csvFilePath: Assets/CSV/kick.csv
   _modelLimbObject:
   - {fileID: 5347151387135259080}
   - {fileID: 446000248687921928}
