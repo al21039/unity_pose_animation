@@ -393,11 +393,12 @@ public class CreateAnimationFromCSV : MonoBehaviour
         animclip.SetCurve("", typeof(Animator), "RightFootT.z", rightFootTZ);
 
 
+#if UNITY_EDITOR
         //アニメーションを制作
         AssetDatabase.CreateAsset(animclip, AssetDatabase.GenerateUniqueAssetPath("Assets/kick.anim"));
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        
+#endif
 
         AnimatorOverrideController overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = overrideController;
