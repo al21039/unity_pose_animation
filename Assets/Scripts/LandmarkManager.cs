@@ -32,7 +32,14 @@ public class LandmarkManager : MonoBehaviour
         set
         {
             _csvLandmarkPositions = value;
-            SetJsonLandmark();
+            if (_jsonFilePaths.Length > 0)
+            {
+                SetJsonLandmark();
+            }
+            else
+            {
+                EditManager.GetInstance().PrepareEditing();
+            }
         }
     }
 

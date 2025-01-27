@@ -222,18 +222,27 @@ public class CreateFromJSON : BaseCalculation
 
         string startDate = LandmarkManager.GetInstance().StartDate;
         int jsonCount = LandmarkManager.GetInstance().JsonCount;
+        string fileName = jsonCount + ".png";
+        string folderPath = "JSON/ModelImages/";
+
+
 
         Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         screenshot.Apply();
 
-        string fileName = jsonCount + ".png";
-        string folderPath = "JSON/ModelImages/";
+
+#if UNITY_EDITOR
         string fullFolderPath = Path.Combine(Application.dataPath, folderPath, startDate);
+#else
+        string fullFolderPath = Path.Combine(Application.persistentDataPath, folderPath, startDate);
+#endif
         if (!Directory.Exists(fullFolderPath))
         {
             Directory.CreateDirectory(fullFolderPath); // フォルダが存在しない場合は作成
         }
+
+        yield return new WaitUntil(() => Directory.Exists(fullFolderPath));
 
         string filePath = Path.Combine(fullFolderPath, fileName);
 
@@ -241,7 +250,12 @@ public class CreateFromJSON : BaseCalculation
         byte[] bytes = screenshot.EncodeToPNG();
         File.WriteAllBytes(filePath, bytes);
 
-        LandmarkManager.GetInstance().FileName = folderPath + startDate;
+        yield return new WaitUntil(() => File.Exists(filePath));
+
+        if (jsonCount == 0)
+        {
+            LandmarkManager.GetInstance().FileName = fullFolderPath;
+        }
 
         yield return new WaitForEndOfFrame();
         // テクスチャを破棄
