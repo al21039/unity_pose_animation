@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class IKTargetPos : BaseCalculation
 {
-    [SerializeField] private string csvFilePath = "Assets/CSV/kick.csv";
+    //[SerializeField] private string csvFilePath = "Assets/CSV/kick.csv";
+    [SerializeField] private TextAsset csvFilePath;
     [SerializeField] GameObject[] _modelLimbObject = new GameObject[19];
     [SerializeField] GameObject[] _modelTransform = new GameObject[3];
     [SerializeField] private List<float> _hipHeightRatio = new List<float>();
@@ -74,6 +76,7 @@ public class IKTargetPos : BaseCalculation
     //CSVファイルからランドマークデータ読み出し
     void LoadLandmarkData()
     {
+        /*
         using (var reader = new StreamReader(csvFilePath))
         {
             bool isFirstLine = true;
@@ -86,10 +89,9 @@ public class IKTargetPos : BaseCalculation
                     continue; // Skip header line
                 }
                 var values = line.Split(',');
+
                 int frame = int.Parse(values[0]);
                 Vector3[] landmarks = new Vector3[33];
-                Vector3[] leftHands = new Vector3[21];
-                Vector3[] rightHands = new Vector3[21];
 
                 for (int i = 0; i < 33; i++)
                 {
@@ -99,30 +101,47 @@ public class IKTargetPos : BaseCalculation
                     landmarks[i] = new Vector3(-x, -y + 1, -z);
                 }
                 _hipHeightRatio.Add(float.Parse(values[100]));
-                
-                /*
-                for (int i = 0; i < 21; i++)
-                {
-                    float x = float.Parse(values[1 + (i + 33) * 3]);
-                    float y = float.Parse(values[2 + (i + 33) * 3]);
-                    float z = float.Parse(values[3 + (i + 33) * 3]);
-                    leftHands[i] = new Vector3(-x, -y + 1, -z);
-                }
-
-                for (int i = 0; i < 21; i++)
-                {
-                    float x = float.Parse(values[1 + (i + 54) * 3]);
-                    float y = float.Parse(values[2 + (i + 54) * 3]);
-                    float z = float.Parse(values[3 + (i + 54) * 3]);
-                    rightHands[i] = new Vector3(-x, -y + 1, -z);
-                }
-                _hipHeightRatio.Add(float.Parse(values[226]));
-                */                
+      
 
                 landmarkData[frame] = landmarks;
 
                 totalFrames++;
             }
+        }
+        isLoaded = true;
+        */
+
+        var lines = csvFilePath.text.Split('\n');
+        bool isFirstLine = true;
+
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            if (isFirstLine)
+            {
+                isFirstLine = false;
+                continue; // Skip header line
+            }
+
+            var values = line.Split(',');
+
+            int frame = int.Parse(values[0]);
+            Vector3[] landmarks = new Vector3[33];
+
+            for (int i = 0; i < 33; i++)
+            {
+                float x = float.Parse(values[1 + i * 3]);
+                float y = float.Parse(values[2 + i * 3]);
+                float z = float.Parse(values[3 + i * 3]);
+                landmarks[i] = new Vector3(-x, -y + 1, -z);
+            }
+            _hipHeightRatio.Add(float.Parse(values[100]));
+
+
+            landmarkData[frame] = landmarks;
+
+            totalFrames++;
         }
         isLoaded = true;
     }
