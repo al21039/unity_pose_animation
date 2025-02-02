@@ -105,7 +105,12 @@ public class SetNewPosition : MonoBehaviour
     private void SaveHumanPose()
     {
         string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+#if UNITY_EDITOR
         string folderPath = Path.Combine(Application.dataPath, "AnimCSV");
+#else
+        string folderPath = Path.Combine(Application.persistentDataPath, "AnimCSV");
+#endif
+
         Directory.CreateDirectory(folderPath);
         string filePath = Path.Combine(folderPath, $"{timestamp}.csv");
 
