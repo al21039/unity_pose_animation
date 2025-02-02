@@ -171,6 +171,8 @@ public class LandmarkManager : MonoBehaviour
     {
         _startDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         Application.targetFrameRate = 30;
+        QualitySettings.vSyncCount = 0;
+
     }
 
     private void SetJsonLandmark()
