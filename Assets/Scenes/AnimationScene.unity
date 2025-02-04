@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8b1958f49fbe549b1195bd12b12161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFile: {fileID: 4900000, guid: 5416881c932cc064e87f54896a860b78, type: 3}
+  csvFile: {fileID: 4900000, guid: 7216e011b2fdaee45977f1f3aafb7423, type: 3}
   animator: {fileID: 1297258485}
 --- !u!1 &1598347478
 GameObject:

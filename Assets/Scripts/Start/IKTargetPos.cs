@@ -387,22 +387,16 @@ public class IKTargetPos : BaseCalculation
 
         _modelTransform[4].transform.rotation = rightHand * offsetRotation;
 
-        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]);
-        Vector3 leftFootUp = (landmarks[27] - landmarks[29]);
+        Vector3 leftFootDirection = (landmarks[31] - landmarks[29]).normalized;
+        Vector3 leftFootUp = (landmarks[27] - landmarks[29]).normalized;
         Quaternion leftFootForward = Quaternion.LookRotation(leftFootDirection, leftFootUp);
-
-        if (currentFrame == 0)
-        {
-            Debug.Log(landmarks[27]);
-            Debug.Log(landmarks[29]);
-            Debug.Log(landmarks[31]);
-        }
 
         _modelTransform[5].transform.rotation = leftFootForward;//* Quaternion.Euler(0, 90, 90);
 
 
         Vector3 rightFootDirection = (landmarks[32] - landmarks[30]).normalized;
-        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection);
+        Vector3 rightFootUp = (landmarks[28] - landmarks[30]).normalized;
+        Quaternion rightFootForward = Quaternion.LookRotation(rightFootDirection, rightFootUp);
 
         _modelTransform[6].transform.rotation = rightFootForward * Quaternion.Euler(0, -90, 110);
 

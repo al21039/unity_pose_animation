@@ -799,7 +799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jsonModel: {fileID: 7478624704600419168, guid: 274f44ffa59a6dd4d8ac21d7b7b4fbee, type: 3}
   _jsonFilePaths:
-  - {fileID: 4900000, guid: a4bf5fbbb803b3d4c98f9105e6160b9c, type: 3}
+  - {fileID: 4900000, guid: e64dfcaf3de7b4347b789f870df1f180, type: 3}
 --- !u!1 &114657561
 GameObject:
   m_ObjectHideFlags: 0
@@ -10658,7 +10658,7 @@ MonoBehaviour:
     m_Target: {fileID: 1833377659174510546}
     m_Hint: {fileID: 1215299983234956040}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0
+    m_TargetRotationWeight: 1
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
@@ -11377,7 +11377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96048f604eb614408b23132103c023e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFilePath: {fileID: 4900000, guid: 0b5900451c5a81941baff360e40c7bcc, type: 3}
+  csvFilePath: {fileID: 4900000, guid: 1efcbbd75f28b9542846f52730f8045a, type: 3}
   _modelLimbObject:
   - {fileID: 5347151387135259080}
   - {fileID: 446000248687921928}
@@ -11760,7 +11760,7 @@ MonoBehaviour:
     m_Target: {fileID: 3279531304253408256}
     m_Hint: {fileID: 2005917664988397096}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0
+    m_TargetRotationWeight: 1
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
@@ -11800,7 +11800,7 @@ MonoBehaviour:
     m_Target: {fileID: 5553059631876692810}
     m_Hint: {fileID: 3591175312041887244}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0
+    m_TargetRotationWeight: 1
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
@@ -13906,7 +13906,7 @@ MonoBehaviour:
     m_Target: {fileID: 5418017712362718703}
     m_Hint: {fileID: 2125688268081763679}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0
+    m_TargetRotationWeight: 1
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0

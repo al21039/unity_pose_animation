@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class EditManager : MonoBehaviour
 {
@@ -104,6 +105,8 @@ public class EditManager : MonoBehaviour
         int listNo = _keyPoseList.IndexOf(index);
         _keyPoseList.RemoveAt(listNo);
         _keyPoseModel.RemoveAt(listNo);
+        _hipHeight[index] = 0;
+        _heightInterpolationer.Interpolation(index, 0);
         _lineInterpolation.InterpolationAllLine(false);
     }
 
